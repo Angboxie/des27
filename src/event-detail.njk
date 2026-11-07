@@ -62,6 +62,7 @@ eleventyComputed:
             <span class="ev-btn ed-btn--lime is-disabled" aria-disabled="true">Registration link soon</span>
           {% endif %}
 
+          {% if not event.dateDisplay %}
           <details class="ed-cal">
             <summary class="ev-btn">
               Add to calendar
@@ -72,6 +73,7 @@ eleventyComputed:
               <a href="/events/{{ event.id }}/event.ics" download>Apple / Outlook (.ics)</a>
             </div>
           </details>
+          {% endif %}
 
           {% if reg.status == "coming-soon" or event.flagship %}
             {% if event.remindUrl %}
@@ -86,8 +88,8 @@ eleventyComputed:
 
     <p class="ev-featured__date reveal" style="--delay: 200ms">
       <time datetime="{{ event.date }}">
-        <span class="ev-featured__month">{{ event.date | datePart("month") }}</span>
-        <span class="ev-featured__day script">{{ event.date | datePart("day") }}</span>
+        <span class="ev-featured__month">{{ event.dateDisplay.big if event.dateDisplay else (event.date | datePart("month")) }}</span>
+        <span class="ev-featured__day script">{{ event.dateDisplay.script if event.dateDisplay else (event.date | datePart("day")) }}</span>
       </time>
     </p>
   </div>
@@ -118,7 +120,7 @@ eleventyComputed:
             <ol class="ed-timeline">
               {% for item in d.keyDates %}
                 <li style="--i: {{ loop.index0 }}">
-                  <time datetime="{{ item.date }}">{{ item.date | datePart("month") }} <span class="script">{{ item.date | datePart("day") }}</span></time>
+                  {% if item.when %}<span class="ed-timeline__when">{{ item.when }}</span>{% else %}<time datetime="{{ item.date }}">{{ item.date | datePart("month") }} <span class="script">{{ item.date | datePart("day") }}</span></time>{% endif %}
                   <span>{{ item.label }}</span>
                 </li>
               {% endfor %}
@@ -130,6 +132,12 @@ eleventyComputed:
             <div class="ed-block reveal">
               <h3>Eligibility</h3>
               <ul class="ed-list">{% for item in d.eligibility %}<li>{{ item }}</li>{% endfor %}</ul>
+            </div>
+          {% endif %}
+          {% if d.prizes %}
+            <div class="ed-block reveal" style="--delay: 60ms">
+              <h3>Prizes</h3>
+              <ul class="ed-list">{% for item in d.prizes %}<li>{{ item }}</li>{% endfor %}</ul>
             </div>
           {% endif %}
           {% if d.submission %}
@@ -145,7 +153,7 @@ eleventyComputed:
     <aside class="ed-info reveal" style="--delay: 150ms" aria-label="Event details">
       <h2 class="ed-info__title">Details</h2>
       <dl>
-        <div><dt>Date</dt><dd>{{ event.date | datePart("weekday") }}, {{ event.date | readableDate }}</dd></div>
+        <div><dt>Date</dt><dd>{% if event.dateDisplay %}{{ event.dateDisplay.text }}{% else %}{{ event.date | datePart("weekday") }}, {{ event.date | readableDate }}{% endif %}{% if event.dateNote %}<small class="ed-info__note">{{ event.dateNote }}</small>{% endif %}</dd></div>
         {% if event.startTime %}<div><dt>Time</dt><dd>{{ event.startTime }}{% if event.endTime %} – {{ event.endTime }}{% endif %}</dd></div>{% endif %}
         <div><dt>Location</dt><dd>{{ event.location or "TBC" }}</dd></div>
         {% if reg and not isPast %}
@@ -153,7 +161,7 @@ eleventyComputed:
           {% if reg.deadline %}<div><dt>Register by</dt><dd>{{ reg.deadline | readableDate }}</dd></div>{% endif %}
         {% endif %}
       </dl>
-      {% if not isPast %}
+      {% if not isPast and not event.dateDisplay %}
         <a class="des-btn ed-info__cal" href="/events/{{ event.id }}/event.ics" download>
           Add to calendar
           <svg class="ev-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5" /></svg>

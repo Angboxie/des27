@@ -35,16 +35,16 @@
       </h2>
       <p class="ev-featured__text reveal" style="--delay: 320ms">{{ featured.summary }}</p>
 
-      <a class="ev-btn reveal" data-magnetic style="--delay: 420ms" href="{{ (featured.registration and featured.registration.url) or ('/events/' + featured.id + '/') }}">
-        Sign Up Now
+      <a class="ev-btn ev-btn--lime reveal" data-magnetic style="--delay: 420ms" href="{{ (featured.registration and featured.registration.url) or ('/events/' + featured.id + '/') }}">
+        {% if featured.registration and featured.registration.status == "open" %}Sign Up Now{% else %}Find Out More{% endif %}
         <svg class="ev-arrow" viewBox="0 0 16 16" aria-hidden="true"><path pathLength="1" d="M4 12 12 4M5.5 4H12v6.5" /></svg>
       </a>
     </div>
 
     <p class="ev-featured__date reveal" style="--delay: 200ms">
       <time datetime="{{ featured.date }}">
-        <span class="ev-featured__month">{{ featured.date | datePart("month") }}</span>
-        <span class="ev-featured__day script">{{ featured.date | datePart("day") }}</span>
+        <span class="ev-featured__month">{{ featured.dateDisplay.big if featured.dateDisplay else (featured.date | datePart("month")) }}</span>
+        <span class="ev-featured__day script">{{ featured.dateDisplay.script if featured.dateDisplay else (featured.date | datePart("day")) }}</span>
       </time>
     </p>
   </div>

@@ -11,11 +11,14 @@
     "summary": "A one-day, hands-on workshop to turn ideas into real design concepts.",
     "description": "Placeholder: a longer description of the workshop - what you'll make, who it's for and what to bring.",
     "image": "/assets/images/design-workshop.jpg",
-    "registration": { "status": "open", "url": null, "deadline": "2027-03-12" },
+    "registration": {
+      "status": "open",
+      "url": null,
+      "deadline": "2027-03-12"
+    },
     "remindUrl": null,
     "requested": true,
     "status": "upcoming",
-    "featured": true,
     "placeholder": true
   },
   {
@@ -23,27 +26,59 @@
     "title": "OPEN CITY 2027",
     "headline": "Open City",
     "headlineAccent": "2027",
-    "date": "2027-05-01",
-    "location": "MSD",
-    "summary": "Placeholder: DES's flagship design competition.",
-    "description": "Placeholder: the competition overview, theme and prizes.",
-    "image": null,
-    "registration": { "status": "coming-soon", "url": null, "deadline": "2027-04-10" },
+    "date": "2026-12-01",
+    "location": "Online, with the finale at the Melbourne School of Design",
+    "summary": "A summer design challenge for architecture, UI/UX and graphic design students from every university in Melbourne.",
+    "description": "Over eight weeks of summer, students from different design disciplines take on one shared challenge facing Melbourne. The best work is presented at a live crit, awards night and open exhibition in Week 2 of Semester 1, 2027.",
+    "image": "/assets/images/open-city.jpg",
+    "registration": {
+      "status": "coming-soon",
+      "url": null,
+      "deadline": null
+    },
     "remindUrl": null,
     "flagship": true,
+    "featured": true,
+    "dateNote": "Launch date to be locked in. The finale is around 9–11 March 2027.",
     "details": {
-      "brief": "Placeholder: the competition brief.",
-      "eligibility": ["Placeholder: who can enter", "Placeholder: team size", "Placeholder: year levels"],
+      "brief": "The theme and full brief are released at launch in early December 2026, along with mentor videos from the judges on the OPEN CITY Discord.",
       "keyDates": [
-        { "label": "Registrations open", "date": "2027-03-20" },
-        { "label": "Registrations close", "date": "2027-04-10" },
-        { "label": "Submissions due", "date": "2027-04-28" },
-        { "label": "Winners announced", "date": "2027-05-01" }
+        {
+          "label": "Competition launches",
+          "when": "Early Dec 2026"
+        },
+        {
+          "label": "Submissions close",
+          "when": "Late Feb – 1 Mar 2027"
+        },
+        {
+          "label": "Finale: live crit, awards and exhibition",
+          "when": "9–11 Mar 2027"
+        }
       ],
-      "submission": ["Placeholder: board format and size", "Placeholder: file type", "Placeholder: how to submit"]
+      "eligibility": [
+        "Bachelor and Masters students at any university or tertiary provider in Greater Melbourne",
+        "Categories: A. Architecture · B. UI/UX Design · C. Graphic Design",
+        "Solo or teams of up to 3, one entry per person",
+        "$10 per person early bird, $15 standard (AUD)"
+      ],
+      "prizes": [
+        "$3,500 cash prize pool across all three categories",
+        "People’s Choice Award ($200), voted by finale guests",
+        "Lived Experience Award (commendation)",
+        "Industry prizes such as studio tours and portfolio reviews (TBC)"
+      ],
+      "submission": [
+        "Released with the brief at launch. Join the Discord for announcements, Q&A and team-finding."
+      ]
     },
     "status": "upcoming",
-    "placeholder": true
+    "placeholder": false,
+    "dateDisplay": {
+      "big": "Early",
+      "script": "Dec",
+      "text": "Early December 2026"
+    }
   },
   {
     "id": "poster-design-lab-1",
@@ -54,34 +89,12 @@
     "location": "MSD",
     "summary": "Placeholder description. Replace with event details.",
     "image": null,
-    "registration": { "status": "open", "url": null, "deadline": "2027-03-20" },
+    "registration": {
+      "status": "open",
+      "url": null,
+      "deadline": "2027-03-20"
+    },
     "requested": true,
-    "status": "upcoming",
-    "placeholder": true
-  },
-  {
-    "id": "poster-design-lab-2",
-    "title": "Poster Design Lab",
-    "date": "2027-03-30",
-    "startTime": "18:00",
-    "endTime": "20:00",
-    "location": "MSD",
-    "summary": "Placeholder description. Replace with event details.",
-    "image": null,
-    "registration": { "status": "coming-soon", "url": null, "deadline": null },
-    "status": "upcoming",
-    "placeholder": true
-  },
-  {
-    "id": "poster-design-lab-3",
-    "title": "Poster Design Lab",
-    "date": "2027-04-06",
-    "startTime": "18:00",
-    "endTime": "20:00",
-    "location": "MSD",
-    "summary": "Placeholder description. Replace with event details.",
-    "image": null,
-    "registration": { "status": "closed", "url": null, "deadline": null },
     "status": "upcoming",
     "placeholder": true
   },
@@ -92,8 +105,13 @@
     "location": "MSD",
     "summary": "Placeholder description. Replace with event details.",
     "recap": "Placeholder recap: what happened, who spoke and highlights from the night.",
-    "image": "/assets/images/archive-crowd.jpg",
-    "gallery": ["/assets/images/archive-crowd.jpg", "/assets/images/design-workshop.jpg", "/assets/images/merch-new-2.jpg"],
+    "image": "/assets/images/industry-night-4.jpg",
+    "gallery": [
+      "/assets/images/industry-night-1.jpg",
+      "/assets/images/industry-night-2.jpg",
+      "/assets/images/industry-night-3.jpg",
+      "/assets/images/industry-night-4.jpg"
+    ],
     "status": "past",
     "placeholder": true
   },

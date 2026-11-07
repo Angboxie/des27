@@ -37,7 +37,7 @@ scripts:
           </div>
           <div class="ev-card__body ed-person__body">
             <h3 class="ev-card__title ed-person__name">{{ person.name }}</h3>
-            <p class="ed-person__role script">{{ person.role }}</p>
+            <p class="ed-person__role">{{ person.role }}</p>
             <p class="ed-person__meta">{{ person.discipline }} · {{ person.year }}</p>
             <p class="ed-person__bio">{{ person.bio }}</p>
             <ul class="ed-chips" aria-label="Software">{% for tool in person.software %}<li>{{ tool }}</li>{% endfor %}</ul>

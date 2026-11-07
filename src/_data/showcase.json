@@ -1,8 +1,57 @@
 [
-  { "title": "Project Title", "student": "Student or Team Name", "award": "Winner, OPEN CITY", "description": "Placeholder project description. Student work is only published with permission.", "image": "/assets/images/archive-crowd.jpg", "portfolio": null, "featured": true, "placeholder": true },
-  { "title": "Project Title", "student": "Student Name", "award": "Highly Commended", "description": "Placeholder project description.", "image": null, "portfolio": null, "placeholder": true },
-  { "title": "Project Title", "student": "Team Name", "award": null, "description": "Placeholder project description.", "image": null, "portfolio": null, "placeholder": true },
-  { "title": "Project Title", "student": "Student Name", "award": null, "description": "Placeholder project description.", "image": null, "portfolio": null, "placeholder": true },
-  { "title": "Project Title", "student": "Student Name", "award": "People’s Choice", "description": "Placeholder project description.", "image": null, "portfolio": null, "placeholder": true },
-  { "title": "Project Title", "student": "Team Name", "award": null, "description": "Placeholder project description.", "image": null, "portfolio": null, "placeholder": true }
+  {
+    "title": "Project Title",
+    "student": "Student or Team Name",
+    "award": "Winner, OPEN CITY",
+    "description": "Placeholder project description. Student work is only published with permission.",
+    "image": null,
+    "portfolio": null,
+    "featured": true,
+    "placeholder": true
+  },
+  {
+    "title": "Project Title",
+    "student": "Student Name",
+    "award": "Highly Commended",
+    "description": "Placeholder project description.",
+    "image": null,
+    "portfolio": null,
+    "placeholder": true
+  },
+  {
+    "title": "Project Title",
+    "student": "Team Name",
+    "award": null,
+    "description": "Placeholder project description.",
+    "image": null,
+    "portfolio": null,
+    "placeholder": true
+  },
+  {
+    "title": "Project Title",
+    "student": "Student Name",
+    "award": null,
+    "description": "Placeholder project description.",
+    "image": null,
+    "portfolio": null,
+    "placeholder": true
+  },
+  {
+    "title": "Project Title",
+    "student": "Student Name",
+    "award": "People’s Choice",
+    "description": "Placeholder project description.",
+    "image": null,
+    "portfolio": null,
+    "placeholder": true
+  },
+  {
+    "title": "Project Title",
+    "student": "Team Name",
+    "award": null,
+    "description": "Placeholder project description.",
+    "image": null,
+    "portfolio": null,
+    "placeholder": true
+  }
 ]
