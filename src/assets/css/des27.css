@@ -458,64 +458,6 @@
 
 
 
-/* "Scroll" cue at the bottom of heroes */
-
-.des-scroll-cue {
-  position: absolute;
-  z-index: 2;
-  left: 50%;
-  translate: -50% 0;
-  bottom: clamp(1.25rem, 2.5vw, 2rem);
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--des-blue);
-  opacity: 0;
-  animation: cue-in 0.8s var(--ease-out) calc(var(--enter-delay, 0s) + 1.4s) forwards;
-}
-
-.des-scroll-cue--light {
-  left: var(--des-gutter);
-  translate: none;
-  color: var(--des-white);
-}
-
-.des-scroll-cue__track {
-  position: relative;
-  width: 2px;
-  height: 3rem;
-  overflow: hidden;
-  background: color-mix(in srgb, currentColor 25%, transparent);
-  border-radius: 2px;
-}
-
-.des-scroll-cue__track span {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 40%;
-  background: var(--des-lime);
-  border-radius: 2px;
-  animation: cue-drop 1.8s var(--ease-in-out) infinite;
-}
-
-.des-scroll-cue:not(.des-scroll-cue--light) .des-scroll-cue__track span {
-  background: currentColor;
-}
-
-@keyframes cue-in {
-  to { opacity: 1; }
-}
-
-@keyframes cue-drop {
-  0% { transform: translateY(-100%); }
-  60%, 100% { transform: translateY(260%); }
-}
 
 
 
