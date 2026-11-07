@@ -1,0 +1,46 @@
+[
+  {
+    "id": "sample-event-1",
+    "title": "Sample Event 1",
+    "date": "2026-12-03",
+    "location": null,
+    "summary": "Placeholder description. Replace with event details.",
+    "image": null,
+    "link": null,
+    "status": "upcoming",
+    "placeholder": true
+  },
+  {
+    "id": "sample-event-2",
+    "title": "Sample Event 2",
+    "date": "2027-01-21",
+    "location": null,
+    "summary": "Placeholder description. Replace with event details.",
+    "image": null,
+    "link": null,
+    "status": "upcoming",
+    "placeholder": true
+  },
+  {
+    "id": "sample-event-3",
+    "title": "Sample Event 3",
+    "date": "2026-10-15",
+    "location": null,
+    "summary": "Placeholder description. Replace with event details.",
+    "image": null,
+    "link": null,
+    "status": "past",
+    "placeholder": true
+  },
+  {
+    "id": "sample-event-4",
+    "title": "Sample Event 4",
+    "date": "2026-06-10",
+    "location": null,
+    "summary": "Placeholder description. Replace with event details.",
+    "image": null,
+    "link": null,
+    "status": "past",
+    "placeholder": true
+  }
+]

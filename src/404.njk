@@ -1,0 +1,14 @@
+---
+layout: layouts/page.njk
+title: Page not found
+permalink: /404.html
+eleventyExcludeFromCollections: true
+---
+{% from "components/button.njk" import button %}
+
+<section class="section">
+  <div class="container">
+    <p>Sorry, we couldn't find that page.</p>
+    {{ button("Back to homepage", "/") }}
+  </div>
+</section>

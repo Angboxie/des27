@@ -1,0 +1,26 @@
+[
+  {
+    "id": "partner-a",
+    "name": "Partner Name A",
+    "description": "Placeholder partner description.",
+    "logo": null,
+    "website": null,
+    "placeholder": true
+  },
+  {
+    "id": "partner-b",
+    "name": "Partner Name B",
+    "description": "Placeholder partner description.",
+    "logo": null,
+    "website": null,
+    "placeholder": true
+  },
+  {
+    "id": "partner-c",
+    "name": "Partner Name C",
+    "description": "Placeholder partner description.",
+    "logo": null,
+    "website": null,
+    "placeholder": true
+  }
+]

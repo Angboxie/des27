@@ -1,0 +1,20 @@
+---
+layout: layouts/page.njk
+title: Merchandise
+intro: "[Merchandise introduction to be confirmed]"
+---
+{% from "components/button.njk" import button %}
+{% from "components/card.njk" import card %}
+
+{# Display only for now - ordering/payments will be added later #}
+<section class="section">
+  <div class="container">
+    <div class="grid">
+      {% for item in merchandise %}
+        {% call card({ title: item.name, meta: item.price | price, text: item.description, image: item.image, imageAlt: item.name }) %}
+          {{ button("Coming soon", disabled=true) }}
+        {% endcall %}
+      {% endfor %}
+    </div>
+  </div>
+</section>

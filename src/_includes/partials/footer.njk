@@ -1,0 +1,21 @@
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div>
+      <p class="site-footer__name">{{ site.name }}</p>
+      <p class="placeholder">[Contact details and social links to be confirmed]</p>
+    </div>
+
+    <nav aria-label="Footer">
+      <ul class="footer-links">
+        <li><a href="/">Home</a></li>
+        {% for link in site.nav %}
+          <li><a href="{{ link.url }}">{{ link.label }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container">
+    <p class="site-footer__legal">&copy; {% year %} {{ site.name }}</p>
+  </div>
+</footer>

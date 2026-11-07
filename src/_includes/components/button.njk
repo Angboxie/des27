@@ -1,0 +1,13 @@
+{#
+  Usage:
+    {{ button("Label", "/link/") }}
+    {{ button("Label", "/link/", "secondary") }}
+    {{ button("Coming soon", disabled=true) }}
+#}
+{% macro button(label, href="", variant="primary", disabled=false) %}
+  {% if href and not disabled %}
+    <a class="btn btn--{{ variant }}" href="{{ href }}">{{ label }}</a>
+  {% else %}
+    <button class="btn btn--{{ variant }}" type="button"{% if disabled %} disabled{% endif %}>{{ label }}</button>
+  {% endif %}
+{% endmacro %}

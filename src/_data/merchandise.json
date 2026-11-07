@@ -1,0 +1,29 @@
+[
+  {
+    "id": "item-1",
+    "name": "Sample Item 1",
+    "description": "Placeholder product description.",
+    "price": null,
+    "image": null,
+    "available": false,
+    "placeholder": true
+  },
+  {
+    "id": "item-2",
+    "name": "Sample Item 2",
+    "description": "Placeholder product description.",
+    "price": null,
+    "image": null,
+    "available": false,
+    "placeholder": true
+  },
+  {
+    "id": "item-3",
+    "name": "Sample Item 3",
+    "description": "Placeholder product description.",
+    "price": null,
+    "image": null,
+    "available": false,
+    "placeholder": true
+  }
+]

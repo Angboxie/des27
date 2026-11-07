@@ -1,0 +1,14 @@
+{
+  "name": "Design Engineering Society",
+  "shortName": "DES",
+  "description": "Website of the Design Engineering Society.",
+  "nav": [
+    { "label": "About DES", "url": "/about/" },
+    { "label": "What DES Does", "url": "/what-we-do/" },
+    { "label": "Events", "url": "/events/" },
+    { "label": "Partners", "url": "/partners/" },
+    { "label": "Merchandise", "url": "/merchandise/" },
+    { "label": "Locker Sales", "url": "/lockers/" }
+  ],
+  "socials": []
+}

@@ -1,0 +1,30 @@
+{#
+  Generic card used for events, partners and merch.
+
+  {{ card({ title: "...", text: "...", meta: "...", image: "...", url: "..." }) }}
+
+  Use {% call card({...}) %} ... {% endcall %} to add extra content (e.g. a button).
+#}
+{% macro card(item) %}
+  <article class="card">
+    <div class="card__media">
+      {% if item.image %}
+        <img src="{{ item.image }}" alt="{{ item.imageAlt or '' }}" loading="lazy">
+      {% endif %}
+    </div>
+
+    <div class="card__body">
+      {% if item.meta %}<p class="card__meta">{{ item.meta }}</p>{% endif %}
+
+      <h3 class="card__title">
+        {% if item.url %}<a href="{{ item.url }}">{{ item.title }}</a>{% else %}{{ item.title }}{% endif %}
+      </h3>
+
+      {% if item.text %}<p>{{ item.text }}</p>{% endif %}
+
+      {% if caller %}
+        <div class="card__footer">{{ caller() }}</div>
+      {% endif %}
+    </div>
+  </article>
+{% endmacro %}

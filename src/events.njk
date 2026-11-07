@@ -1,0 +1,43 @@
+---
+layout: layouts/page.njk
+title: Events
+intro: "[Events introduction to be confirmed]"
+---
+{% from "components/card.njk" import card %}
+
+{% set upcoming = events | upcomingEvents %}
+{% set past = events | pastEvents %}
+
+<section class="section" aria-labelledby="upcoming-heading">
+  <div class="container">
+    <h2 id="upcoming-heading">Upcoming</h2>
+
+    {% if upcoming.length %}
+      <div class="grid">
+        {% for event in upcoming %}
+          {% set meta = (event.date | readableDate) + " · " + (event.location or "Location TBC") %}
+          {{ card({ title: event.title, meta: meta, text: event.summary, image: event.image, url: event.link }) }}
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="empty-state">No upcoming events right now.</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="section section--alt" aria-labelledby="past-heading">
+  <div class="container">
+    <h2 id="past-heading">Past events</h2>
+
+    {% if past.length %}
+      <div class="grid">
+        {% for event in past %}
+          {% set meta = (event.date | readableDate) + " · " + (event.location or "Location TBC") %}
+          {{ card({ title: event.title, meta: meta, text: event.summary, image: event.image, url: event.link }) }}
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="empty-state">No past events to show yet.</p>
+    {% endif %}
+  </div>
+</section>
