@@ -1,0 +1,10 @@
+{# Tabs linking the Learn pages (Resources, Community, Showcase) #}
+<nav class="ed-subnav" aria-label="Learn">
+  <div class="des-container">
+    <ul>
+      {% for link in site.learnNav %}
+        <li><a href="{{ link.url }}"{% if page.url == link.url %} aria-current="page"{% endif %}>{{ link.label }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</nav>

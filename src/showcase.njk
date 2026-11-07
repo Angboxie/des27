@@ -1,0 +1,87 @@
+---
+layout: layouts/base.njk
+title: Showcase
+theme: des27
+styles:
+  - /assets/css/events.css
+  - /assets/css/learn.css
+scripts:
+  - /assets/js/events.js
+  - /assets/js/learn.js
+---
+{# Student Showcase - projects in _data/showcase.json. Only publish work with the student's permission. #}
+{% set featured = (showcase | selectattr("featured") | first) %}
+{% set projects = showcase | rejectattr("featured") %}
+{% set heroScript = "Showcase" %}
+{% set heroTags = ["Student work", "competition winners", "&amp; portfolios"] %}
+{% set heroIntro = ["Celebrating what", "DES students design,", "build and make."] %}
+{% include "partials/des27-hero.njk" %}
+{% include "partials/learn-subnav.njk" %}
+
+{% if featured %}
+{% set words = featured.title.split(" ") %}
+<section class="ev-featured" data-cursor="light" aria-labelledby="winner-title">
+  <div class="ev-featured__glow" aria-hidden="true"></div>
+  <svg class="ev-featured__curve draw-line" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path pathLength="1" d="M400 20 C 250 40, 150 120, 120 260 C 105 330, 70 380, 10 420" />
+  </svg>
+  <div class="ev-featured__media">
+    {% if featured.image %}<img src="{{ featured.image }}" alt="">{% else %}<div class="media-placeholder"></div>{% endif %}
+  </div>
+  <div class="des-container ev-featured__inner">
+    <div class="ev-featured__content">
+      <p class="ev-eyebrow reveal">{{ featured.award or "Featured project" }}</p>
+      <h2 id="winner-title" class="ev-featured__title">
+        <span class="ev-featured__big reveal" style="--delay: 100ms">{{ words[0] }}</span>
+        {% if words.length > 1 %}<span class="script ev-featured__script reveal" style="--delay: 220ms">{{ words.slice(1).join(" ") }}</span>{% endif %}
+      </h2>
+      <p class="ed-byline reveal" style="--delay: 260ms">by {{ featured.student }}</p>
+      <p class="ev-featured__text reveal" style="--delay: 320ms">{{ featured.description }}</p>
+      {% if featured.portfolio %}
+        <a class="ev-btn reveal" data-magnetic style="--delay: 420ms" href="{{ featured.portfolio }}" target="_blank" rel="noopener">
+          View portfolio
+          <svg class="ev-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5" /></svg>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="ed-section ed-section--cream" aria-labelledby="projects-title">
+  <div class="des-container">
+    <div class="ed-head">
+      <h2 id="projects-title" class="ev-heading reveal">
+        <span class="ev-heading__big">Project</span>
+        <span class="ev-heading__script script">Gallery</span>
+      </h2>
+      <p class="ed-head__text reveal" style="--delay: 120ms">Work from DES competitions<br>and education initiatives.</p>
+    </div>
+
+    <ul class="ed-projects" data-lightbox>
+      {% for project in projects %}
+        <li class="ev-card reveal" data-tilt style="--delay: {{ (loop.index0 % 3) * 90 }}ms">
+          <div class="ev-frame">
+            <div class="ev-card__media">
+              {% if project.award %}<span class="ed-pill ed-pill--award ev-card__status">{{ project.award }}</span>{% endif %}
+              {% if project.image %}
+                <a href="{{ project.image }}" data-lightbox-item data-caption="{{ project.title }} by {{ project.student }}"><img src="{{ project.image }}" alt="{{ project.title }}" loading="lazy"></a>
+              {% endif %}
+            </div>
+          </div>
+          <div class="ev-card__body">
+            <h3 class="ev-card__title">{{ project.title }}</h3>
+            <p class="ed-person__meta">by {{ project.student }}</p>
+            <p class="ed-person__bio">{{ project.description }}</p>
+            {% if project.portfolio %}
+              <a class="ev-card__link" href="{{ project.portfolio }}" target="_blank" rel="noopener" aria-label="{{ project.student }}'s portfolio">
+                <svg class="ev-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5" /></svg>
+              </a>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+    <p class="ed-note reveal">Student work is only published with the student's permission. Want your project featured? <a href="/community/">Get in touch</a>.</p>
+  </div>
+</section>

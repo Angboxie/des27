@@ -1,69 +1,203 @@
-// Events page: scroll reveals, parallax, upcoming carousel and archive stack
+// DES27 page motion: scroll reveals, scroll-linked drift, lines, tilt,
+// magnetic buttons, the upcoming carousel and the archive stack.
+// Everything here is decoration - the pages work without it.
 
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
 
-/* Reveal on scroll */
+/* Reveal on scroll - plays every time, from the side the element enters */
 
-const revealTargets = document.querySelectorAll(
-  ".reveal, .draw-line, .ev-featured, .ev-rule, [data-archive]"
-);
+const revealTargets = document.querySelectorAll(".reveal, .ev-rule, [data-archive]");
+const peekTargets = document.querySelectorAll(".ev-featured");
 
-if ("IntersectionObserver" in window) {
+if ("IntersectionObserver" in window && !reduceMotion) {
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
+        const el = entry.target;
+        if (entry.isIntersecting) {
+          el.classList.add("is-visible");
+        } else {
+          // left through the top -> come back in from above next time
+          el.dataset.from = entry.boundingClientRect.top < 0 ? "above" : "below";
+          el.classList.remove("is-visible");
+        }
       });
     },
-    { threshold: 0.15, rootMargin: "0px 0px -5% 0px" }
+    { threshold: 0.12, rootMargin: "0px 0px -6% 0px" }
   );
 
   revealTargets.forEach((el) => observer.observe(el));
+
+  // Blue bands open as soon as they peek in, so the bottom of the hero
+  // shows the photo and hints that there is more below
+  const peekObserver = new IntersectionObserver(
+    (entries) => entries.forEach((entry) => entry.target.classList.toggle("is-visible", entry.isIntersecting)),
+    { threshold: 0 }
+  );
+  peekTargets.forEach((el) => peekObserver.observe(el));
 } else {
+  peekTargets.forEach((el) => el.classList.add("is-visible"));
   revealTargets.forEach((el) => el.classList.add("is-visible"));
 }
 
 
-/* Parallax: hero blob follows the pointer, featured photo drifts on scroll */
+/* Scroll-linked motion */
 
 if (!reduceMotion) {
-  const blob = document.querySelector(".ev-hero__blob");
-  const featuredMedia = document.querySelector(".ev-featured__media");
-  let pointer = null;
-  let ticking = false;
+  const vh = () => window.innerHeight;
 
-  const update = () => {
-    ticking = false;
+  // Page position ignoring transforms, so drift doesn't feed back into itself
+  const docTop = (el) => {
+    let top = 0;
+    for (let node = el; node; node = node.offsetParent) top += node.offsetTop;
+    return top;
+  };
 
-    if (blob && pointer) {
-      blob.style.setProperty("--mx", ((pointer.x / window.innerWidth) * 2 - 1).toFixed(3));
-      blob.style.setProperty("--my", ((pointer.y / window.innerHeight) * 2 - 1).toFixed(3));
-    }
+  let items = [];
 
-    if (featuredMedia) {
-      const rect = featuredMedia.getBoundingClientRect();
-      const progress = (rect.top + rect.height / 2 - window.innerHeight / 2) / window.innerHeight;
-      featuredMedia.style.setProperty("--p", Math.max(-1, Math.min(1, progress)).toFixed(3));
+  const measure = () => {
+    const find = (selector, read) =>
+      Array.from(document.querySelectorAll(selector)).map((el) => {
+        const box = el instanceof SVGElement ? el.parentElement : el;
+        return { el, top: docTop(box), height: box.offsetHeight, ...read(el) };
+      });
+
+    items = [
+      ...find("[data-lag]", (el) => ({ type: "lag", amount: parseFloat(el.dataset.lag) })),
+      ...find("[data-speed]", (el) => ({ type: "speed", amount: parseFloat(el.dataset.speed) })),
+      ...find("[data-x]", (el) => ({ type: "x", amount: parseFloat(el.dataset.x) })),
+      ...find(".draw-line", () => ({ type: "draw" })),
+      ...find("[data-archive-stack]", () => ({ type: "fan" })),
+      ...find(".ev-featured__media", () => ({ type: "photo" })),
+    ];
+  };
+
+  let lastY = window.scrollY;
+  let velocity = 0;
+  let running = false;
+  const skewTargets = document.querySelectorAll("[data-skew]");
+
+  const frame = () => {
+    const y = window.scrollY;
+    const h = vh();
+
+    // smoothed scroll speed, used for the lean on card rows
+    velocity += (y - lastY - velocity) * 0.18;
+    lastY = y;
+
+    items.forEach((item) => {
+      // -1 (above centre) .. 0 (centred) .. 1 (below centre)
+      const centre = (item.top + item.height / 2 - y - h / 2) / h;
+      // 0 as it enters from the bottom, 1 once it's well into view
+      const enter = clamp((h - (item.top - y)) / (h * 0.85), 0, 1);
+      const style = item.el.style;
+
+      switch (item.type) {
+        case "lag":
+          style.setProperty("--ty", `${(y * item.amount).toFixed(1)}px`);
+          break;
+        case "speed":
+          style.setProperty("--ty", `${(-centre * item.amount * h).toFixed(1)}px`);
+          break;
+        case "x":
+          style.setProperty("--tx", `${(centre * item.amount).toFixed(1)}px`);
+          break;
+        case "draw":
+          style.setProperty("--draw", enter.toFixed(3));
+          break;
+        case "fan":
+          style.setProperty("--fan", (0.35 + enter * 0.75).toFixed(3));
+          break;
+        case "photo":
+          style.setProperty("--p", clamp(centre, -1, 1).toFixed(3));
+          break;
+      }
+    });
+
+    const lean = clamp(velocity * -0.06, -3.5, 3.5);
+    skewTargets.forEach((el) => el.style.setProperty("--skew", `${lean.toFixed(2)}deg`));
+
+    if (Math.abs(velocity) > 0.05) {
+      requestAnimationFrame(frame);
+    } else {
+      running = false;
+      velocity = 0;
+      skewTargets.forEach((el) => el.style.setProperty("--skew", "0deg"));
     }
   };
 
-  const requestUpdate = () => {
-    if (!ticking) {
-      ticking = true;
-      requestAnimationFrame(update);
-    }
+  const start = () => {
+    if (running) return;
+    running = true;
+    requestAnimationFrame(frame);
   };
 
-  window.addEventListener("pointermove", (event) => {
-    pointer = { x: event.clientX, y: event.clientY };
-    requestUpdate();
-  }, { passive: true });
+  const remeasure = () => {
+    measure();
+    running = false;
+    frame();
+  };
 
-  window.addEventListener("scroll", requestUpdate, { passive: true });
-  requestUpdate();
+  measure();
+  frame();
+  window.addEventListener("scroll", start, { passive: true });
+  window.addEventListener("resize", remeasure);
+  window.addEventListener("load", remeasure);
+  if (document.fonts) document.fonts.ready.then(remeasure);
+
+
+  /* Pointer effects (mouse / trackpad only) */
+
+  if (finePointer) {
+    const blob = document.querySelector(".ev-hero__blob");
+    if (blob) {
+      window.addEventListener("pointermove", (event) => {
+        blob.style.setProperty("--mx", ((event.clientX / window.innerWidth) * 2 - 1).toFixed(3));
+        blob.style.setProperty("--my", ((event.clientY / window.innerHeight) * 2 - 1).toFixed(3));
+      }, { passive: true });
+    }
+
+    // Buttons lean toward the pointer
+    document.querySelectorAll("[data-magnetic]").forEach((el) => {
+      el.addEventListener("pointermove", (event) => {
+        const rect = el.getBoundingClientRect();
+        const x = (event.clientX - rect.left - rect.width / 2) * 0.25;
+        const y = (event.clientY - rect.top - rect.height / 2) * 0.35;
+        el.style.translate = `${x.toFixed(1)}px ${y.toFixed(1)}px`;
+      });
+      el.addEventListener("pointerleave", () => { el.style.translate = ""; });
+    });
+
+    // Cards and the front archive photo tilt toward the pointer
+    const tilt = (host, target, strength) => {
+      host.addEventListener("pointermove", (event) => {
+        const el = target();
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const px = (event.clientX - rect.left) / rect.width - 0.5;
+        const py = (event.clientY - rect.top) / rect.height - 0.5;
+        el.style.setProperty("--ry", `${(px * strength).toFixed(2)}deg`);
+        el.style.setProperty("--rx", `${(-py * strength).toFixed(2)}deg`);
+      });
+      host.addEventListener("pointerleave", () => {
+        const el = target();
+        if (!el) return;
+        el.style.removeProperty("--rx");
+        el.style.removeProperty("--ry");
+      });
+    };
+
+    document.querySelectorAll("[data-tilt]").forEach((card) => {
+      tilt(card, () => card.querySelector(".ev-card__media"), 10);
+    });
+
+    document.querySelectorAll("[data-archive-stack]").forEach((stack) => {
+      tilt(stack, () => stack.querySelector('[data-pos="0"] figure'), 8);
+    });
+  }
 }
 
 
@@ -74,6 +208,7 @@ document.querySelectorAll("[data-carousel]").forEach((carousel) => {
   const prev = carousel.querySelector("[data-carousel-prev]");
   const next = carousel.querySelector("[data-carousel-next]");
   const dotsWrap = carousel.querySelector("[data-carousel-dots]");
+  const progress = carousel.querySelector("[data-carousel-progress]");
   if (!track) return;
 
   const cards = Array.from(track.children);
@@ -85,7 +220,7 @@ document.querySelectorAll("[data-carousel]").forEach((carousel) => {
 
   const maxScroll = () => track.scrollWidth - track.clientWidth;
 
-  const dots = cards.map((card, index) => {
+  const dots = !dotsWrap ? [] : cards.map((card, index) => {
     const dot = document.createElement("button");
     dot.type = "button";
     dot.className = "ev-carousel__dot";
@@ -107,12 +242,15 @@ document.querySelectorAll("[data-carousel]").forEach((carousel) => {
   function updateControls() {
     const active = currentIndex();
     dots.forEach((dot, index) => dot.setAttribute("aria-current", String(index === active)));
-    prev.disabled = track.scrollLeft <= 2;
-    next.disabled = track.scrollLeft >= maxScroll() - 2;
+    if (prev) prev.disabled = track.scrollLeft <= 2;
+    if (next) next.disabled = track.scrollLeft >= maxScroll() - 2;
+    if (progress) {
+      progress.style.setProperty("--pos", (maxScroll() > 0 ? track.scrollLeft / maxScroll() : 0).toFixed(3));
+    }
   }
 
-  prev.addEventListener("click", () => track.scrollBy({ left: -step() }));
-  next.addEventListener("click", () => track.scrollBy({ left: step() }));
+  if (prev) prev.addEventListener("click", () => track.scrollBy({ left: -step() }));
+  if (next) next.addEventListener("click", () => track.scrollBy({ left: step() }));
 
   let frame;
   track.addEventListener("scroll", () => {
@@ -170,9 +308,14 @@ document.querySelectorAll("[data-archive]").forEach((stage) => {
     order.forEach((itemIndex, pos) => {
       const item = items[itemIndex];
       item.dataset.pos = pos <= 3 ? String(pos) : "hidden";
-      item.style.setProperty("--order", pos);
       item.setAttribute("aria-hidden", String(pos !== 0));
       item.querySelector(".ev-archive__link").tabIndex = pos === 0 ? 0 : -1;
+      // clear any tilt left on a photo that's no longer in front
+      if (pos !== 0) {
+        const figure = item.querySelector("figure");
+        figure.style.removeProperty("--rx");
+        figure.style.removeProperty("--ry");
+      }
     });
   }
 
@@ -223,11 +366,32 @@ document.querySelectorAll("[data-archive]").forEach((stage) => {
   }
 
   layout();
-  next.addEventListener("click", () => shuffle(1));
-  prev.addEventListener("click", () => shuffle(-1));
+  next.addEventListener("click", () => { shuffle(1); restartAuto(); });
+  prev.addEventListener("click", () => { shuffle(-1); restartAuto(); });
 
   stage.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowRight") shuffle(1);
-    if (event.key === "ArrowLeft") shuffle(-1);
+    if (event.key === "ArrowRight") { shuffle(1); restartAuto(); }
+    if (event.key === "ArrowLeft") { shuffle(-1); restartAuto(); }
   });
+
+  // Shuffle by itself while on screen, pausing while someone is interacting
+  let timer = null;
+  let paused = false;
+
+  function restartAuto() {
+    clearInterval(timer);
+    timer = null;
+    if (reduceMotion || paused || !stage.classList.contains("is-visible")) return;
+    timer = setInterval(() => {
+      if (!document.hidden) shuffle(1);
+    }, 4500);
+  }
+
+  stage.addEventListener("pointerenter", () => { paused = true; restartAuto(); });
+  stage.addEventListener("pointerleave", () => { paused = false; restartAuto(); });
+  stage.addEventListener("focusin", () => { paused = true; restartAuto(); });
+  stage.addEventListener("focusout", () => { paused = false; restartAuto(); });
+
+  // the reveal observer toggles .is-visible on the stage
+  new MutationObserver(restartAuto).observe(stage, { attributes: true, attributeFilter: ["class"] });
 });

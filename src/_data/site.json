@@ -1,7 +1,7 @@
 {
-  "name": "Design Engineering Society",
+  "name": "Design Student Society",
   "shortName": "DES",
-  "description": "Website of the Design Engineering Society.",
+  "description": "Website of the Design Student Society.",
   "nav": [
     {
       "label": "About DES",
@@ -39,6 +39,15 @@
       "url": "/events/"
     },
     {
+      "label": "Learn",
+      "url": "/resources/",
+      "activeFor": [
+        "/resources/",
+        "/community/",
+        "/showcase/"
+      ]
+    },
+    {
       "label": "Locker Sales",
       "url": "/lockers/"
     },
@@ -54,5 +63,37 @@
       "label": "Join Us",
       "url": "/about/#join"
     }
-  ]
+  ],
+  "learnNav": [
+    {
+      "label": "Resources",
+      "url": "/resources/"
+    },
+    {
+      "label": "Community",
+      "url": "/community/"
+    },
+    {
+      "label": "Showcase",
+      "url": "/showcase/"
+    }
+  ],
+  "education": {
+    "_note": "Links for the Learn pages. Leave as null until ready - those buttons show as 'Coming soon'.",
+    "discordUrl": null,
+    "whatsappUrl": null,
+    "suggestionFormUrl": null,
+    "askQuestionEmail": null,
+    "poll": {
+      "question": "Which software masterclass do you need most for mid-sem review?",
+      "options": [
+        "Rhino",
+        "Grasshopper",
+        "Revit",
+        "Adobe Creative Cloud",
+        "Enscape/V-Ray"
+      ],
+      "url": null
+    }
+  }
 }

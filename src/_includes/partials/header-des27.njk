@@ -11,7 +11,8 @@
       <ul>
         {% for link in site.des27Nav %}
           <li>
-            <a href="{{ link.url }}"{% if page.url == link.url %} aria-current="page"{% endif %}>{{ link.label }}</a>
+            {% set isCurrent = page.url == link.url or (link.url != "/" and page.url.startsWith(link.url)) or (link.activeFor and page.url in link.activeFor) %}
+            <a href="{{ link.url }}"{% if isCurrent %} aria-current="page"{% endif %}>{{ link.label }}{% if isCurrent %}<span class="des-nav__bar" aria-hidden="true"></span>{% endif %}</a>
           </li>
         {% endfor %}
       </ul>

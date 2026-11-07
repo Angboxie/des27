@@ -12,7 +12,7 @@
   {% if theme == "des27" %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Montserrat:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Prata&family=Montserrat:wght@400;500;600;700&display=swap">
   {% endif %}
 
   <link rel="stylesheet" href="/assets/css/tokens.css">
@@ -23,7 +23,21 @@
   {% for sheet in styles %}<link rel="stylesheet" href="{{ sheet }}">{% endfor %}
 
   <script>document.documentElement.classList.add("js");</script>
+  {% if theme == "des27" %}
+    {# Arriving through a page transition: the hero title morphs in, so skip its own entrance #}
+    <script>
+      addEventListener("pagereveal", function (e) {
+        if (!e.viewTransition) return;
+        var root = document.documentElement, x = 0.5, y = 0.5;
+        root.classList.add("vt-arrive");
+        try { var p = JSON.parse(sessionStorage.getItem("des-vt")); if (p) { x = p.x; y = p.y; } } catch (err) {}
+        root.style.setProperty("--vt-x", Math.round(x * innerWidth) + "px");
+        root.style.setProperty("--vt-y", Math.round(y * innerHeight) + "px");
+      });
+    </script>
+  {% endif %}
   <script src="/assets/js/nav.js" defer></script>
+  {% if theme == "des27" %}<script src="/assets/js/cursor.js" defer></script>{% endif %}
   {% for script in scripts %}<script src="{{ script }}" defer></script>{% endfor %}
 </head>
 <body{% if theme %} class="theme-{{ theme }}"{% endif %}>

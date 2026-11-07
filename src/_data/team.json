@@ -1,0 +1,6 @@
+[
+  { "name": "Team Member", "role": "Education Director", "discipline": "Architecture", "year": "Year 3", "bio": "Placeholder bio: design interests and current studio project.", "software": ["Rhino", "Grasshopper"], "photo": null, "email": null, "placeholder": true },
+  { "name": "Team Member", "role": "Workshops Lead", "discipline": "Industrial Design", "year": "Year 2", "bio": "Placeholder bio: design interests and current studio project.", "software": ["Adobe Creative Cloud"], "photo": null, "email": null, "placeholder": true },
+  { "name": "Team Member", "role": "Resources Lead", "discipline": "Landscape", "year": "Year 2", "bio": "Placeholder bio: design interests and current studio project.", "software": ["Revit", "Enscape/V-Ray"], "photo": null, "email": null, "placeholder": true },
+  { "name": "Team Member", "role": "Competitions Lead", "discipline": "Architecture", "year": "Year 3", "bio": "Placeholder bio: design interests and current studio project.", "software": ["Rhino", "Adobe Creative Cloud"], "photo": null, "email": null, "placeholder": true }
+]

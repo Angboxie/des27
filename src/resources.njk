@@ -1,0 +1,113 @@
+---
+layout: layouts/base.njk
+title: Resources
+theme: des27
+styles:
+  - /assets/css/events.css
+  - /assets/css/learn.css
+scripts:
+  - /assets/js/events.js
+  - /assets/js/learn.js
+---
+{# Digital Resource Hub - content lives in _data/resources.json #}
+{% set heroScript = "Resources" %}
+{% set heroTags = ["Cheat sheets", "templates", "reading lists", "&amp; handouts"] %}
+{% set heroIntro = ["Tools and guides", "to keep you going", "between events."] %}
+{% include "partials/des27-hero.njk" %}
+{% include "partials/learn-subnav.njk" %}
+
+<section class="ed-section ed-section--cream" aria-labelledby="toolkit-title">
+  <div class="des-container">
+    <div class="ed-head">
+      <h2 id="toolkit-title" class="ev-heading reveal">
+        <span class="ev-heading__big">Learning</span>
+        <span class="ev-heading__script script">Toolkit</span>
+      </h2>
+      <p class="ed-head__text reveal" style="--delay: 120ms">Software starter packs, templates,<br>reading lists and workshop files<br>from the Education Team.</p>
+    </div>
+
+    <form class="ed-filters reveal" data-filters aria-label="Filter resources" onsubmit="return false">
+      <label class="ed-search">
+        <span class="visually-hidden">Search</span>
+        <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="5.5"/><path d="m13 13 4 4"/></svg>
+        <input type="search" name="q" placeholder="Search resources" autocomplete="off">
+      </label>
+      {% for filter in [
+        { name: "type", label: "Type", all: "All types", values: resources | uniqueValues("type") },
+        { name: "software", label: "Software", all: "All software", values: resources | uniqueValues("software") },
+        { name: "year", label: "Year level", all: "All year levels", values: resources | uniqueValues("year") },
+        { name: "discipline", label: "Discipline", all: "All disciplines", values: resources | uniqueValues("discipline") }
+      ] %}
+        <label class="ed-select">
+          <span class="visually-hidden">{{ filter.label }}</span>
+          <select name="{{ filter.name }}">
+            <option value="">{{ filter.all }}</option>
+            {% for value in filter.values %}<option value="{{ value }}">{{ value }}</option>{% endfor %}
+          </select>
+        </label>
+      {% endfor %}
+      <label class="ed-toggle">
+        <input type="checkbox" name="recommended">
+        <span>Recommended only</span>
+      </label>
+      <p class="ed-filters__count" data-filter-count aria-live="polite">{{ resources.length }} resources</p>
+    </form>
+
+    <ul class="ed-res-grid" data-filter-list>
+      {% for item in resources %}
+        <li class="ed-res reveal" style="--delay: {{ (loop.index0 % 3) * 90 }}ms"
+            data-type="{{ item.type }}"
+            data-software="|{{ item.software | join('|') }}|"
+            data-year="|{{ item.year | join('|') }}|"
+            data-discipline="|{{ item.discipline | join('|') }}|"
+            data-recommended="{{ 'yes' if item.recommended else '' }}"
+            data-search="{{ (item.title + ' ' + item.description + ' ' + (item.software | join(' '))) | lower }}">
+          <div class="ed-res__preview">
+            {% if item.preview %}
+              <img src="{{ item.preview }}" alt="" loading="lazy">
+            {% else %}
+              <span class="ed-res__filetype script" aria-hidden="true">{{ item.fileType }}</span>
+              <span class="ed-res__lines" aria-hidden="true"><i></i><i></i><i></i></span>
+            {% endif %}
+            {% if item.recommended %}<span class="ed-pill ed-pill--{{ item.recommended | lower }} ed-res__badge">{{ item.recommended }} recommended</span>{% endif %}
+          </div>
+          <div class="ed-res__body">
+            <p class="ed-res__type">{{ item.type }} · {{ item.fileType }}</p>
+            <h3 class="ed-res__title">{{ item.title }}</h3>
+            <p class="ed-res__text">{{ item.description }}</p>
+            <ul class="ed-chips" aria-label="Tags">
+              {% for tag in item.software %}<li>{{ tag }}</li>{% endfor %}
+              {% for tag in item.year %}<li>{{ tag }}</li>{% endfor %}
+            </ul>
+            <div class="ed-res__actions">
+              {% if item.file %}
+                <a class="des-btn des-btn--solid" href="{{ item.file }}" download>
+                  Download
+                  <svg class="ev-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v9M4 8l4 4 4-4" /></svg>
+                </a>
+                <a class="ed-link" href="{{ item.file }}" target="_blank" rel="noopener">Preview</a>
+              {% else %}
+                <span class="des-btn des-btn--solid is-disabled" aria-disabled="true">Coming soon</span>
+              {% endif %}
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+    <p class="ed-empty" data-filter-empty hidden>No resources match those filters yet. Try clearing one, or <a href="/community/">ask the team</a>.</p>
+  </div>
+</section>
+
+<section class="ed-band" data-cursor="light" aria-labelledby="ask-title">
+  <div class="des-container ed-band__inner">
+    <h2 id="ask-title" class="ev-heading reveal">
+      <span class="ev-heading__big">Need something</span>
+      <span class="ev-heading__script script">else?</span>
+    </h2>
+    <p class="reveal" style="--delay: 120ms">Tell the Education Team what would help,<br>and we'll make it.</p>
+    <a class="ev-btn reveal" data-magnetic style="--delay: 220ms" href="/community/">
+      Ask the team
+      <svg class="ev-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5" /></svg>
+    </a>
+  </div>
+</section>

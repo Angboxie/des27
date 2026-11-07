@@ -4,3 +4,7 @@ _site/
 .env
 .DS_Store
 *.log
+
+# Brand fonts: free versions are personal-use only. Not committed until the club has licences.
+src/assets/fonts/*
+!src/assets/fonts/README.md

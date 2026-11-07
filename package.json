@@ -2,7 +2,7 @@
   "name": "des-website",
   "version": "0.1.0",
   "private": true,
-  "description": "Website for the Design Engineering Society",
+  "description": "Website for the Design Student Society",
   "scripts": {
     "start": "eleventy --serve",
     "build": "eleventy",

@@ -1,6 +1,6 @@
 # DES Website
 
-Website for the Design Engineering Society, built with [Eleventy](https://www.11ty.dev/) (plain HTML, CSS and JS with Nunjucks templates).
+Website for the Design Student Society, built with [Eleventy](https://www.11ty.dev/) (plain HTML, CSS and JS with Nunjucks templates).
 
 All page text and data is placeholder until the content and designs are finalised.
 
@@ -36,7 +36,11 @@ Most content lives in `src/_data/`, so it can be edited without touching templat
 
 - **Events** - `events.json`. Set `status` to `"upcoming"` or `"past"` to choose which list it appears in. Dates use `YYYY-MM-DD`.
 - **Partners** - `partners.json`
-- **Merchandise** - `merchandise.json`. `price` is a number (e.g. `15` shows as £15.00), or `null` for "Price TBC".
+- **Merchandise** - `merchandise.json`. `price` is a number (e.g. `15` shows as $15.00), or `null` for "Price TBC".
+- **Events** also take `registration` (`status`: `open` / `coming-soon` / `closed`, `url`, `deadline`), `startTime`/`endTime`, `requested: true` (adds the "You asked, we're delivering" tag), `gallery` (photos for past events) and `details` (brief, eligibility, key dates, submission rules for flagship events). Each event gets its own page at `/events/<id>/` with Add to Calendar links.
+- **Resources** - `resources.json` (`file` is the download link, e.g. a Google Drive link)
+- **Community** - `team.json`, `faq.json`, and the Discord/WhatsApp/form links and poll in `site.json` under `education`
+- **Showcase** - `showcase.json` (only publish work with the student's permission)
 - **Navigation** - `site.json`
 
 Images go in `src/assets/images/` and are referenced as `/assets/images/filename.jpg`.

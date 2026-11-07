@@ -1,0 +1,9 @@
+---
+pagination:
+  data: events
+  size: 1
+  alias: event
+permalink: "/events/{{ event.id }}/event.ics"
+eleventyExcludeFromCollections: true
+---
+{{ event | icsFile(site.name) | safe }}

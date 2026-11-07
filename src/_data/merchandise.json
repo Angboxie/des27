@@ -1,29 +1,35 @@
-[
-  {
-    "id": "item-1",
-    "name": "Sample Item 1",
-    "description": "Placeholder product description.",
-    "price": null,
+{
+  "hero": {
     "image": null,
-    "available": false,
-    "placeholder": true
+    "tags": ["Workshops", "talks", "exhibitions", "& more"]
   },
-  {
-    "id": "item-2",
-    "name": "Sample Item 2",
-    "description": "Placeholder product description.",
-    "price": null,
-    "image": null,
-    "available": false,
-    "placeholder": true
+  "newIn": {
+    "label": "Browse our latest drop!",
+    "items": [
+      { "name": "New drop 1", "image": "/assets/images/merch-new-1.jpg", "link": null, "placeholder": true },
+      { "name": "New drop 2", "image": "/assets/images/merch-new-2.jpg", "link": null, "placeholder": true },
+      { "name": "New drop 3", "image": "/assets/images/merch-new-3.jpg", "link": null, "placeholder": true },
+      { "name": "New drop 4", "image": null, "link": null, "placeholder": true }
+    ]
   },
-  {
-    "id": "item-3",
-    "name": "Sample Item 3",
-    "description": "Placeholder product description.",
-    "price": null,
+  "inStock": {
+    "browseAllLink": null,
+    "items": [
+      { "name": "DES Club Tee", "price": null, "image": null, "link": null, "placeholder": true },
+      { "name": "DES Club Tote", "price": null, "image": null, "link": null, "placeholder": true },
+      { "name": "DES Club Cap", "price": null, "image": null, "link": null, "placeholder": true },
+      { "name": "DES Club Hoodie", "price": null, "image": null, "link": null, "placeholder": true },
+      { "name": "DES Club Stickers", "price": null, "image": null, "link": null, "placeholder": true }
+    ]
+  },
+  "specialRelease": {
+    "title": "DES27",
+    "label": "Special release",
+    "date": "2027-03-16",
     "image": null,
-    "available": false,
-    "placeholder": true
+    "imageCutout": null,
+    "buttonLabel": "Sneak Peek",
+    "link": null,
+    "_note": "imageCutout: optional PNG of just the people (transparent background). It sits in front of the big DES27 text, like the design."
   }
-]
+}

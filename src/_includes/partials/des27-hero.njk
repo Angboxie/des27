@@ -5,7 +5,7 @@
 #}
 {% set heroBig = heroBig or "DES CLUB" %}
 <section class="ev-hero{% if heroLinks %} ev-hero--tall{% endif %}" aria-labelledby="hero-title">
-  <div class="ev-hero__blob" aria-hidden="true"></div>
+  <div class="ev-hero__blob" data-lag="0.45" aria-hidden="true"></div>
 
   <svg class="ev-hero__line draw-line" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
     <path pathLength="1" d="M-20 330 C 120 470, 260 500, 420 470 C 600 430, 720 330, 820 190 C 900 80, 1060 40, 1460 60" />
@@ -18,7 +18,7 @@
           {% if letter == " " %} {% else %}<span class="ev-letter" style="--i: {{ loop.index0 }}">{{ letter }}</span>{% endif %}
         {%- endfor -%}
       </span>
-      <span class="ev-hero__script script" aria-hidden="true">{{ heroScript }}</span>
+      <span class="ev-hero__script script{% if heroScript.length > 7 %} ev-hero__script--long{% endif %}" aria-hidden="true">{{ heroScript }}</span>
       <span class="visually-hidden">{{ heroBig }} {{ heroScript }}</span>
     </h1>
 
@@ -28,7 +28,7 @@
     {% if heroLinks %}
       <div class="ev-hero__links reveal" style="--delay: 900ms">
         {% for link in heroLinks %}
-          <a class="des-btn" href="{{ link.url }}">
+          <a class="des-btn" data-magnetic href="{{ link.url }}">
             {{ link.label }}
             <svg class="ev-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5" /></svg>
           </a>
@@ -36,4 +36,6 @@
       </div>
     {% endif %}
   </div>
+
+  {% include "partials/scroll-cue.njk" %}
 </section>

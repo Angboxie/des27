@@ -1,0 +1,153 @@
+---
+layout: layouts/base.njk
+title: Community
+theme: des27
+styles:
+  - /assets/css/events.css
+  - /assets/css/learn.css
+scripts:
+  - /assets/js/events.js
+  - /assets/js/learn.js
+---
+{# Community Hub - team in _data/team.json, FAQ in _data/faq.json, links and poll in site.json (education) #}
+{% set edu = site.education %}
+{% set heroScript = "Community" %}
+{% set heroTags = ["Meet the team", "peer support", "&amp; polls"] %}
+{% set heroIntro = ["The Education Team,", "here to help you", "learn and make."] %}
+{% include "partials/des27-hero.njk" %}
+{% include "partials/learn-subnav.njk" %}
+
+<section class="ed-section ed-section--cream" aria-labelledby="team-title">
+  <div class="des-container">
+    <div class="ed-head">
+      <h2 id="team-title" class="ev-heading reveal">
+        <span class="ev-heading__big">Meet</span>
+        <span class="ev-heading__script script">the Team</span>
+      </h2>
+      <p class="ed-head__text reveal" style="--delay: 120ms">Stuck on software or studio?<br>Ask one of us.</p>
+    </div>
+
+    <ul class="ed-team">
+      {% for person in team %}
+        <li class="ev-card ed-person reveal" data-tilt style="--delay: {{ (loop.index0 % 4) * 90 }}ms">
+          <div class="ev-frame">
+            <div class="ev-card__media ed-person__photo">
+              {% if person.photo %}<img src="{{ person.photo }}" alt="{{ person.name }}" loading="lazy">{% endif %}
+            </div>
+          </div>
+          <div class="ev-card__body ed-person__body">
+            <h3 class="ev-card__title ed-person__name">{{ person.name }}</h3>
+            <p class="ed-person__role script">{{ person.role }}</p>
+            <p class="ed-person__meta">{{ person.discipline }} · {{ person.year }}</p>
+            <p class="ed-person__bio">{{ person.bio }}</p>
+            <ul class="ed-chips" aria-label="Software">{% for tool in person.software %}<li>{{ tool }}</li>{% endfor %}</ul>
+            {% set askTo = person.email or edu.askQuestionEmail %}
+            {% if askTo %}
+              <a class="des-btn ed-person__ask" href="mailto:{{ askTo }}?subject=Question for the DES Education Team">
+                Ask a question
+                <svg class="ev-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5" /></svg>
+              </a>
+            {% else %}
+              <span class="des-btn ed-person__ask is-disabled" aria-disabled="true">Ask a question (soon)</span>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="ed-band" data-cursor="light" aria-labelledby="say-title">
+  <svg class="ev-featured__curve draw-line" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path pathLength="1" d="M400 20 C 250 40, 150 120, 120 260 C 105 330, 70 380, 10 420" />
+  </svg>
+  <div class="des-container">
+    <h2 id="say-title" class="ev-heading reveal">
+      <span class="ev-heading__big">Have your</span>
+      <span class="ev-heading__script script">Say</span>
+    </h2>
+
+    <div class="ed-panels">
+      <form class="ed-panel ed-poll reveal" data-poll onsubmit="return false">
+        <p class="ed-panel__eyebrow">Live poll</p>
+        <fieldset>
+          <legend class="ed-panel__title">{{ edu.poll.question }}</legend>
+          {% for option in edu.poll.options %}
+            <label class="ed-poll__option">
+              <input type="radio" name="poll" value="{{ option }}">
+              <span>{{ option }}</span>
+            </label>
+          {% endfor %}
+        </fieldset>
+        {% if edu.poll.url %}
+          <a class="ev-btn ed-btn--lime" data-poll-submit href="{{ edu.poll.url }}" target="_blank" rel="noopener">
+            Cast your vote
+            <svg class="ev-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5" /></svg>
+          </a>
+        {% else %}
+          <span class="ev-btn ed-btn--lime is-disabled" aria-disabled="true">Voting opens soon</span>
+        {% endif %}
+        <p class="ed-panel__note">Results are shared with everyone once the poll closes.</p>
+      </form>
+
+      <div class="ed-panel reveal" style="--delay: 150ms">
+        <p class="ed-panel__eyebrow">Suggestion box</p>
+        <p class="ed-panel__title">Want a workshop on something specific?</p>
+        <p>Tell us what you need. Events that come from your suggestions get a <span class="ed-pill ed-pill--asked">You asked, we're delivering</span> tag.</p>
+        {% if edu.suggestionFormUrl %}
+          <a class="ev-btn" data-magnetic href="{{ edu.suggestionFormUrl }}" target="_blank" rel="noopener">
+            Suggest an event
+            <svg class="ev-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5" /></svg>
+          </a>
+        {% else %}
+          <span class="ev-btn is-disabled" aria-disabled="true">Suggestions open soon</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ed-section" aria-labelledby="faq-title">
+  <div class="des-container ed-faq-wrap">
+    <h2 id="faq-title" class="ev-heading reveal">
+      <span class="ev-heading__big">Common</span>
+      <span class="ev-heading__script script">Questions</span>
+    </h2>
+    <div class="ed-faq">
+      {% for item in faq %}
+        <details class="reveal" style="--delay: {{ loop.index0 * 60 }}ms">
+          <summary>{{ item.question }}<span class="ed-faq__icon" aria-hidden="true"></span></summary>
+          <p>{{ item.answer }}</p>
+        </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="ed-section ed-section--cream" aria-labelledby="chat-title">
+  <div class="des-container">
+    <h2 id="chat-title" class="ev-heading reveal">
+      <span class="ev-heading__big">Get help</span>
+      <span class="ev-heading__script script">in real time</span>
+    </h2>
+    <div class="ed-chat">
+      {% for channel in [
+        { name: "Discord", text: "Join the DES Education channel for tutorial help and quick questions.", url: edu.discordUrl },
+        { name: "WhatsApp", text: "Join the community chat for announcements and workshop drops.", url: edu.whatsappUrl }
+      ] %}
+        <div class="ed-chat__card reveal" style="--delay: {{ loop.index0 * 120 }}ms">
+          <h3>{{ channel.name }}</h3>
+          <p>{{ channel.text }}</p>
+          {% if channel.url %}
+            <a class="des-btn des-btn--solid" data-magnetic href="{{ channel.url }}" target="_blank" rel="noopener">
+              Join {{ channel.name }}
+              <svg class="ev-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5" /></svg>
+            </a>
+          {% else %}
+            <span class="des-btn des-btn--solid is-disabled" aria-disabled="true">Link coming soon</span>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
