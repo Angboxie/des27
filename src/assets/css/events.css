@@ -237,8 +237,9 @@
   translate: 0 calc(var(--p, 0) * 4%);
 }
 
+/* starts as a sliver of photo, opens when the band scrolls into view */
 .js .ev-featured__media {
-  clip-path: ellipse(0% 120% at 0% 50%);
+  clip-path: ellipse(24% 120% at 0% 50%);
   transition: clip-path 1.6s var(--ease-out);
 }
 
@@ -384,7 +385,7 @@
     clip-path: ellipse(calc(120% - var(--ring)) calc(100% - var(--ring)) at 50% 0%);
   }
 
-  .js .ev-featured__media { clip-path: ellipse(120% 0% at 50% 0%); }
+  .js .ev-featured__media { clip-path: ellipse(120% 28% at 50% 0%); }
   .js .ev-featured.is-visible .ev-featured__media { clip-path: ellipse(120% 100% at 50% 0%); }
 
   .ev-featured__inner {

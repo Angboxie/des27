@@ -31,11 +31,11 @@ if ("IntersectionObserver" in window && !reduceMotion) {
 
   revealTargets.forEach((el) => observer.observe(el));
 
-  // Blue bands open as soon as they peek in, so the bottom of the hero
-  // shows the photo and hints that there is more below
+  // Blue bands: the photo starts slightly uncovered (a hint in the peek below
+  // the hero) and opens fully once the band is properly on screen
   const peekObserver = new IntersectionObserver(
-    (entries) => entries.forEach((entry) => entry.target.classList.toggle("is-visible", entry.isIntersecting)),
-    { threshold: 0 }
+    (entries) => entries.forEach((entry) => entry.target.classList.toggle("is-visible", entry.intersectionRatio >= 0.6)),
+    { threshold: [0, 0.6] }
   );
   peekTargets.forEach((el) => peekObserver.observe(el));
 } else {
