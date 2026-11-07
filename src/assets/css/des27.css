@@ -1,36 +1,23 @@
 /*
-  Brand fonts: Against (serif) and Codec Pro (main text) are paid fonts, so they
-  aren't in the repo. Drop the font files (.woff2, .otf or .ttf) into src/assets/fonts/ with the names
-  below and they'll be used automatically. Until then the lookalikes after them
-  in the font lists are used (Prata, Montserrat).
+  Brand fonts, in src/assets/fonts/:
+  - Against by 177Studio (serif)
+  - Codec Pro by Zetafonts (main text) - CC BY-NC, credited in the footer.
+    Only the Regular weight is included, so bold text is drawn from it.
+  If a file is missing, the look-alikes after them in the font lists are used.
 */
 
 @font-face {
   font-family: "Against";
-  src: local("Against"), local("Against Regular"), url("../fonts/against-regular.woff2") format("woff2"),
-       url("../fonts/against-regular.otf") format("opentype"), url("../fonts/against-regular.ttf") format("truetype");
+  src: url("../fonts/against-regular.otf") format("opentype");
   font-weight: 400;
   font-display: swap;
 }
 
 @font-face {
   font-family: "Codec Pro";
-  src: local("Codec Pro"), local("Codec Pro Regular"), url("../fonts/codec-pro-regular.woff2") format("woff2"),
-       url("../fonts/codec-pro-regular.otf") format("opentype"), url("../fonts/codec-pro-regular.ttf") format("truetype");
-  font-weight: 300 400;
+  src: url("../fonts/codec-pro-regular.ttf") format("truetype");
+  font-weight: 400;
   font-display: swap;
-  /* the free trial has no numbers, so digits use the fallback font */
-  unicode-range: U+0000-002F, U+003A-FFFF;
-}
-
-@font-face {
-  font-family: "Codec Pro";
-  src: local("Codec Pro Bold"), url("../fonts/codec-pro-bold.woff2") format("woff2"),
-       url("../fonts/codec-pro-bold.otf") format("opentype"), url("../fonts/codec-pro-bold.ttf") format("truetype");
-  font-weight: 500 900;
-  font-display: swap;
-  /* the free trial has no numbers, so digits use the fallback font */
-  unicode-range: U+0000-002F, U+003A-FFFF;
 }
 
 /*

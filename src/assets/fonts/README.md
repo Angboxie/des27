@@ -1,9 +1,7 @@
 # Fonts
 
-Brand fonts go here. They are not committed (see `.gitignore`) because the free versions are personal-use only.
+- `against-regular.otf` - Against by 177Studio (serif)
+- `codec-pro-regular.ttf` - Codec Pro by Zetafonts (main text), CC BY-NC.
+  Credit required: "Font: Codec Pro Family by Zetafonts - http://www.zetafonts.com/collection/3809" (shown in the site footer).
 
-- `against-regular.otf` - Against by 177Studio (serif). Licence: https://177studio.com/product/against-font/
-- `codec-pro-regular.ttf`, `codec-pro-bold.ttf` - Codec by Zetafonts (main text). Licence: https://zetafonts.com
-
-Once the club has licences, remove the fonts lines from `.gitignore` so they get published.
-Without these files the site falls back to Prata and Montserrat.
+Big Shoulders loads from Google Fonts. If a file here is missing, the site falls back to Prata and Montserrat.
