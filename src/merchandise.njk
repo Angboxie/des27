@@ -1,20 +1,56 @@
 ---
-layout: layouts/page.njk
+layout: layouts/base.njk
 title: Merchandise
-intro: "[Merchandise introduction to be confirmed]"
+theme: des27
+styles:
+  - /assets/css/events.css
+  - /assets/css/merch.css
+scripts:
+  - /assets/js/events.js
 ---
-{% from "components/button.njk" import button %}
-{% from "components/card.njk" import card %}
-
 {# Display only for now - ordering/payments will be added later #}
-<section class="section">
-  <div class="container">
-    <div class="grid">
-      {% for item in merchandise %}
-        {% call card({ title: item.name, meta: item.price | price, text: item.description, image: item.image, imageAlt: item.name }) %}
-          {{ button("Coming soon", disabled=true) }}
-        {% endcall %}
-      {% endfor %}
+
+{% set heroScript = "Merch" %}
+{% set heroTags = ["Tees", "hoodies", "totes", "&amp; more"] %}
+{% set heroIntro = ["Wear the club.", "Designed by members,", "made for the studio."] %}
+{% include "partials/des27-hero.njk" %}
+
+<section class="mc-shop" aria-labelledby="shop-title">
+  <svg class="mc-shop__line draw-line" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path pathLength="1" d="M1460 40 C 1200 60, 1080 140, 1020 260 C 960 380, 820 420, 640 400" />
+  </svg>
+
+  <div class="des-container">
+    <div class="mc-shop__header">
+      <h2 id="shop-title" class="ev-heading reveal">
+        <span class="ev-heading__big">The</span>
+        <span class="ev-heading__script script">Collection</span>
+      </h2>
+      <p class="mc-shop__note reveal" style="--delay: 150ms">Online ordering<br>opens soon.</p>
     </div>
+
+    {% if merchandise.length %}
+      <ul class="mc-grid">
+        {% for item in merchandise %}
+          <li class="ev-card mc-card reveal" style="--delay: {{ (loop.index0 % 3) * 110 }}ms">
+            <div class="ev-card__media">
+              {% if item.image %}<img src="{{ item.image }}" alt="{{ item.name }}" loading="lazy">{% endif %}
+            </div>
+            <div class="ev-card__body">
+              <div class="mc-card__top">
+                <h3 class="ev-card__title">{{ item.name }}</h3>
+                <p class="mc-card__price">{{ item.price | price }}</p>
+              </div>
+              {% if item.description %}<p class="mc-card__text">{{ item.description }}</p>{% endif %}
+              <button class="mc-card__btn" type="button"{% if not item.available %} disabled{% endif %}>
+                {% if item.available %}Add to order{% else %}Coming soon{% endif %}
+              </button>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="empty-state">No merch to show yet.</p>
+    {% endif %}
   </div>
 </section>

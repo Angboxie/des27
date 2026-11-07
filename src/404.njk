@@ -1,14 +1,17 @@
 ---
-layout: layouts/page.njk
+layout: layouts/base.njk
 title: Page not found
 permalink: /404.html
 eleventyExcludeFromCollections: true
+theme: des27
+styles:
+  - /assets/css/events.css
+scripts:
+  - /assets/js/events.js
 ---
-{% from "components/button.njk" import button %}
-
-<section class="section">
-  <div class="container">
-    <p>Sorry, we couldn't find that page.</p>
-    {{ button("Back to homepage", "/") }}
-  </div>
-</section>
+{% set heroBig = "ERROR 404" %}
+{% set heroScript = "Not Found" %}
+{% set heroTags = ["Page not found"] %}
+{% set heroIntro = ["Sorry, we couldn't find that page.", "It may have moved, or it", "hasn't been built yet."] %}
+{% set heroLinks = [{ label: "See events", url: "/events/" }, { label: "Shop merch", url: "/merchandise/" }] %}
+{% include "partials/des27-hero.njk" %}

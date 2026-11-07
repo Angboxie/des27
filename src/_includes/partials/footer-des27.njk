@@ -1,0 +1,15 @@
+<footer class="des-footer">
+  <div class="des-container des-footer__inner">
+    <a class="des-logo" href="/" aria-label="DES27 home">DES<span>27</span></a>
+
+    <nav aria-label="Footer">
+      <ul class="des-footer__links">
+        {% for link in site.des27Nav %}
+          <li><a href="{{ link.url }}">{{ link.label }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+
+    <p class="des-footer__legal">&copy; {% year %} {{ site.name }}</p>
+  </div>
+</footer>

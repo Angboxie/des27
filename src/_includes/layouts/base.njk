@@ -39,6 +39,10 @@
     {{ content | safe }}
   </main>
 
-  {% include "partials/footer.njk" %}
+  {% if theme == "des27" %}
+    {% include "partials/footer-des27.njk" %}
+  {% else %}
+    {% include "partials/footer.njk" %}
+  {% endif %}
 </body>
 </html>

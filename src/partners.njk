@@ -1,22 +1,4 @@
 ---
-layout: layouts/page.njk
+layout: layouts/coming-soon.njk
 title: Partners
-intro: "[Partners introduction to be confirmed]"
 ---
-{% from "components/card.njk" import card %}
-
-<section class="section">
-  <div class="container">
-    <div class="grid">
-      {% for partner in partners %}
-        {{ card({
-          title: partner.name,
-          text: partner.description,
-          image: partner.logo,
-          imageAlt: partner.name + " logo",
-          url: partner.website
-        }) }}
-      {% endfor %}
-    </div>
-  </div>
-</section>

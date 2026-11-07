@@ -1,0 +1,39 @@
+{#
+  Big "DES CLUB <script word>" hero from the DES27 design.
+  Set before including: heroScript ("Events"), heroTags (list), heroIntro (list of lines)
+  Optional: heroBig (defaults to "DES CLUB"), heroLinks (list of { label, url })
+#}
+{% set heroBig = heroBig or "DES CLUB" %}
+<section class="ev-hero{% if heroLinks %} ev-hero--tall{% endif %}" aria-labelledby="hero-title">
+  <div class="ev-hero__blob" aria-hidden="true"></div>
+
+  <svg class="ev-hero__line draw-line" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path pathLength="1" d="M-20 330 C 120 470, 260 500, 420 470 C 600 430, 720 330, 820 190 C 900 80, 1060 40, 1460 60" />
+  </svg>
+
+  <div class="des-container ev-hero__inner">
+    <h1 id="hero-title" class="ev-hero__title">
+      <span class="ev-hero__big" aria-hidden="true">
+        {%- for letter in heroBig | list -%}
+          {% if letter == " " %} {% else %}<span class="ev-letter" style="--i: {{ loop.index0 }}">{{ letter }}</span>{% endif %}
+        {%- endfor -%}
+      </span>
+      <span class="ev-hero__script script" aria-hidden="true">{{ heroScript }}</span>
+      <span class="visually-hidden">{{ heroBig }} {{ heroScript }}</span>
+    </h1>
+
+    <p class="ev-hero__tags reveal" style="--delay: 600ms">{{ heroTags | join(",<br>") | safe }}</p>
+    <p class="ev-hero__intro reveal" style="--delay: 750ms">{{ heroIntro | join("<br>") | safe }}</p>
+
+    {% if heroLinks %}
+      <div class="ev-hero__links reveal" style="--delay: 900ms">
+        {% for link in heroLinks %}
+          <a class="des-btn" href="{{ link.url }}">
+            {{ link.label }}
+            <svg class="ev-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5" /></svg>
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>

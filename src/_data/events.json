@@ -7,7 +7,7 @@
     "date": "2027-03-16",
     "location": "MSD",
     "summary": "A one-day, hands-on workshop to turn ideas into real design concepts.",
-    "image": null,
+    "image": "/assets/images/design-workshop.jpg",
     "link": null,
     "status": "upcoming",
     "featured": true,
@@ -63,7 +63,7 @@
     "date": "2026-10-15",
     "location": null,
     "summary": "Placeholder description. Replace with event details.",
-    "image": null,
+    "image": "/assets/images/archive-crowd.jpg",
     "link": null,
     "status": "past",
     "placeholder": true

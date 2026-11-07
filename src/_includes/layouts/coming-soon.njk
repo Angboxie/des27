@@ -1,0 +1,15 @@
+---
+layout: layouts/base.njk
+theme: des27
+styles:
+  - /assets/css/events.css
+scripts:
+  - /assets/js/events.js
+---
+{# Placeholder for pages that haven't been designed yet. Swap the page's layout once its design is ready. #}
+{% set heroBig = "COMING" %}
+{% set heroScript = "Soon" %}
+{% set heroTags = [(navLabel or title) + "<br>is on its way"] %}
+{% set heroIntro = ["This page is still being built.", "In the meantime, check out", "our events and merch."] %}
+{% set heroLinks = [{ label: "See events", url: "/events/" }, { label: "Shop merch", url: "/merchandise/" }] %}
+{% include "partials/des27-hero.njk" %}

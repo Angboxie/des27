@@ -875,3 +875,20 @@
   .ev-archive__nav--prev { grid-area: prev; justify-self: start; }
   .ev-archive__nav--next { grid-area: next; justify-self: end; }
 }
+
+
+/* Hero with buttons (coming soon / 404 pages) */
+
+.ev-hero--tall {
+  display: flex;
+  align-items: center;
+  min-height: clamp(32rem, calc(100svh - 5.25rem), 52rem);
+}
+
+.ev-hero__links {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: clamp(1.25rem, 2.5vw, 2rem);
+}
