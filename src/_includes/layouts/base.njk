@@ -9,18 +9,31 @@
   <!-- TODO: swap for the real favicon once branding is ready -->
   <link rel="icon" href="data:,">
 
+  {% if theme == "des27" %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Montserrat:wght@400;500;600;700&display=swap">
+  {% endif %}
+
   <link rel="stylesheet" href="/assets/css/tokens.css">
   <link rel="stylesheet" href="/assets/css/base.css">
   <link rel="stylesheet" href="/assets/css/layout.css">
   <link rel="stylesheet" href="/assets/css/components.css">
+  {% if theme == "des27" %}<link rel="stylesheet" href="/assets/css/des27.css">{% endif %}
+  {% for sheet in styles %}<link rel="stylesheet" href="{{ sheet }}">{% endfor %}
 
   <script>document.documentElement.classList.add("js");</script>
   <script src="/assets/js/nav.js" defer></script>
+  {% for script in scripts %}<script src="{{ script }}" defer></script>{% endfor %}
 </head>
-<body>
+<body{% if theme %} class="theme-{{ theme }}"{% endif %}>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  {% include "partials/header.njk" %}
+  {% if theme == "des27" %}
+    {% include "partials/header-des27.njk" %}
+  {% else %}
+    {% include "partials/header.njk" %}
+  {% endif %}
 
   <main id="main">
     {{ content | safe }}

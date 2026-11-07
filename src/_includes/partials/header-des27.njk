@@ -1,0 +1,20 @@
+{# Header from the DES27 redesign. Links come from site.des27Nav. #}
+<header class="des-header">
+  <div class="des-container des-header__inner">
+    <a class="des-logo" href="/" aria-label="DES27 home">DES<span>27</span></a>
+
+    <button class="nav-toggle des-header__toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      Menu
+    </button>
+
+    <nav id="site-nav" class="site-nav des-nav" aria-label="Main">
+      <ul>
+        {% for link in site.des27Nav %}
+          <li>
+            <a href="{{ link.url }}"{% if page.url == link.url %} aria-current="page"{% endif %}>{{ link.label }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
+</header>

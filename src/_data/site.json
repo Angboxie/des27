@@ -3,12 +3,56 @@
   "shortName": "DES",
   "description": "Website of the Design Engineering Society.",
   "nav": [
-    { "label": "About DES", "url": "/about/" },
-    { "label": "What DES Does", "url": "/what-we-do/" },
-    { "label": "Events", "url": "/events/" },
-    { "label": "Partners", "url": "/partners/" },
-    { "label": "Merchandise", "url": "/merchandise/" },
-    { "label": "Locker Sales", "url": "/lockers/" }
+    {
+      "label": "About DES",
+      "url": "/about/"
+    },
+    {
+      "label": "What DES Does",
+      "url": "/what-we-do/"
+    },
+    {
+      "label": "Events",
+      "url": "/events/"
+    },
+    {
+      "label": "Partners",
+      "url": "/partners/"
+    },
+    {
+      "label": "Merchandise",
+      "url": "/merchandise/"
+    },
+    {
+      "label": "Locker Sales",
+      "url": "/lockers/"
+    }
   ],
-  "socials": []
+  "socials": [],
+  "des27Nav": [
+    {
+      "label": "Home",
+      "url": "/"
+    },
+    {
+      "label": "Events",
+      "url": "/events/"
+    },
+    {
+      "label": "Locker Sales",
+      "url": "/lockers/"
+    },
+    {
+      "label": "Merch",
+      "url": "/merchandise/"
+    },
+    {
+      "label": "About",
+      "url": "/about/"
+    },
+    {
+      "label": "Join Us",
+      "url": "/about/#join"
+    }
+  ]
 }

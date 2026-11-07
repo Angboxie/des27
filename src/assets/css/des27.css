@@ -1,0 +1,189 @@
+/*
+  DES27 redesign - shared theme.
+  Pages opt in with `theme: des27` in their front matter.
+*/
+
+.theme-des27 {
+  --des-blue: #2a44f0;
+  --des-blue-deep: #1b2fd0;
+  --des-blue-soft: #5b80ff;
+  --des-lime: #d8f26d;
+  --des-cream: #f7f5f1;
+  --des-ink: #0d0d0d;
+  --des-grey: #d9d9d9;
+  --des-white: #ffffff;
+
+  --font-display: "Anton", "Impact", "Arial Narrow", sans-serif;
+  --font-script: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --font-body: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-heading: var(--font-display);
+
+  --des-max: 78rem;
+  --des-gutter: clamp(1rem, 6.9vw, 6.25rem);
+  /* distance from the container edge to the edge of the screen */
+  --des-bleed: max(var(--des-gutter), (100vw - var(--des-max)) / 2);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --color-focus: var(--des-blue);
+  --color-text: var(--des-ink);
+  --color-accent: var(--des-blue);
+
+  background: var(--des-cream);
+  color: var(--des-ink);
+}
+
+.theme-des27 main {
+  overflow-x: clip;
+}
+
+.des-container {
+  width: 100%;
+  max-width: calc(var(--des-max) + 2 * var(--des-gutter));
+  margin-inline: auto;
+  padding-inline: var(--des-gutter);
+}
+
+.theme-des27 .script {
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-optical-sizing: auto;
+  text-transform: none;
+  letter-spacing: 0.01em;
+}
+
+
+/* Header */
+
+.des-header {
+  position: relative;
+  z-index: 20;
+  background: var(--des-cream);
+}
+
+.des-header__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  min-height: clamp(3.75rem, 5.8vw, 5.25rem);
+}
+
+.des-logo {
+  font-family: var(--font-body);
+  font-size: clamp(1.25rem, 1.8vw, 1.6rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.des-logo span {
+  font-weight: 300;
+}
+
+.des-header__toggle {
+  border-color: var(--des-ink);
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: var(--text-sm);
+}
+
+.des-nav a {
+  position: relative;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.des-nav a:hover,
+.des-nav a[aria-current="page"] {
+  text-decoration: none;
+}
+
+.des-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.3rem;
+  height: 2px;
+  background: var(--des-blue);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s var(--ease-out);
+}
+
+.des-nav a:hover::after,
+.des-nav a[aria-current="page"]::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+@media (max-width: 59.99em) {
+  .des-nav ul {
+    padding-bottom: var(--space-sm);
+  }
+}
+
+@media (min-width: 60em) {
+  .des-nav {
+    flex: 1;
+  }
+
+  .des-nav ul {
+    justify-content: center;
+    gap: clamp(1.5rem, 5vw, 4.5rem);
+    /* keep links centred on the page, not between logo and edge */
+    padding-right: clamp(3rem, 6vw, 6rem);
+  }
+}
+
+
+/* Shared animation helpers */
+
+.js .theme-des27 .reveal {
+  opacity: 0;
+  transform: translateY(1.75rem);
+  transition:
+    opacity 0.9s var(--ease-out) var(--delay, 0ms),
+    transform 1.1s var(--ease-out) var(--delay, 0ms);
+}
+
+.js .theme-des27 .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.draw-line path {
+  fill: none;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+.js .draw-line path {
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 2.4s var(--ease-in-out) var(--delay, 0ms);
+}
+
+.js .draw-line.is-visible path {
+  stroke-dashoffset: 0;
+}
+
+.media-placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--des-grey);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-des27 *,
+  .theme-des27 *::before,
+  .theme-des27 *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+}
