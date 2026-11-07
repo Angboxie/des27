@@ -40,6 +40,10 @@ scripts:
   <p class="mh-hero__word script" aria-hidden="true">
     {%- for letter in "merch" | list -%}<span class="mh-letter" style="--i: {{ loop.index0 }}">{{ letter }}</span>{%- endfor -%}
   </p>
+
+  {% set scrollCueLight = true %}
+  {% include "partials/scroll-cue.njk" %}
+  {% set scrollCueLight = false %}
 </section>
 
 {# ---------- New in ---------- #}
