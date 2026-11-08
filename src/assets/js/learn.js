@@ -39,6 +39,36 @@ document.querySelectorAll("[data-filters]").forEach((form) => {
 
   form.addEventListener("input", apply);
   form.addEventListener("change", apply);
+
+  // Phones: the filters sit in a panel that slides up from the bottom
+  const sheet = form.querySelector("[data-filter-sheet]");
+  const openButton = form.querySelector("[data-filter-open]");
+  const activeCount = form.querySelector("[data-filter-active]");
+
+  if (sheet && openButton) {
+    const setSheet = (open) => {
+      form.classList.toggle("is-sheet-open", open);
+      document.documentElement.classList.toggle("sheet-open", open);
+      openButton.setAttribute("aria-expanded", String(open));
+      if (open) sheet.querySelector("select, input")?.focus({ preventScroll: true });
+      else openButton.focus({ preventScroll: true });
+    };
+
+    openButton.addEventListener("click", () => setSheet(true));
+    form.querySelectorAll("[data-filter-close]").forEach((el) => el.addEventListener("click", () => setSheet(false)));
+    form.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && form.classList.contains("is-sheet-open")) setSheet(false);
+    });
+
+    // Show how many filters are on, e.g. "Filters 2"
+    const showActive = () => {
+      const on = Array.from(sheet.querySelectorAll("select")).filter((select) => select.value).length +
+        (sheet.querySelector('[name="recommended"]').checked ? 1 : 0);
+      activeCount.textContent = on;
+      activeCount.hidden = on === 0;
+    };
+    form.addEventListener("change", showActive);
+  }
 });
 
 

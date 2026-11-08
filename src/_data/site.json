@@ -95,5 +95,32 @@
       ],
       "url": null
     }
-  }
+  },
+  "des27Dock": [
+    {
+      "label": "Home",
+      "url": "/",
+      "icon": "home"
+    },
+    {
+      "label": "Events",
+      "url": "/events/",
+      "icon": "calendar"
+    },
+    {
+      "label": "Learn",
+      "url": "/resources/",
+      "icon": "book",
+      "activeFor": [
+        "/resources/",
+        "/community/",
+        "/showcase/"
+      ]
+    },
+    {
+      "label": "Merch",
+      "url": "/merchandise/",
+      "icon": "bag"
+    }
+  ]
 }

@@ -17,8 +17,9 @@
   overflow: hidden;
   isolation: isolate;
   height: max(22rem, 36vw);
-  color: var(--des-white);
-  background: var(--des-blue);
+  color: var(--des-on-blue);
+  background: var(--des-blue-surface);
+  background-blend-mode: soft-light, normal;
 }
 
 .mh-hero__media {
@@ -46,12 +47,12 @@
     #c8c8c8;
 }
 
-/* brand-blue tint over the photo */
+/* brand-blue tint over the photo, graded like the other blue areas */
 .mh-hero__media::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: var(--des-blue);
+  background: var(--des-blue-field);
   mix-blend-mode: multiply;
 }
 
@@ -305,9 +306,10 @@
   grid-template-rows: auto auto;
   align-items: center;
   padding: 12.8vw 0 4.6vw;
-  color: var(--des-white);
+  color: var(--des-on-blue);
   /* same band as the Events featured section */
-  background: linear-gradient(100deg, var(--des-blue-deep) 0%, var(--des-blue) 45%, #3558ff 75%, var(--des-blue-soft) 100%);
+  background: var(--des-blue-surface);
+  background-blend-mode: soft-light, normal;
 }
 
 .ms__lines path {
@@ -627,14 +629,18 @@
 /* ---------- Small screens ---------- */
 
 @media (max-width: 47.99em) {
-  .mn-item { flex-basis: 70vw; }
-  .ms-card { flex-basis: 62vw; }
-  .mn-controls { width: calc(100% - 2 * var(--mc-side)); }
+  /* one product in the middle, neighbours peeking in (see events.css) */
+  .mn-item { flex-basis: 72vw; scroll-snap-align: center; }
+  .mn-track { padding-inline: 14vw; }
+  .ms-card { flex-basis: 64vw; scroll-snap-align: center; }
+  .ms-track { padding-inline: 18vw; }
+  .mn-controls { width: calc(100% - 2 * var(--mc-side)); justify-content: center; }
+  .mn-btn { display: none; }
   .ms {
     grid-template-columns: minmax(0, 1fr);
     padding-top: 6rem;
   }
-  .ms__title { margin-bottom: 1.5rem; }
+  .ms__title { grid-row: 1; margin-bottom: 1.5rem; }
   .ms-carousel { grid-column: 1; grid-row: 2; padding-left: var(--mc-side); }
   .ms-progress { width: calc(100% - var(--mc-side)); margin-left: 0; }
   .ms-browse { top: 1.5rem; }

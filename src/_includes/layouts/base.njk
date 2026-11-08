@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>{% if title and page.url != "/" %}{{ title }} | {% endif %}{{ site.name }}</title>
   <meta name="description" content="{{ description or site.description }}">
 
@@ -10,6 +10,7 @@
   <link rel="icon" href="data:,">
 
   {% if theme == "des27" %}
+    <meta name="theme-color" content="#f7f5f1">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Prata&family=Montserrat:wght@400;500;600;700&display=swap">
@@ -37,7 +38,7 @@
     </script>
   {% endif %}
   <script src="/assets/js/nav.js" defer></script>
-  {% if theme == "des27" %}<script src="/assets/js/cursor.js" defer></script>{% endif %}
+  {% if theme == "des27" %}<script src="/assets/js/cursor.js" defer></script><script src="/assets/js/mobile.js" defer></script>{% endif %}
   {% for script in scripts %}<script src="{{ script }}" defer></script>{% endfor %}
 </head>
 <body{% if theme %} class="theme-{{ theme }}"{% endif %}>
@@ -55,6 +56,7 @@
 
   {% if theme == "des27" %}
     {% include "partials/footer-des27.njk" %}
+    {% include "partials/dock-des27.njk" %}
   {% else %}
     {% include "partials/footer.njk" %}
   {% endif %}

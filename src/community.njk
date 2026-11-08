@@ -27,7 +27,9 @@ scripts:
       <p class="ed-head__text reveal" style="--delay: 120ms">Stuck on software or studio?<br>Ask one of us.</p>
     </div>
 
-    <ul class="ed-team">
+    {# A grid on desktop; on phones a swipe row like the events carousel #}
+    <div class="ed-team-wrap" data-carousel>
+    <ul class="ed-team" data-carousel-track>
       {% for person in team %}
         <li class="ev-card ed-person reveal" data-tilt style="--delay: {{ (loop.index0 % 4) * 90 }}ms">
           <div class="ev-frame">
@@ -54,6 +56,8 @@ scripts:
         </li>
       {% endfor %}
     </ul>
+    <div class="ev-carousel__dots ed-team__dots" data-carousel-dots></div>
+    </div>
   </div>
 </section>
 

@@ -1,7 +1,7 @@
 {# Header from the DES27 redesign. Links come from site.des27Nav. #}
 <header class="des-header">
   <div class="des-container des-header__inner">
-    <a class="des-logo" href="/" aria-label="DES27 home">DES<span>27</span></a>
+    <a class="des-logo" href="/" aria-label="DES home"><span class="des-logo__mark" aria-hidden="true"></span></a>
 
     <button class="nav-toggle des-header__toggle" type="button" aria-expanded="false" aria-controls="site-nav">
       Menu
@@ -10,7 +10,7 @@
     <nav id="site-nav" class="site-nav des-nav" aria-label="Main">
       <ul>
         {% for link in site.des27Nav %}
-          <li>
+          <li style="--i: {{ loop.index0 }}">
             {% set isCurrent = page.url == link.url or (link.url != "/" and page.url.startsWith(link.url)) or (link.activeFor and page.url in link.activeFor) %}
             <a href="{{ link.url }}"{% if isCurrent %} aria-current="page"{% endif %}>{{ link.label }}{% if isCurrent %}<span class="des-nav__bar" aria-hidden="true"></span>{% endif %}</a>
           </li>

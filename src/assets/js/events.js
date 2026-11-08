@@ -5,6 +5,8 @@
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+// Phone layout (matches the 47.99em breakpoint in the CSS)
+const phone = window.matchMedia("(max-width: 47.99em)");
 
 
 /* Reveal on scroll - plays every time, from the side the element enters */
@@ -239,8 +241,29 @@ document.querySelectorAll("[data-carousel]").forEach((carousel) => {
     return Math.round(track.scrollLeft / step());
   }
 
+  // On phones each card eases back as it slides away from the middle
+  function updateFocus() {
+    if (!phone.matches) {
+      cards.forEach((card) => card.style.removeProperty("--focus"));
+      return;
+    }
+    const box = track.getBoundingClientRect();
+    const middle = box.left + box.width / 2;
+    cards.forEach((card) => {
+      const rect = card.getBoundingClientRect();
+      const away = Math.abs(rect.left + rect.width / 2 - middle) / rect.width;
+      card.style.setProperty("--focus", clamp(1 - away, 0, 1).toFixed(3));
+    });
+  }
+
+  let lastActive = 0;
+
   function updateControls() {
+    updateFocus();
     const active = currentIndex();
+    // a light tick as each card settles in the middle (phones)
+    if (active !== lastActive && phone.matches && window.desHaptic) window.desHaptic(6);
+    lastActive = active;
     dots.forEach((dot, index) => dot.setAttribute("aria-current", String(index === active)));
     if (prev) prev.disabled = track.scrollLeft <= 2;
     if (next) next.disabled = track.scrollLeft >= maxScroll() - 2;
@@ -374,6 +397,45 @@ document.querySelectorAll("[data-archive]").forEach((stage) => {
     if (event.key === "ArrowLeft") { shuffle(-1); restartAuto(); }
   });
 
+  // Swipe the pile on touch screens: left for the next photo, right for the previous.
+  // The front photo follows the finger a little before it's flung.
+  const stack = stage.querySelector("[data-archive-stack]");
+  let swipe = null;
+
+  stack.addEventListener("pointerdown", (event) => {
+    if (event.pointerType === "mouse" || busy) return;
+    swipe = { x: event.clientX, y: event.clientY, front: items[order[0]].querySelector("figure"), dx: 0 };
+  });
+
+  stack.addEventListener("pointermove", (event) => {
+    if (!swipe) return;
+    swipe.dx = event.clientX - swipe.x;
+    // a mostly-vertical drag is a page scroll, so leave it alone
+    if (Math.abs(event.clientY - swipe.y) > Math.abs(swipe.dx) + 10) {
+      swipe.front.style.translate = "";
+      swipe = null;
+      return;
+    }
+    swipe.front.style.translate = `${(swipe.dx * 0.35).toFixed(1)}px 0`;
+  });
+
+  const endSwipe = () => {
+    if (!swipe) return;
+    const { dx, front } = swipe;
+    swipe = null;
+    front.style.translate = "";
+    if (Math.abs(dx) > 45) {
+      if (window.desHaptic) window.desHaptic(12);
+      shuffle(dx < 0 ? 1 : -1);
+      restartAuto();
+      // don't also open the photo's link
+      stack.addEventListener("click", (e) => e.preventDefault(), { capture: true, once: true });
+    }
+  };
+
+  stack.addEventListener("pointerup", endSwipe);
+  stack.addEventListener("pointercancel", endSwipe);
+
   // Shuffle by itself while on screen, pausing while someone is interacting
   let timer = null;
   let paused = false;
@@ -387,8 +449,17 @@ document.querySelectorAll("[data-archive]").forEach((stage) => {
     }, 4500);
   }
 
-  stage.addEventListener("pointerenter", () => { paused = true; restartAuto(); });
-  stage.addEventListener("pointerleave", () => { paused = false; restartAuto(); });
+  // (mouse only: on touch screens "enter" fires on every tap and never "leaves")
+  stage.addEventListener("pointerenter", (event) => {
+    if (event.pointerType !== "mouse") return;
+    paused = true;
+    restartAuto();
+  });
+  stage.addEventListener("pointerleave", (event) => {
+    if (event.pointerType !== "mouse") return;
+    paused = false;
+    restartAuto();
+  });
   stage.addEventListener("focusin", () => { paused = true; restartAuto(); });
   stage.addEventListener("focusout", () => { paused = false; restartAuto(); });
 

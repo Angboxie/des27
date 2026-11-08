@@ -26,9 +26,18 @@
 */
 
 .theme-des27 {
-  --des-blue: #2a44f0;
-  --des-blue-deep: #1b2fd0;
-  --des-blue-soft: #5b80ff;
+  /* Brand blue for lines, text, borders and buttons. A touch calmer than the
+     original #2a44f0, which buzzed against the cream and lime. */
+  --des-blue: #3a4fe0;
+  --des-blue-deep: #2434b0;
+  --des-blue-soft: #7c8fe4;
+  /* Big blue areas (featured bands, merch hero) use a deeper, gently graded
+     blue with fine grain instead of flat bright blue, so they don't glare. */
+  --des-blue-field: linear-gradient(112deg, #23308f 0%, #2d40bd 34%, #3a50d4 64%, #6a7fd9 100%);
+  --des-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --des-blue-surface: var(--des-grain) 0 0 / 220px, var(--des-blue-field);
+  /* soft white for text on blue - pure white on saturated blue is harsh */
+  --des-on-blue: #f3f2fa;
   --des-lime: #d8f26d;
   --des-cream: #f7f5f1;
   --des-ink: #0d0d0d;
@@ -92,7 +101,7 @@
   background: color-mix(in srgb, var(--des-cream) 82%, transparent);
   -webkit-backdrop-filter: blur(14px) saturate(1.4);
   backdrop-filter: blur(14px) saturate(1.4);
-  box-shadow: 0 1px 0 rgba(42, 68, 240, 0.14), 0 14px 30px -24px rgba(13, 13, 40, 0.45);
+  box-shadow: 0 1px 0 rgba(58, 79, 224, 0.14), 0 14px 30px -24px rgba(13, 13, 40, 0.45);
 }
 
 .des-header__inner {
@@ -112,17 +121,31 @@
   min-height: clamp(3.75rem, 5.8vw, 5.25rem);
 }
 
+/* DES logo (images/des-logo.png). It's drawn as a mask, so it takes the
+   text colour and can be recoloured, e.g. on blue backgrounds. */
 .des-logo {
-  font-family: var(--font-body);
-  font-size: clamp(1.25rem, 1.8vw, 1.6rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
+  display: inline-flex;
+  align-items: center;
+  color: var(--des-ink);
   text-decoration: none;
-  line-height: 1;
+  transition: color 0.35s, scale 0.35s var(--ease-out);
 }
 
-.des-logo span {
-  font-weight: 300;
+.des-logo:hover {
+  color: var(--des-blue);
+}
+
+.des-logo:active {
+  scale: 0.95;
+}
+
+.des-logo__mark {
+  display: block;
+  height: clamp(1.05rem, 1.55vw, 1.4rem);
+  aspect-ratio: 600 / 239;
+  background: currentColor;
+  -webkit-mask: url("../images/des-logo.png") center / contain no-repeat;
+  mask: url("../images/des-logo.png") center / contain no-repeat;
 }
 
 .des-header__toggle {
@@ -192,6 +215,403 @@
     /* keep links centred on the page, not between logo and edge */
     padding-right: clamp(3rem, 6vw, 6rem);
   }
+}
+
+
+/* ---------- Phones and small tablets ----------
+   The menu moves to a tab bar at the bottom of the screen (partials/dock-des27.njk),
+   where thumbs can reach it. "Menu" opens the full menu as a sheet that spreads
+   out from the button, like the page transitions. */
+
+.des-dock {
+  display: none;
+}
+
+@media (max-width: 59.99em) {
+  .theme-des27 {
+    --dock-h: 4rem;
+    --dock-gap: max(0.75rem, env(safe-area-inset-bottom));
+  }
+
+  /* leave room under the footer for the tab bar */
+  .theme-des27 .des-footer {
+    padding-bottom: calc(var(--dock-h) + var(--dock-gap) + 1.75rem);
+  }
+
+  /* Header: just the logo, and it tucks away while scrolling down (nav.js) */
+  .js .des-header__toggle {
+    display: none;
+  }
+
+  .des-header {
+    transition: background-color 0.4s, box-shadow 0.4s, translate 0.45s var(--ease-out);
+  }
+
+  .des-header.is-tucked {
+    translate: 0 -100%;
+  }
+
+  .des-header__inner,
+  .des-header.is-scrolled .des-header__inner {
+    min-height: 3.5rem;
+  }
+
+  /* the logo stays on top of the open menu */
+  .des-logo {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Full menu: a sheet that grows out of the Menu button */
+  .js .des-nav,
+  .js .des-nav.is-open {
+    display: flex;
+  }
+
+  .js .des-nav {
+    position: fixed;
+    z-index: 1;
+    inset: 0;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 5rem var(--des-gutter) calc(var(--dock-h) + var(--dock-gap) + 2rem);
+    overflow-y: auto;
+    background:
+      radial-gradient(90% 55% at 100% 100%, rgba(58, 79, 224, 0.16), rgba(58, 79, 224, 0) 70%),
+      var(--des-cream);
+    clip-path: circle(0 at var(--menu-x, 85%) var(--menu-y, 95%));
+    visibility: hidden;
+    transition: clip-path 0.55s var(--ease-in-out), visibility 0s 0.55s;
+  }
+
+  .js .des-nav.is-open {
+    clip-path: circle(150vmax at var(--menu-x, 85%) var(--menu-y, 95%));
+    visibility: visible;
+    transition: clip-path 0.8s var(--ease-out);
+  }
+
+  .des-nav ul {
+    gap: 0.1rem;
+    padding-bottom: 0;
+  }
+
+  .des-nav a {
+    display: inline-block;
+    padding-block: 0.05em;
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 12vw, 4rem);
+    font-weight: var(--display-weight);
+    line-height: 1.05;
+    text-transform: uppercase;
+  }
+
+  .des-nav a[aria-current="page"] {
+    color: var(--des-blue);
+  }
+
+  .des-nav__bar {
+    display: none;
+  }
+
+  .js .des-nav li {
+    opacity: 0;
+    translate: 0 0.9em;
+    transition: opacity 0.3s, translate 0.3s;
+  }
+
+  .js .des-nav.is-open li {
+    opacity: 1;
+    translate: none;
+    transition:
+      opacity 0.6s var(--ease-out) calc(0.12s + var(--i, 0) * 0.05s),
+      translate 0.8s var(--ease-out) calc(0.12s + var(--i, 0) * 0.05s);
+  }
+
+  /* While the menu is open: no frosting or tucking on the header (either would
+     trap the full-screen sheet inside the header), and the page stays still */
+  .menu-open {
+    overflow: hidden;
+  }
+
+  .menu-open .des-header {
+    translate: none;
+    background: var(--des-cream);
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  /* Tab bar */
+  .des-dock {
+    position: fixed;
+    z-index: 110;
+    left: 50%;
+    bottom: var(--dock-gap);
+    display: block;
+    width: min(calc(100% - 1.5rem), 26rem);
+    translate: -50% 0;
+    transition: translate 0.45s var(--ease-out);
+    view-transition-name: dock;
+  }
+
+  .des-dock ul {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    margin: 0;
+    padding: 0.35rem;
+    list-style: none;
+    background: color-mix(in srgb, var(--des-cream) 86%, transparent);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    backdrop-filter: blur(18px) saturate(1.4);
+    border: 1px solid rgba(58, 79, 224, 0.14);
+    border-radius: 1.4rem;
+    box-shadow: 0 2px 6px rgba(13, 13, 40, 0.06), 0 14px 32px -16px rgba(13, 13, 40, 0.4);
+  }
+
+  .des-dock__item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    width: 100%;
+    height: calc(var(--dock-h) - 0.7rem);
+    padding: 0;
+    font: inherit;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--des-ink);
+    text-decoration: none;
+    background: none;
+    border: 0;
+    border-radius: 1.05rem;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: color 0.35s, scale 0.25s var(--ease-out);
+  }
+
+  .des-dock__item > :not(.des-dock__pill) {
+    position: relative;
+  }
+
+  .des-dock__item svg {
+    width: 1.35rem;
+    height: 1.35rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .des-dock__item:active {
+    scale: 0.92;
+  }
+
+  .des-dock__item[aria-current="page"] {
+    color: var(--des-on-blue);
+  }
+
+  /* slides to the new tab during page transitions */
+  .des-dock__pill {
+    position: absolute;
+    inset: 0;
+    background: var(--des-blue-surface);
+    background-blend-mode: soft-light, normal;
+    border-radius: inherit;
+    view-transition-name: dock-pill;
+  }
+
+  /* without JS the Menu button can't open anything, so leave it out */
+  html:not(.js) .des-dock ul {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  html:not(.js) .des-dock li:last-child {
+    display: none;
+  }
+
+  /* Two lines that cross into an X when the menu is open */
+  .des-dock__burger {
+    display: grid;
+    place-items: center;
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+
+  .des-dock__burger span {
+    grid-area: 1 / 1;
+    width: 1.1rem;
+    height: 1.7px;
+    background: currentColor;
+    border-radius: 2px;
+    translate: 0 -3.5px;
+    transition: translate 0.4s var(--ease-out), rotate 0.4s var(--ease-out);
+  }
+
+  .des-dock__burger span + span {
+    translate: 0 3.5px;
+  }
+
+  .des-dock__menu[aria-expanded="true"] .des-dock__burger span {
+    translate: 0 0;
+    rotate: 45deg;
+  }
+
+  .des-dock__menu[aria-expanded="true"] .des-dock__burger span + span {
+    rotate: -45deg;
+  }
+}
+
+/* Touch screens: there's no hover, so give a little press feedback instead */
+@media (hover: none) {
+  .theme-des27 {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .des-btn,
+  .ev-btn {
+    transition: color 0.45s var(--ease-out), border-color 0.45s var(--ease-out), translate 0.6s var(--ease-out), scale 0.2s var(--ease-out);
+  }
+
+  .des-btn:active,
+  .ev-btn:active,
+  .ev-carousel__btn:active,
+  .ev-archive__nav:active {
+    scale: 0.95;
+  }
+}
+
+
+/* ---------- Touch-screen motion (mobile.js) ----------
+   Only switched on for touch screens without "reduce motion"; mobile.js adds
+   .is-touch to <html>. Desktop keeps the cursor and hover effects instead. */
+
+/* Tap bloom: a ring that spreads from where you tap */
+.tap-bloom {
+  position: fixed;
+  z-index: 1001;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin: -1.375rem 0 0 -1.375rem;
+  border: 1.5px solid var(--des-blue);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: tap-bloom 0.65s var(--ease-out) forwards;
+}
+
+.tap-bloom--hit {
+  background: rgba(58, 79, 224, 0.12);
+  animation-duration: 0.75s;
+}
+
+.tap-bloom--light {
+  border-color: var(--des-lime);
+  background: rgba(216, 242, 109, 0.12);
+}
+
+@keyframes tap-bloom {
+  from { scale: 0.3; opacity: 0.9; }
+  to   { scale: 2.3; opacity: 0; }
+}
+
+/* Press tilt: quick to lean in, springy on the way back */
+.is-touch .ev-card__media.is-pressed,
+.is-touch .ev-archive__item figure.is-pressed {
+  scale: 0.97;
+  transition: transform 0.2s var(--ease-out), scale 0.2s var(--ease-out), box-shadow 0.6s var(--ease-out);
+}
+
+.is-touch .ev-card__media.is-springing,
+.is-touch .ev-archive__item figure.is-springing {
+  transition: transform 0.75s cubic-bezier(0.34, 1.7, 0.64, 1), scale 0.75s cubic-bezier(0.34, 1.7, 0.64, 1), box-shadow 0.6s var(--ease-out);
+}
+
+/* Hero: as you scroll away the title letters slip up into their mask at
+   different speeds, the script word slides off, and the small text fades.
+   --hero-out (0 at the top, 1 once the hero is mostly gone) is set by mobile.js. */
+.is-touch .ev-hero .ev-letter {
+  translate: 0 calc(var(--hero-out, 0) * -1 * (0.3em + var(--i, 0) * 0.13em));
+  transition: translate 0.25s linear, color 0.5s var(--ease-out);
+}
+
+.is-touch .ev-hero__script {
+  translate: calc(var(--hero-out, 0) * 35vw) 0;
+  opacity: calc(1 - var(--hero-out, 0) * 0.9);
+}
+
+.is-touch .ev-hero__tags,
+.is-touch .ev-hero__intro {
+  translate: 0 calc(var(--hero-out, 0) * -1.5rem);
+}
+
+.is-touch .theme-des27 .ev-hero .reveal.is-visible {
+  opacity: calc(1 - var(--hero-out, 0) * 1.3);
+}
+
+/* Headings rise out of a mask, the serif word a beat after the big one
+   (in place of the whole heading fading up, as on desktop) */
+.is-touch .theme-des27 .ev-heading.reveal {
+  opacity: 1;
+  transform: none;
+}
+
+.is-touch .ev-heading.reveal .ev-heading__big,
+.is-touch .ev-heading.reveal .ev-heading__script {
+  clip-path: inset(0 -0.2em 100% -0.2em);
+  translate: 0 0.4em;
+  transition:
+    clip-path 0.9s var(--ease-out) calc(var(--delay, 0ms) + var(--lag, 0ms)),
+    translate 1s var(--ease-out) calc(var(--delay, 0ms) + var(--lag, 0ms));
+}
+
+.is-touch .ev-heading.reveal .ev-heading__script {
+  --lag: 140ms;
+}
+
+/* leaving through the top: come back in from above */
+.is-touch .ev-heading.reveal[data-from="above"] .ev-heading__big,
+.is-touch .ev-heading.reveal[data-from="above"] .ev-heading__script {
+  clip-path: inset(100% -0.2em 0 -0.2em);
+  translate: 0 -0.4em;
+}
+
+.is-touch .ev-heading.reveal.is-visible .ev-heading__big,
+.is-touch .ev-heading.reveal.is-visible .ev-heading__script {
+  clip-path: inset(-0.25em -0.2em -0.25em -0.2em);
+  translate: none;
+}
+
+/* Tab bar: a thin line that fills as you read down the page */
+.des-dock__progress {
+  display: none;
+}
+
+.is-touch .des-dock__progress {
+  position: absolute;
+  z-index: 1;
+  left: 1.4rem;
+  right: 1.4rem;
+  bottom: 0.2rem;
+  display: block;
+  height: 2px;
+  background: var(--des-blue);
+  border-radius: 2px;
+  transform: scaleX(var(--progress, 0));
+  transform-origin: left;
+  pointer-events: none;
+}
+
+/* the tab you've just opened gives a small hop as the page arrives */
+.is-touch .des-dock__item[aria-current="page"] svg {
+  animation: dock-land 0.7s var(--ease-out) 0.3s both;
+}
+
+@keyframes dock-land {
+  35% { translate: 0 -5px; scale: 1.14; }
+  70% { translate: 0 1px; scale: 0.97; }
 }
 
 

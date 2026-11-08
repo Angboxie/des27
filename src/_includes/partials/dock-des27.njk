@@ -1,0 +1,32 @@
+{#
+  Bottom tab bar for phones and small tablets (hidden on desktop).
+  Links come from site.des27Dock; "Menu" opens the full menu (#site-nav).
+  The blue highlight slides to the new tab during page transitions.
+#}
+{% set dockIcons = {
+  home: '<path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z"/>',
+  calendar: '<rect x="4" y="5.5" width="16" height="14.5" rx="2"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/>',
+  book: '<path d="M4 5.5c2.8-1 5.5-.8 8 1 2.5-1.8 5.2-2 8-1V19c-2.8-1-5.5-.8-8 1-2.5-1.8-5.2-2-8-1z"/><path d="M12 6.5V20"/>',
+  bag: '<path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/>'
+} %}
+<nav class="des-dock" aria-label="Quick links">
+  <span class="des-dock__progress" aria-hidden="true"></span>
+  <ul>
+    {% for link in site.des27Dock %}
+      {% set isCurrent = page.url == link.url or (link.url != "/" and page.url.startsWith(link.url)) or (link.activeFor and page.url in link.activeFor) %}
+      <li>
+        <a class="des-dock__item" href="{{ link.url }}"{% if isCurrent %} aria-current="page"{% endif %}>
+          {% if isCurrent %}<span class="des-dock__pill" aria-hidden="true"></span>{% endif %}
+          <svg viewBox="0 0 24 24" aria-hidden="true">{{ dockIcons[link.icon] | safe }}</svg>
+          <span>{{ link.label }}</span>
+        </a>
+      </li>
+    {% endfor %}
+    <li>
+      <button class="des-dock__item des-dock__menu" type="button" data-menu-toggle aria-controls="site-nav" aria-expanded="false">
+        <span class="des-dock__burger" aria-hidden="true"><span></span><span></span></span>
+        <span data-menu-label>Menu</span>
+      </button>
+    </li>
+  </ul>
+</nav>

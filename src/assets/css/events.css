@@ -29,8 +29,9 @@
   width: clamp(18rem, 44vw, 42rem);
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 50%, var(--des-blue) 0%, var(--des-blue) 32%, rgba(42, 68, 240, 0.55) 52%, rgba(42, 68, 240, 0) 72%);
-  filter: blur(18px);
+  background: radial-gradient(circle at 50% 50%, rgba(58, 79, 224, 0.92) 0%, rgba(60, 82, 216, 0.78) 28%, rgba(110, 130, 222, 0.42) 50%, rgba(124, 143, 228, 0) 72%);
+  filter: blur(26px);
+  mix-blend-mode: multiply;
   translate: calc(var(--mx, 0) * 2.5rem) calc(var(--my, 0) * 2rem + var(--ty, 0px));
   transition: translate 1.2s var(--ease-out);
   animation: blob-drift 14s ease-in-out infinite alternate;
@@ -156,16 +157,53 @@
   line-height: 1.25;
 }
 
-@media (max-width: 40em) {
+/* Phones: the title fills the width and sits low on the first screen, within
+   thumb reach, with the glow tucked into the top corner */
+@media (max-width: 47.99em) {
+  .ev-hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: min(74svh, 40rem);
+    padding-block: 2.5rem 4.5rem;
+  }
+
   .ev-hero__inner {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "title title"
+      "tags intro";
+    column-gap: 1rem;
+  }
+
+  .ev-hero__big { font-size: 23.5vw; }
+  .ev-hero__script { margin-left: 0.55em; font-size: 16vw; }
+  .ev-hero__script--long { margin-left: 0.3em; font-size: 11.2vw; }
+
+  .ev-hero__tags,
+  .ev-hero__intro {
+    margin-top: 1.5rem;
+    font-size: 0.78rem;
+  }
+
+  .ev-hero__intro { font-size: 0.85rem; }
+
+  .ev-hero__blob {
+    top: -12%;
+    right: -42%;
+    width: 112vw;
+    filter: blur(30px);
+  }
+
+  .ev-hero__links { grid-column: 1 / -1; }
+
+  /* coming-soon heroes have longer lines, so stack them */
+  .ev-hero--tall .ev-hero__inner {
+    grid-template-columns: minmax(0, 1fr);
     grid-template-areas: "title" "tags" "intro";
   }
 
-  .ev-hero__big { font-size: 17.5vw; }
-  .ev-hero__script { font-size: 14vw; margin-left: 0.9em; }
-  .ev-hero__tags { margin-top: 1.25rem; }
-  .ev-hero__blob { top: -10%; right: -40%; width: 26rem; }
+  .ev-hero--tall .ev-hero__intro { margin-top: 0.75rem; }
 }
 
 
@@ -175,8 +213,9 @@
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  color: var(--des-white);
-  background: linear-gradient(100deg, var(--des-blue-deep) 0%, var(--des-blue) 45%, #3558ff 75%, var(--des-blue-soft) 100%);
+  color: var(--des-on-blue);
+  background: var(--des-blue-surface);
+  background-blend-mode: soft-light, normal;
 }
 
 .ev-featured__glow {
@@ -187,7 +226,7 @@
   width: 50vw;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(140, 170, 255, 0.55), rgba(140, 170, 255, 0) 65%);
+  background: radial-gradient(circle, rgba(160, 176, 240, 0.32), rgba(160, 176, 240, 0) 65%);
   animation: glow-pulse 9s ease-in-out infinite alternate;
 }
 
@@ -219,7 +258,7 @@
   bottom: 0;
   left: 0;
   width: 45.5%;
-  background: #1a2cc8;
+  background: var(--des-blue-deep);
   clip-path: ellipse(100% 120% at 0% 50%);
 }
 
@@ -606,7 +645,7 @@
 }
 
 .ev-card:hover .ev-card__media {
-  box-shadow: 0 18px 30px -18px rgba(42, 68, 240, 0.5);
+  box-shadow: 0 18px 30px -18px rgba(58, 79, 224, 0.5);
 }
 
 .ev-card:hover .ev-card__media img {
@@ -687,6 +726,8 @@
   background: var(--des-blue);
 }
 
+/* Phones: one card in the middle, the neighbours peeking in at the sides.
+   Swipe to move; the arrows give way to the dots. */
 @media (max-width: 47.99em) {
   .ev-upcoming__inner {
     grid-template-columns: minmax(0, 1fr);
@@ -697,8 +738,45 @@
     display: none;
   }
 
+  .ev-carousel__track {
+    margin: 0 calc(-1 * var(--des-gutter));
+    padding-inline: 12vw;
+  }
+
   .ev-card {
-    flex-basis: 72vw;
+    flex-basis: 76vw;
+    scroll-snap-align: center;
+  }
+
+  .ev-carousel__controls {
+    justify-content: center;
+  }
+
+  .ev-carousel__btn {
+    display: none;
+  }
+
+  .ev-carousel__dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    transition: width 0.4s var(--ease-out), background-color 0.4s var(--ease-out);
+  }
+
+  /* the current dot stretches into a short bar */
+  .ev-carousel__dot[aria-current="true"] {
+    width: 1.6rem;
+  }
+}
+
+/* Carousel cards ease back as they slide away from the middle.
+   --focus (1 = centred, 0 = a card away) is set by events.js on touch screens. */
+@media (max-width: 47.99em) {
+  [data-carousel-track] > * {
+    scale: calc(0.9 + var(--focus, 1) * 0.1);
+  }
+
+  [data-carousel-track] > * > * {
+    opacity: calc(0.55 + var(--focus, 1) * 0.45);
   }
 }
 
@@ -933,7 +1011,7 @@
     grid-template-areas: "stack stack" "prev next";
   }
 
-  .ev-archive__stack { grid-area: stack; width: 82%; }
+  .ev-archive__stack { grid-area: stack; width: 82%; touch-action: pan-y; }
   .ev-archive__nav { margin: 1rem 0 0; }
   .ev-archive__nav--prev { grid-area: prev; justify-self: start; }
   .ev-archive__nav--next { grid-area: next; justify-self: end; }

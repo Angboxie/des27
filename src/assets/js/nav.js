@@ -1,33 +1,76 @@
-// Mobile menu toggle
+// Menu toggle, sticky header and page-transition click point
 
-const navToggle = document.querySelector(".nav-toggle");
 const siteNav = document.getElementById("site-nav");
+// The header "Menu" button (older pages) and the phone tab bar's "Menu" button
+const menuToggles = Array.from(document.querySelectorAll(".nav-toggle, [data-menu-toggle]"));
+const root = document.documentElement;
 
-function setMenu(open) {
-  navToggle.setAttribute("aria-expanded", String(open));
+function setMenu(open, origin) {
+  // The full-screen phone menu spreads out from the button that opened it
+  if (open && origin) {
+    const box = origin.getBoundingClientRect();
+    root.style.setProperty("--menu-x", `${Math.round(box.left + box.width / 2)}px`);
+    root.style.setProperty("--menu-y", `${Math.round(box.top + box.height / 2)}px`);
+  }
+
+  menuToggles.forEach((toggle) => {
+    toggle.setAttribute("aria-expanded", String(open));
+    const label = toggle.querySelector("[data-menu-label]");
+    if (label) label.textContent = open ? "Close" : "Menu";
+  });
   siteNav.classList.toggle("is-open", open);
+  root.classList.toggle("menu-open", open);
 }
 
-if (navToggle && siteNav) {
-  navToggle.addEventListener("click", () => {
-    const isOpen = navToggle.getAttribute("aria-expanded") === "true";
-    setMenu(!isOpen);
+if (menuToggles.length && siteNav) {
+  menuToggles.forEach((toggle) => {
+    toggle.addEventListener("click", () => {
+      setMenu(!siteNav.classList.contains("is-open"), toggle);
+    });
+  });
+
+  // Choosing a link closes the menu (the page transition takes over from there)
+  siteNav.addEventListener("click", (event) => {
+    if (event.target.closest("a")) setMenu(false);
   });
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && siteNav.classList.contains("is-open")) {
       setMenu(false);
-      navToggle.focus();
+      const visible = menuToggles.find((toggle) => toggle.offsetParent !== null);
+      if (visible) visible.focus();
     }
   });
+
+  // Coming back to a page from the back/forward cache: make sure the menu is shut
+  window.addEventListener("pageshow", () => setMenu(false));
 }
 
 
-// Sticky header: add a shadow once the page has scrolled
+// Sticky header: frosted once the page has scrolled. On phones it also tucks
+// away while you scroll down and comes back as soon as you scroll up.
 const stickyHeader = document.querySelector(".des-header");
 
 if (stickyHeader) {
-  const onScroll = () => stickyHeader.classList.toggle("is-scrolled", window.scrollY > 8);
+  const phone = window.matchMedia("(max-width: 59.99em)");
+  let lastY = window.scrollY;
+
+  const onScroll = () => {
+    const y = window.scrollY;
+    stickyHeader.classList.toggle("is-scrolled", y > 8);
+
+    if (phone.matches && !root.classList.contains("menu-open")) {
+      const goingDown = y > lastY + 4;
+      const goingUp = y < lastY - 4;
+      if (goingDown && y > 140) stickyHeader.classList.add("is-tucked");
+      if (goingUp || y < 140) stickyHeader.classList.remove("is-tucked");
+    } else {
+      stickyHeader.classList.remove("is-tucked");
+    }
+
+    if (Math.abs(y - lastY) > 4) lastY = y;
+  };
+
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 }
