@@ -1,4 +1,140 @@
 ---
-layout: layouts/coming-soon.njk
+layout: layouts/base.njk
 title: Locker Sales
+theme: des27
+styles:
+  - /assets/css/events.css
+  - /assets/css/lockers.css
+scripts:
+  - /assets/js/events.js
+  - /assets/js/lockers.js
 ---
+{# Locker hire page. Sizes, prices and the booking link live in _data/lockers.json #}
+{% set chosen = lockers.defaultSize %}
+
+{# ---------- Hero ---------- #}
+<section class="lk-hero" aria-labelledby="locker-title">
+  <div class="lk-stage lk-hero__stage">
+    <svg class="lk-hero__line draw-line" viewBox="0 0 1440 557" aria-hidden="true">
+      <path pathLength="1" d="M691 314C730 300 770 312 810 340C880 392 950 450 1030 476" />
+      <path pathLength="1" d="M1300 474C1350 456 1400 424 1444 388" />
+    </svg>
+
+    {# phones get the locker without the star, as it sits below the title there #}
+    <picture class="lk-hero__art">
+      <source media="(max-width: 47.99em)" srcset="/assets/images/lockers/locker-only.webp" width="648" height="919">
+      <img src="/assets/images/lockers/locker-hero.webp" alt="" width="960" height="1003">
+    </picture>
+
+    <div class="lk-hero__text">
+      <h1 id="locker-title" class="lk-title">
+        <span class="lk-title__big" aria-hidden="true">DES Locker</span>
+        <span class="lk-title__hire" aria-hidden="true">Hire</span>
+        <span class="lk-title__year script" aria-hidden="true">{{ lockers.year }}</span>
+        <span class="visually-hidden">DES Locker Hire {{ lockers.year }}</span>
+      </h1>
+      <p class="lk-hero__tag">{{ lockers.tagline | join("<br>") | safe }}</p>
+    </div>
+  </div>
+</section>
+
+
+{# ---------- Prices ---------- #}
+<section class="lk-prices" data-cursor="light" aria-labelledby="prices-title">
+  <div class="lk-stage lk-prices__stage">
+    <svg class="lk-prices__lines draw-line" viewBox="0 0 1440 636" aria-hidden="true">
+      <path pathLength="1" d="M216 0C260 120 380 230 552 271L800 283C880 278 950 262 1010 262C1200 262 1320 380 1334 563L1330 640" />
+      <path pathLength="1" d="M-4 451C130 440 230 520 269 640" />
+    </svg>
+
+    <div class="lk-prices__grid">
+      {% for size in lockers.sizes %}
+        <a class="lk-price lk-price--{{ size.id }} reveal" style="--delay: {{ loop.index0 * 90 }}ms" href="#hire" data-pick-size="{{ size.id }}">
+          <span class="lk-price__name">{{ size.label }}</span>
+          <span class="lk-price__amount">${{ size.price }}</span>
+          <span class="visually-hidden"> per semester. Choose this size</span>
+        </a>
+      {% endfor %}
+
+      <div class="lk-prices__text reveal" style="--delay: 200ms">
+        <h2 id="prices-title" class="lk-prices__title">{{ lockers.perLabel }}</h2>
+        <p>{{ lockers.note | join("<br>") | safe }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{# ---------- Steps ---------- #}
+<section class="lk-steps" aria-labelledby="steps-title">
+  <div class="lk-stage lk-steps__stage">
+    <svg class="lk-steps__burst" viewBox="0 0 1166 240" preserveAspectRatio="none" aria-hidden="true">
+      <polygon points="0,150 420,95 395,0 560,70 690,25 780,80 1120,22 950,105 1166,140 880,165 940,235 700,190 560,240 470,185 290,235 330,180 0,150" />
+    </svg>
+
+    <h2 id="steps-title" class="lk-steps__title reveal">3 steps. One locker.</h2>
+    <p class="lk-steps__sub reveal" style="--delay: 100ms">{% for size in lockers.sizes %}{{ size.label }}.{% if not loop.last %} {% endif %}{% endfor %}</p>
+
+    <ol class="lk-steps__list">
+      {% for step in lockers.steps %}
+        <li class="reveal" style="--delay: {{ loop.index0 * 140 + 150 }}ms">
+          <span class="lk-steps__num script" aria-hidden="true">{{ loop.index }}</span>
+          <span class="lk-steps__label">{{ step | join("<br>") | safe }}</span>
+        </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+
+
+{# ---------- Choose a locker ---------- #}
+<section class="lk-hire" id="hire" aria-labelledby="hire-title">
+  <div class="lk-stage lk-hire__stage">
+    <svg class="lk-hire__lines draw-line" viewBox="0 0 1440 565" aria-hidden="true">
+      <path pathLength="1" d="M-4 58C60 58 110 100 100 170C92 230 60 290 84 360C110 430 190 440 290 446C480 456 620 480 700 540L724 570" />
+      <path pathLength="1" d="M1022 -3C1040 20 1060 40 1080 58" />
+      <path pathLength="1" d="M1444 194C1420 204 1400 214 1380 222" />
+    </svg>
+
+    <img class="lk-hire__art" src="/assets/images/lockers/locker-doors.webp" alt="" width="1278" height="1018" loading="lazy">
+
+    <svg class="lk-hire__star" viewBox="-200 -200 400 400" aria-hidden="true">
+      <polygon points="-58,-179 5,-50 75,-130 40,-29 188,-40 49,10 115,80 26,43 23,163 -10,49 -96,154 -42,27 -188,26 -49,-12 -105,-73 -30,-40" />
+    </svg>
+
+    <form class="lk-card reveal" data-locker-form{% if lockers.hireUrl %} action="{{ lockers.hireUrl }}" method="get"{% endif %}>
+      <h2 id="hire-title" class="lk-card__title">DES Locker Hire</h2>
+      <p class="lk-card__price" data-locker-total aria-live="polite">
+        {%- for size in lockers.sizes %}{% if size.id == chosen %}{{ size.price | price }}{% endif %}{% endfor -%}
+      </p>
+      <hr class="lk-card__rule">
+
+      <fieldset class="lk-card__sizes">
+        <legend>Locker size</legend>
+        <div class="lk-sizes">
+          {% for size in lockers.sizes %}
+            <label class="lk-size">
+              <input class="visually-hidden" type="radio" name="size" value="{{ size.id }}" data-price="{{ size.price }}"{% if size.id == chosen %} checked{% endif %}>
+              <span>{{ size.label }}</span>
+            </label>
+          {% endfor %}
+        </div>
+      </fieldset>
+
+      <div class="lk-card__row">
+        <div class="lk-qty">
+          <button type="button" data-qty-step="-1" aria-label="One fewer">&minus;</button>
+          <input type="number" name="quantity" value="1" min="1" max="{{ lockers.maxQuantity }}" inputmode="numeric" aria-label="Quantity" data-locker-qty>
+          <button type="button" data-qty-step="1" aria-label="One more">+</button>
+        </div>
+
+        <button class="lk-continue" type="submit" data-magnetic>
+          Continue to details
+          <svg viewBox="0 0 28 16" aria-hidden="true"><path d="M2 8h23M18 2l7 6-7 6" /></svg>
+        </button>
+      </div>
+
+      <p class="lk-card__note" data-locker-note role="status" hidden>Bookings aren&rsquo;t open yet. Check back soon.</p>
+    </form>
+  </div>
+</section>

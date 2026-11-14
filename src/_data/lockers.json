@@ -1,0 +1,20 @@
+{
+  "_note": "Locker Sales page. Prices are in AUD per semester. Set hireUrl to the booking/payment form when it is ready - until then the Continue button says bookings aren't open yet. The chosen size and quantity are added to that link as ?size=small&quantity=1.",
+  "year": "2027",
+  "tagline": ["No more carrying", "your studio around"],
+  "perLabel": "Per semester.",
+  "note": ["Large lockers", "for model storage only."],
+  "sizes": [
+    { "id": "small", "label": "Small", "price": 25 },
+    { "id": "medium", "label": "Medium", "price": 45 },
+    { "id": "large", "label": "Large", "price": 65 }
+  ],
+  "defaultSize": "small",
+  "maxQuantity": 5,
+  "hireUrl": null,
+  "steps": [
+    ["Choose your", "locker size"],
+    ["Fill in your", "details and pay"],
+    ["Receive your", "locker allocation", "by email."]
+  ]
+}

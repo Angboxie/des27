@@ -1,0 +1,823 @@
+/*
+  Locker Sales page - DES27 design.
+  Each section has a "stage" sized like the 1440px-wide design. Inside it,
+  lengths are in cqw (1cqw = 1% of the stage width), so the layout scales as
+  one piece. Phones get their own layout at the bottom of this file.
+*/
+
+.lk-stage {
+  position: relative;
+  width: 100%;
+  max-width: 100rem;
+  margin-inline: auto;
+  container-type: inline-size;
+}
+
+
+/* ---------- Hero ---------- */
+
+.lk-hero {
+  overflow: hidden;
+  /* blue glow under the locker, running into the band below */
+  background:
+    radial-gradient(ellipse 30vw 19vw at 81% 106%, var(--des-blue) 0%, rgba(58, 79, 224, 0.82) 30%, rgba(58, 79, 224, 0.35) 62%, rgba(58, 79, 224, 0) 100%),
+    var(--des-cream);
+}
+
+.lk-hero__stage {
+  min-height: 38.68cqw;
+}
+
+.lk-hero__line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: visible;
+}
+
+.lk-hero__line path {
+  stroke: var(--des-blue);
+  stroke-width: 1.5;
+}
+
+/* locker with the lime star on its corner */
+.lk-hero__art {
+  position: absolute;
+  right: 6cqw;
+  bottom: 0;
+  width: 37cqw;
+}
+
+.lk-hero__art img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.lk-hero__text {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 3cqw;
+  padding: 6cqw 0 0 6.3cqw;
+}
+
+/* the heading's parts sit directly in the grid, next to the tagline */
+.lk-title {
+  display: contents;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: 13.7cqw;
+  line-height: 0.86;
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+}
+
+.lk-title__big {
+  grid-column: 1 / -1;
+}
+
+.lk-title__hire {
+  grid-column: 1;
+  grid-row: 2;
+  margin-top: 2.2cqw;
+  color: var(--des-lime);
+  -webkit-text-stroke: 0.62cqw var(--des-blue);
+  paint-order: stroke fill;
+}
+
+.lk-title__year {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: end;
+  justify-self: start;
+  margin-bottom: 0.1cqw;
+  font-size: 7.6cqw;
+  line-height: 0.8;
+  color: var(--des-blue);
+}
+
+.lk-hero__tag {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: start;
+  margin: 2.5cqw 0 0;
+  font-size: max(0.7rem, 1.32cqw);
+  font-weight: 500;
+  line-height: 1.12;
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .lk-title__big,
+  .js .lk-title__hire,
+  .js .lk-title__year,
+  .js .lk-hero__tag {
+    animation: lk-rise 1s var(--ease-out) both;
+  }
+
+  .js .lk-title__hire { animation-delay: 120ms; }
+  .js .lk-hero__tag { animation-delay: 260ms; }
+  .js .lk-title__year { animation-delay: 340ms; }
+
+  .js .lk-hero__art {
+    animation: lk-art-in 1.3s var(--ease-out) 150ms both;
+  }
+
+  .lk-hire__star {
+    animation: lk-rock 8s var(--ease-in-out) infinite alternate;
+  }
+}
+
+@keyframes lk-rise {
+  from { opacity: 0; translate: 0 0.3em; }
+}
+
+@keyframes lk-art-in {
+  from { opacity: 0; translate: 0 6%; }
+}
+
+@keyframes lk-rock {
+  from { rotate: -6deg; }
+  to { rotate: 8deg; }
+}
+
+
+/* ---------- Prices ---------- */
+
+.lk-prices {
+  overflow: hidden;
+  color: var(--des-on-blue);
+  background: var(--des-blue-surface);
+  background-blend-mode: soft-light, normal;
+}
+
+.lk-prices__lines {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.lk-prices__lines path {
+  stroke: var(--des-lime);
+  stroke-width: 2;
+}
+
+/* Three boxes drawn to (roughly) the size of each locker */
+.lk-prices__grid {
+  display: grid;
+  grid-template-columns: 32.64cqw 17.43cqw 18.2cqw minmax(0, 1fr);
+  grid-template-rows: 17.43cqw 17.3cqw;
+  gap: 2.08cqw;
+  padding: 3.6cqw 3.33cqw 3.75cqw;
+}
+
+.lk-price {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 1.4cqw 1.6cqw;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: max(1.5rem, 3.3cqw);
+  line-height: 1.04;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--des-blue);
+  background: var(--des-lime);
+  border: max(2px, 0.21cqw) solid var(--des-blue-deep);
+  border-radius: 1cqw;
+  transition: translate 0.6s var(--ease-out), box-shadow 0.6s var(--ease-out);
+}
+
+.lk-price:hover,
+.lk-price:focus-visible {
+  translate: 0 -0.5cqw;
+  box-shadow: 0 1.6cqw 2.4cqw -1.2cqw rgba(8, 12, 60, 0.6);
+}
+
+.lk-price--large {
+  grid-area: 1 / 1 / 3 / 2;
+  background: var(--des-white);
+}
+
+/* the lime lines pass over the big white box but under the lime ones */
+.lk-price--small {
+  z-index: 2;
+  grid-area: 1 / 2;
+}
+
+.lk-price--medium {
+  z-index: 2;
+  grid-area: 2 / 2 / 3 / 4;
+}
+
+.lk-prices__text {
+  position: relative;
+  z-index: 2;
+  grid-area: 1 / 3 / 2 / 5;
+  padding-top: 0.5cqw;
+}
+
+.lk-prices__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: max(1.75rem, 4.5cqw);
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--des-lime);
+}
+
+.lk-prices__text p {
+  margin: 1cqw 0 0;
+  font-size: max(0.85rem, 1.67cqw);
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+
+/* ---------- Steps ---------- */
+
+.lk-steps {
+  overflow: hidden;
+  text-align: center;
+  background: var(--des-white);
+}
+
+.lk-steps__stage {
+  padding: 5.9cqw 0 6.6cqw;
+}
+
+.lk-steps__burst {
+  position: absolute;
+  top: 12.6cqw;
+  left: 4cqw;
+  width: 91cqw;
+  height: 19cqw;
+  fill: #edf1ff;
+}
+
+.lk-steps__title {
+  position: relative;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: max(2rem, 3.9cqw);
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--des-blue);
+}
+
+.lk-steps__sub {
+  position: relative;
+  margin: 1.4cqw 0 0;
+  font-size: max(0.85rem, 1.4cqw);
+  font-weight: 700;
+}
+
+.lk-steps__list {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 5.4cqw 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lk-steps__list li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* dashes between one number and the next */
+.lk-steps__list li + li::before {
+  content: "";
+  position: absolute;
+  top: 3.75cqw;
+  right: calc(50% + 7.1cqw);
+  width: 19.4cqw;
+  height: max(1.5px, 0.14cqw);
+  background: repeating-linear-gradient(90deg, var(--des-ink) 0 0.65cqw, transparent 0.65cqw 1.62cqw);
+}
+
+.lk-steps__num {
+  display: grid;
+  place-items: center;
+  width: 7.64cqw;
+  aspect-ratio: 1;
+  padding-top: 0.2cqw;
+  font-size: 4.3cqw;
+  line-height: 1;
+  color: var(--des-blue);
+  background: var(--des-lime);
+  border: max(1.5px, 0.17cqw) solid var(--des-blue);
+  border-radius: 50%;
+}
+
+.lk-steps__label {
+  margin-top: 3.4cqw;
+  font-size: max(0.85rem, 1.53cqw);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+
+/* ---------- Choose a locker ---------- */
+
+.lk-hire {
+  overflow: hidden;
+  background: var(--des-cream);
+  /* jumping here from the price boxes: stop below the sticky header */
+  scroll-margin-top: 4rem;
+}
+
+.lk-hire__stage {
+  /* no padding here: cqw is measured from this box's inner width */
+  display: flow-root;
+  min-height: 39.24cqw;
+}
+
+.lk-hire__lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.lk-hire__lines path {
+  stroke: var(--des-lime);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+}
+
+.lk-hire__art {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 49.3cqw;
+  height: auto;
+}
+
+.lk-hire__star {
+  position: absolute;
+  top: 13.1cqw;
+  left: -11.8cqw;
+  width: 33.6cqw;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.lk-hire__star polygon {
+  fill: var(--des-blue);
+  stroke: var(--des-lime);
+  stroke-width: 5;
+  stroke-linejoin: round;
+}
+
+.lk-card {
+  position: relative;
+  width: 46.2cqw;
+  min-height: 31.1cqw;
+  margin: 4.1cqw 4.17cqw 4cqw auto;
+  padding: 3cqw 3.2cqw 2.8cqw;
+  background: var(--des-white);
+  border: max(2px, 0.17cqw) solid var(--des-blue);
+  border-radius: 1.1cqw;
+  box-shadow: 0.55cqw 0.55cqw 1.5cqw rgba(13, 13, 40, 0.2);
+}
+
+.lk-card__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: max(1.9rem, 4.17cqw);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.lk-card__price {
+  margin: 1.5cqw 0 0;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: max(1.05rem, 1.67cqw);
+  line-height: 1;
+}
+
+.lk-card__rule {
+  height: 1.5px;
+  margin: 1.8cqw 0 2.2cqw;
+  background: var(--des-blue-soft);
+  border: 0;
+}
+
+.lk-card__sizes {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.lk-card__sizes legend {
+  margin-bottom: 1.1cqw;
+  padding: 0;
+  font-size: max(0.8rem, 1.4cqw);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.lk-sizes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25cqw;
+}
+
+.lk-size {
+  position: relative;
+  cursor: pointer;
+}
+
+.lk-size span,
+.lk-qty,
+.lk-continue {
+  min-height: max(2.75rem, 4.3cqw);
+  font-size: max(0.8rem, 1.4cqw);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--des-blue);
+  background: var(--des-white);
+  border: max(1.5px, 0.14cqw) solid var(--des-blue);
+  border-radius: max(0.4rem, 0.55cqw);
+}
+
+.lk-size span {
+  display: grid;
+  place-items: center;
+  transition: color 0.3s, background-color 0.3s, scale 0.2s var(--ease-out);
+}
+
+.lk-size:hover span {
+  background: #edf1ff;
+}
+
+.lk-size input:checked + span {
+  color: var(--des-white);
+  background: var(--des-blue);
+}
+
+.lk-size input:focus-visible + span {
+  outline: 2px solid var(--des-blue);
+  outline-offset: 3px;
+}
+
+.lk-size:active span {
+  scale: 0.96;
+}
+
+.lk-card__row {
+  display: flex;
+  gap: 2.6cqw;
+  margin-top: 1.9cqw;
+}
+
+.lk-qty {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: stretch;
+  width: max(6.5rem, 9.3cqw);
+}
+
+.lk-qty button {
+  flex: 1;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.lk-qty button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.lk-qty input {
+  flex: 1;
+  width: 2em;
+  min-width: 0;
+  padding: 0;
+  font: inherit;
+  text-align: center;
+  color: inherit;
+  background: none;
+  border: 0;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.lk-qty input::-webkit-outer-spin-button,
+.lk-qty input::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+.lk-continue {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  padding: 0 0.6em;
+  font-family: inherit;
+  white-space: nowrap;
+  background: var(--des-lime);
+  cursor: pointer;
+  transition: color 0.3s, background-color 0.3s, translate 0.6s var(--ease-out), scale 0.2s var(--ease-out);
+}
+
+.lk-continue svg {
+  width: 1.6em;
+  height: 0.95em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.45s var(--ease-out);
+}
+
+.lk-continue:hover,
+.lk-continue:focus-visible {
+  color: var(--des-lime);
+  background: var(--des-blue);
+}
+
+.lk-continue:hover svg,
+.lk-continue:focus-visible svg {
+  transform: translateX(4px);
+}
+
+.lk-continue:active {
+  scale: 0.97;
+}
+
+.lk-card__note {
+  margin: 1.2cqw 0 0;
+  font-size: max(0.8rem, 1.2cqw);
+  font-weight: 600;
+  color: var(--des-blue-deep);
+}
+
+
+/* ---------- Phones ---------- */
+
+@media (max-width: 47.99em) {
+  /* Hero: title, then the locker underneath */
+  .lk-hero {
+    background:
+      radial-gradient(ellipse 72vw 38vw at 64% 104%, var(--des-blue) 0%, rgba(58, 79, 224, 0.8) 30%, rgba(58, 79, 224, 0.3) 65%, rgba(58, 79, 224, 0) 100%),
+      var(--des-cream);
+  }
+
+  .lk-hero__stage {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .lk-hero__line {
+    display: none;
+  }
+
+  .lk-hero__text {
+    column-gap: 4cqw;
+    padding: 7cqw var(--des-gutter) 0;
+  }
+
+  .lk-title {
+    font-size: 20.5cqw;
+  }
+
+  .lk-title__big {
+    white-space: nowrap;
+  }
+
+  .lk-title__hire {
+    margin-top: 3cqw;
+    -webkit-text-stroke-width: 1cqw;
+  }
+
+  .lk-title__year {
+    font-size: 12cqw;
+  }
+
+  .lk-hero__tag {
+    margin-top: 3.6cqw;
+    font-size: 0.72rem;
+  }
+
+  .lk-hero__text {
+    order: 1;
+  }
+
+  .lk-hero__art {
+    position: relative;
+    right: auto;
+    order: 2;
+    align-self: flex-end;
+    width: 50cqw;
+    margin: 4cqw 9cqw 0 0;
+  }
+
+  /* Prices: note on top, then the three boxes */
+  .lk-prices__lines {
+    display: none;
+  }
+
+  .lk-prices__grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    gap: 4cqw;
+    padding: 9cqw var(--des-gutter) 10cqw;
+  }
+
+  .lk-prices__text {
+    order: -1;
+    grid-area: auto / 1 / auto / -1;
+    padding: 0 0 2cqw;
+  }
+
+  .lk-prices__title {
+    font-size: 12cqw;
+  }
+
+  .lk-prices__text p {
+    margin-top: 2.5cqw;
+    font-size: 1.05rem;
+  }
+
+  .lk-price {
+    padding: 3.5cqw 4cqw;
+    font-size: 9cqw;
+    border-radius: 3cqw;
+  }
+
+  .lk-price--small {
+    grid-area: auto / 1;
+    aspect-ratio: 1;
+  }
+
+  .lk-price--medium {
+    grid-area: auto / 1 / auto / -1;
+    aspect-ratio: 2.2;
+  }
+
+  .lk-price--large {
+    grid-area: auto / 1 / auto / -1;
+    aspect-ratio: 1.45;
+  }
+
+  /* Steps: one under the other, joined by dashes */
+  .lk-steps {
+    text-align: left;
+  }
+
+  .lk-steps__stage {
+    padding: 13cqw var(--des-gutter) 14cqw;
+  }
+
+  .lk-steps__burst {
+    top: 34cqw;
+    left: -12cqw;
+    width: 124cqw;
+    height: calc(100% - 44cqw);
+  }
+
+  .lk-steps__title {
+    font-size: 10.5cqw;
+  }
+
+  .lk-steps__sub {
+    margin-top: 2.5cqw;
+    font-size: 1rem;
+  }
+
+  .lk-steps__list {
+    grid-template-columns: 1fr;
+    gap: 9cqw;
+    margin-top: 11cqw;
+  }
+
+  .lk-steps__list li {
+    flex-direction: row;
+    gap: 6cqw;
+  }
+
+  .lk-steps__list li + li::before {
+    top: -7.5cqw;
+    right: auto;
+    left: 9cqw;
+    width: max(1.5px, 0.14cqw);
+    height: 6cqw;
+    background: repeating-linear-gradient(var(--des-ink) 0 1.4cqw, transparent 1.4cqw 2.4cqw);
+  }
+
+  .lk-steps__num {
+    flex: 0 0 auto;
+    width: 18cqw;
+    font-size: 10cqw;
+  }
+
+  .lk-steps__label {
+    margin-top: 0;
+    font-size: 1.1rem;
+  }
+
+  /* Choose a locker: picture on top, the card overlapping its bottom edge */
+  .lk-hire__stage {
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 12cqw;
+  }
+
+  .lk-hire__lines {
+    display: none;
+  }
+
+  .lk-hire__art {
+    position: relative;
+    width: 100%;
+  }
+
+  .lk-hire__star {
+    top: 30cqw;
+    left: -20cqw;
+    width: 52cqw;
+  }
+
+  .lk-card {
+    width: auto;
+    min-height: 0;
+    margin: -14cqw var(--des-gutter) 0;
+    padding: 6.5cqw 6cqw 6cqw;
+    border-radius: 3.5cqw;
+    box-shadow: 1.2cqw 1.2cqw 4cqw rgba(13, 13, 40, 0.2);
+  }
+
+  .lk-card__title {
+    font-size: 12cqw;
+  }
+
+  .lk-card__price {
+    margin-top: 3cqw;
+    font-size: 1.35rem;
+  }
+
+  .lk-card__rule {
+    margin: 4.5cqw 0 5cqw;
+  }
+
+  .lk-card__sizes legend {
+    margin-bottom: 2.5cqw;
+    font-size: 0.9rem;
+  }
+
+  .lk-sizes {
+    gap: 2.5cqw;
+  }
+
+  .lk-size span,
+  .lk-qty,
+  .lk-continue {
+    min-height: 3rem;
+    font-size: 0.85rem;
+  }
+
+  .lk-card__row {
+    flex-wrap: wrap;
+    gap: 3cqw;
+    margin-top: 4cqw;
+  }
+
+  .lk-continue {
+    flex: 1 1 11rem;
+  }
+
+  .lk-card__note {
+    margin-top: 3.5cqw;
+    font-size: 0.9rem;
+  }
+}

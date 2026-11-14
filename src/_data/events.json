@@ -31,6 +31,7 @@
     "summary": "A summer design challenge for architecture, UI/UX and graphic design students from every university in Melbourne.",
     "description": "Over eight weeks of summer, students from different design disciplines take on one shared challenge facing Melbourne. The best work is presented at a live crit, awards night and open exhibition in Week 2 of Semester 1, 2027.",
     "image": "/assets/images/open-city.jpg",
+    "homeArt": "/assets/images/home/open-city-collage.webp",
     "registration": {
       "status": "coming-soon",
       "url": null,

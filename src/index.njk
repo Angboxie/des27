@@ -1,5 +1,173 @@
 ---
-layout: layouts/coming-soon.njk
+layout: layouts/base.njk
 title: Home
 navLabel: Home
+theme: des27
+styles:
+  - /assets/css/events.css
+  - /assets/css/home.css
+scripts:
+  - /assets/js/events.js
 ---
+{% set featured = events | featuredEvent %}
+{% set arrow = '<svg class="ev-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5" /></svg>' %}
+
+{# Explore cards. The pictures are in src/assets/images/home/ #}
+{% set exploreCards = [
+  { label: "Events", url: "/events/", image: "explore-events.webp" },
+  { label: "Education", url: "/resources/", image: "explore-education.webp" },
+  { label: "Merch", url: "/merchandise/", image: "explore-merch.webp" },
+  { label: "Locker Sale", url: "/lockers/", image: "explore-lockers.webp" }
+] %}
+
+{# Photos in the About Us slider #}
+{% set aboutPhotos = [
+  "/assets/images/industry-night-1.jpg",
+  "/assets/images/industry-night-2.jpg",
+  "/assets/images/industry-night-3.jpg",
+  "/assets/images/industry-night-4.jpg"
+] %}
+
+
+{# ---------- Hero ---------- #}
+<section class="hm-hero" aria-labelledby="home-title">
+  {# cream background that ends in a curve, so the blue band below shows through on the right #}
+  <div class="hm-hero__bg" aria-hidden="true">
+    <svg viewBox="0 0 1440 321" preserveAspectRatio="none"><path d="M0 0H1440V46C1420 30 1396 16 1372 9C1396 36 1408 68 1408 96C1408 142 1370 182 1289 220C1180 266 1010 300 760 316C640 321 320 321 0 321Z" /></svg>
+  </div>
+
+  <svg class="hm-hero__line draw-line" viewBox="0 0 1440 800" aria-hidden="true">
+    <path pathLength="1" d="M317 12C500 68 700 78 900 53S1250 18 1380 68C1470 108 1500 218 1480 318C1470 388 1420 413 1340 413C1000 413 700 428 400 458C200 478 70 518 77 588C85 678 300 728 590 753" />
+  </svg>
+
+  <svg class="hm-hero__star" viewBox="-200 -200 400 400" aria-hidden="true">
+    <polygon points="-58,-179 5,-50 75,-130 40,-29 188,-40 49,10 115,80 26,43 23,163 -10,49 -96,154 -42,27 -188,26 -49,-12 -105,-73 -30,-40" />
+  </svg>
+
+  <div class="des-container">
+    <h1 id="home-title" class="hm-title">
+      <span class="hm-row" style="--i: 0">
+        <span class="hm-word">A</span>
+        <span class="hm-photo hm-photo--wide"><img src="/assets/images/home/hero-1.jpg" alt="" width="1086" height="237"></span>
+        <span class="hm-word hm-word--soft">Place for</span>
+      </span>
+      <span class="hm-row" style="--i: 1">
+        <span class="hm-word">Ideas</span>
+        <span class="hm-word hm-word--soft">A space for</span>
+        <span class="hm-photo"><img src="/assets/images/home/hero-2.jpg" alt="" width="676" height="237"></span>
+      </span>
+      <span class="hm-row" style="--i: 2">
+        <span class="hm-word"><span class="hm-word__blue">Des</span>ign</span>
+        <span class="hm-word hm-word--soft">A community for</span>
+      </span>
+      <span class="hm-row" style="--i: 3">
+        <span class="hm-word">Everyone</span>
+        <span class="hm-photo"><img src="/assets/images/home/hero-3.jpg" alt="" width="1510" height="237"></span>
+      </span>
+    </h1>
+  </div>
+
+  <div class="hm-cta">
+    <svg class="hm-cta__burst" viewBox="0 0 1166 240" preserveAspectRatio="none" aria-hidden="true">
+      <polygon points="0,60 190,95 330,70 374,0 470,62 690,25 760,75 1166,28 1010,100 1166,150 990,165 1060,235 800,190 760,240 600,200 370,240 330,180 60,240 190,150" />
+    </svg>
+    <img class="hm-cta__hand" src="/assets/images/home/hand-point.png" alt="" width="599" height="278">
+
+    <div class="des-container">
+      <div class="hm-cta__buttons">
+        <a class="hm-btn hm-btn--lime" data-magnetic href="/about/#join">Join the community {{ arrow | safe }}</a>
+        <a class="hm-btn hm-btn--line" data-magnetic href="/events/">Explore Events</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{# ---------- Featured event ---------- #}
+{% if featured %}
+<section class="ev-featured hm-featured{% if featured.homeArt %} hm-featured--art{% endif %}" data-cursor="light" aria-labelledby="featured-title">
+  <div class="ev-featured__glow" aria-hidden="true"></div>
+
+  <svg class="ev-featured__curve draw-line" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path pathLength="1" d="M400 20 C 250 40, 150 120, 120 260 C 105 330, 70 380, 10 420" />
+  </svg>
+
+  {# An event can set "homeArt" (a cut-out picture) in events.json; otherwise its photo is used #}
+  {% if featured.homeArt %}
+    <img class="hm-featured__art" src="{{ featured.homeArt }}" alt="" width="1360" height="1163" loading="lazy">
+  {% else %}
+    <div class="ev-featured__media" data-parallax>
+      {% if featured.image %}<img src="{{ featured.image }}" alt="" loading="lazy">{% else %}<div class="media-placeholder"></div>{% endif %}
+    </div>
+  {% endif %}
+
+  <div class="des-container ev-featured__inner">
+    <div class="ev-featured__content">
+      <p class="ev-eyebrow reveal">Featured event</p>
+      <h2 id="featured-title" class="ev-featured__title">
+        <span class="ev-featured__big reveal" style="--delay: 100ms">{{ featured.headline or featured.title }}</span>
+        {% if featured.headlineAccent %}<span class="script ev-featured__script reveal" style="--delay: 220ms">{{ featured.headlineAccent }}</span>{% endif %}
+      </h2>
+      <p class="ev-featured__text reveal" style="--delay: 320ms">{{ featured.summary }}</p>
+
+      <a class="ev-btn ev-btn--lime reveal" data-magnetic style="--delay: 420ms" href="{{ (featured.registration and featured.registration.url) or ('/events/' + featured.id + '/') }}">
+        {% if featured.registration and featured.registration.status == "open" %}Sign Up Now{% else %}Find Out More{% endif %}
+        <svg class="ev-arrow" viewBox="0 0 16 16" aria-hidden="true"><path pathLength="1" d="M4 12 12 4M5.5 4H12v6.5" /></svg>
+      </a>
+    </div>
+
+    <p class="ev-featured__date reveal" style="--delay: 200ms">
+      <time datetime="{{ featured.date }}">
+        <span class="ev-featured__month">{{ featured.dateDisplay.big if featured.dateDisplay else (featured.date | datePart("month")) }}</span>
+        <span class="ev-featured__day script">{{ featured.dateDisplay.script if featured.dateDisplay else (featured.date | datePart("day")) }}</span>
+      </time>
+    </p>
+  </div>
+</section>
+{% endif %}
+
+
+{# ---------- Explore ---------- #}
+<section class="hm-explore" aria-labelledby="explore-title">
+  <div class="des-container">
+    <div class="hm-explore__wrap">
+      <div class="hm-explore__inner">
+        {# one line that threads behind the cards and ends at the star above "About us" #}
+        <svg class="hm-explore__line draw-line" viewBox="0 0 1240 748" aria-hidden="true">
+          <path pathLength="1" d="M1076 -3C1050 110 1000 185 918 226S730 310 620 316S400 280 272 251S60 262 0 289C-50 315 -50 440 0 468C80 500 200 498 322 469S520 400 620 380S860 372 964 383C1060 395 1130 480 1148 577C1160 660 1100 720 956 723C820 726 700 690 620 702C606 706 596 716 590 728" />
+        </svg>
+        <svg class="hm-explore__star" viewBox="-100 -100 200 200" aria-hidden="true">
+          <polygon points="16,-94 12,-19 49,-34 21,-5 98,17 18,13 31,54 4,22 -16,91 -12,19 -82,57 -21,5 -95,-17 -19,-12 -33,-48 -5,-21" />
+        </svg>
+
+        <h2 id="explore-title" class="hm-explore__title">Explore</h2>
+
+        <ul class="hm-cards">
+          {% for card in exploreCards %}
+            <li class="reveal" style="--delay: {{ loop.index0 * 90 }}ms">
+              <a class="hm-card" href="{{ card.url }}">
+                <span class="hm-card__art"><img src="/assets/images/home/{{ card.image }}" alt="" width="531" height="548" loading="lazy"></span>
+                <span class="hm-card__label">{{ card.label }} {{ arrow | safe }}</span>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{# ---------- About us ---------- #}
+<section class="hm-about" aria-labelledby="about-title">
+  <h2 id="about-title" class="hm-about__title reveal">About <span>Us</span></h2>
+
+  <div class="hm-slider" data-carousel>
+    <ul class="hm-slider__track" data-carousel-track data-cursor-label="Drag">
+      {% for photo in aboutPhotos %}
+        <li><img src="{{ photo }}" alt="" loading="lazy" draggable="false"></li>
+      {% endfor %}
+    </ul>
+    <div class="hm-slider__progress" data-carousel-progress aria-hidden="true"><span></span></div>
+  </div>
+</section>

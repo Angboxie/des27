@@ -1,0 +1,687 @@
+/*
+  Home page - DES27 design.
+  Sizes follow the 1440px-wide design and scale with the screen.
+  Shared pieces (blue band text, buttons, arrows) come from events.css.
+*/
+
+.theme-des27 {
+  /* height of the curve where the hero meets the blue band */
+  --hm-wave: 22.3vw;
+  --hm-sky: #e3effa;
+}
+
+
+/* ---------- Hero ---------- */
+
+.hm-hero {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  padding-top: clamp(1.5rem, 9.9vw, 9rem);
+}
+
+.hm-hero__bg {
+  position: absolute;
+  z-index: -3;
+  inset: 0;
+}
+
+.hm-hero__bg::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 calc(var(--hm-wave) - 1px);
+  background: linear-gradient(var(--des-cream) 35%, var(--des-white) 80%);
+}
+
+.hm-hero__bg svg {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: var(--hm-wave);
+  fill: var(--des-white);
+}
+
+.hm-hero__line {
+  position: absolute;
+  z-index: -2;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: visible;
+}
+
+.hm-hero__line path {
+  stroke: var(--des-blue);
+  stroke-width: 1.5;
+}
+
+.hm-hero__star {
+  position: absolute;
+  z-index: 1;
+  top: min(2.1vw, 1.9rem);
+  /* hangs off the right end of the headline, also on very wide screens */
+  right: calc(var(--des-bleed) - min(11.6vw, 10.4rem));
+  width: min(24vw, 21.6rem);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.hm-hero__star polygon {
+  fill: var(--des-lime);
+  stroke: var(--des-blue);
+  stroke-width: 3.5;
+  stroke-linejoin: round;
+}
+
+@keyframes hm-spin {
+  to { rotate: 360deg; }
+}
+
+@keyframes hm-rock {
+  from { rotate: -5deg; }
+  to { rotate: 7deg; }
+}
+
+/* Headline: four rows of words with photos set into the lines */
+.hm-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.565em;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(2.5rem, 8.6vw, 7.8rem);
+  line-height: 1.016;
+  letter-spacing: 0.012em;
+  text-transform: uppercase;
+}
+
+.hm-row {
+  display: flex;
+  align-items: center;
+  gap: 0.31em;
+}
+
+@keyframes hm-rise {
+  from { opacity: 0; translate: 0 0.35em; }
+}
+
+.hm-word {
+  white-space: nowrap;
+}
+
+.hm-word--soft {
+  color: #bfc3ca;
+}
+
+.hm-word__blue {
+  color: var(--des-blue);
+}
+
+.hm-photo {
+  flex: 1 1 0;
+  min-width: 1.2em;
+  height: 1.016em;
+  overflow: hidden;
+  border: clamp(2px, 0.21vw, 3px) solid var(--des-blue);
+  border-radius: 0.1em;
+}
+
+.hm-photo--wide {
+  flex: 0 0 44.4%;
+}
+
+.hm-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Entrance and idle motion - skipped for people who ask for reduced motion */
+@media (prefers-reduced-motion: no-preference) {
+  .js .hm-row {
+    animation: hm-rise 1s var(--ease-out) calc(var(--i, 0) * 110ms + 100ms) both;
+  }
+
+  .js .hm-photo img {
+    animation: hm-photo-in 1.5s var(--ease-out) calc(var(--i, 0) * 110ms + 250ms) both;
+  }
+
+  .hm-hero__star {
+    animation: hm-rock 7s var(--ease-in-out) infinite alternate;
+  }
+
+  .hm-cta__hand {
+    animation: hm-point 2.6s var(--ease-in-out) infinite;
+  }
+
+  .hm-explore__star {
+    animation: hm-spin 24s linear infinite;
+  }
+}
+
+@keyframes hm-photo-in {
+  from { scale: 1.35; opacity: 0; }
+}
+
+/* Buttons, with the pointing hand and the pale burst behind them */
+.hm-cta {
+  position: relative;
+  margin-top: min(7.6vw, 6.9rem);
+  padding-bottom: 6.5vw;
+}
+
+.hm-cta__burst {
+  position: absolute;
+  z-index: -1;
+  top: -6.5vw;
+  left: 10vw;
+  width: 81vw;
+  height: 16.7vw;
+  fill: #edf1ff;
+}
+
+.hm-cta__hand {
+  position: absolute;
+  z-index: -1;
+  top: -2.8vw;
+  left: 0;
+  width: min(20.6vw, 22rem);
+  height: auto;
+}
+
+@keyframes hm-point {
+  50% { translate: 1.1vw 0; }
+}
+
+.hm-cta__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(0.75rem, 1.75vw, 1.6rem);
+  padding-left: 21%;
+}
+
+.hm-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2em;
+  min-height: 3.1em;
+  padding: 0.6em 2.35em;
+  overflow: hidden;
+  isolation: isolate;
+  font-size: clamp(0.95rem, 1.5vw, 1.4rem);
+  font-weight: 600;
+  text-decoration: none;
+  border: 2px solid;
+  border-radius: 0.55em;
+  transition: color 0.45s var(--ease-out), translate 0.6s var(--ease-out), scale 0.2s var(--ease-out);
+}
+
+.hm-btn::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  transform: translateY(101%);
+  transition: transform 0.55s var(--ease-out);
+}
+
+.hm-btn:hover::before,
+.hm-btn:focus-visible::before {
+  transform: none;
+}
+
+.hm-btn:hover .ev-arrow,
+.hm-btn:focus-visible .ev-arrow {
+  transform: translate(3px, -3px);
+}
+
+.hm-btn:active {
+  scale: 0.96;
+}
+
+.hm-btn--lime {
+  color: var(--des-ink);
+  background: var(--des-lime);
+  border-color: var(--des-ink);
+}
+
+.hm-btn--lime::before {
+  background: var(--des-white);
+}
+
+.hm-btn--line {
+  color: var(--des-blue-deep);
+  background: var(--des-white);
+  border-color: var(--des-blue-deep);
+}
+
+.hm-btn--line::before {
+  background: var(--des-blue-deep);
+}
+
+.hm-btn--line:hover,
+.hm-btn--line:focus-visible {
+  color: var(--des-white);
+}
+
+
+/* ---------- Featured event ---------- */
+
+/* The band starts behind the hero's curved bottom edge */
+.hm-featured {
+  margin-top: calc(-1 * var(--hm-wave));
+  padding-top: var(--hm-wave);
+}
+
+.hm-featured .ev-featured__inner {
+  min-height: clamp(24rem, 44.5vw, 42rem);
+  padding-top: clamp(2.25rem, 6.2vw, 6rem);
+}
+
+.hm-featured .ev-featured__text {
+  font-size: clamp(0.85rem, 1.25vw, 1.15rem);
+}
+
+.hm-featured .ev-btn {
+  padding: 1em 2.2em;
+  font-size: clamp(0.9rem, 1.4vw, 1.3rem);
+  color: var(--des-ink);
+  border-color: var(--des-ink);
+  border-radius: 0.55em;
+}
+
+/* Cut-out picture sitting on the bottom-left of the band */
+.hm-featured__art {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: min(47.2vw, 46rem);
+  height: auto;
+}
+
+.js .hm-featured__art {
+  translate: 0 9%;
+  opacity: 0;
+  transition: translate 1.4s var(--ease-out), opacity 0.9s var(--ease-out);
+}
+
+.js .hm-featured.is-visible .hm-featured__art {
+  translate: none;
+  opacity: 1;
+}
+
+/* the photo version (no cut-out) sits below the curve, not behind it */
+.hm-featured .ev-featured__media {
+  top: var(--hm-wave);
+}
+
+
+/* ---------- Explore ---------- */
+
+.hm-explore {
+  background: linear-gradient(var(--hm-sky), var(--des-white) 82%);
+}
+
+/* Everything inside is sized in cqw (1cqw = 1% of this box's width), so the
+   line stays threaded through the cards at any screen size */
+.hm-explore__wrap {
+  container-type: inline-size;
+}
+
+.hm-explore__inner {
+  position: relative;
+  padding-block: 4.7cqw 13.5cqw;
+}
+
+.hm-explore__line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: visible;
+}
+
+.hm-explore__line path {
+  stroke: var(--des-blue);
+  stroke-width: 2;
+}
+
+.hm-explore__star {
+  position: absolute;
+  top: 58.7cqw;
+  left: 47.6cqw;
+  width: 6.4cqw;
+  margin: -3.2cqw 0 0 -3.2cqw;
+  overflow: visible;
+  fill: var(--des-blue);
+}
+
+/* Big word that fades out behind the cards */
+.hm-explore__title {
+  height: 11cqw;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: 15.4cqw;
+  line-height: 0.74;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #8da3f8;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .hm-explore__title {
+    color: transparent;
+    background: linear-gradient(#8da3f8 12%, rgba(141, 163, 248, 0) 78%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+}
+
+.hm-cards {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4.03cqw;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hm-card {
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 272 / 386;
+  overflow: hidden;
+  color: var(--des-ink);
+  text-decoration: none;
+  background: var(--des-white);
+  border: clamp(2px, 0.22cqw, 3px) solid var(--des-blue);
+  border-radius: clamp(0.6rem, 1.15cqw, 1rem);
+  box-shadow: 0 1.2cqw 2.6cqw -1.4cqw rgba(36, 52, 176, 0.35);
+  transition: translate 0.6s var(--ease-out), box-shadow 0.6s var(--ease-out);
+}
+
+.hm-card__art {
+  flex: 0 0 72.3%;
+  overflow: hidden;
+}
+
+.hm-card__art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: scale 0.9s var(--ease-out);
+}
+
+.hm-card__label {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45em;
+  padding-bottom: 0.15em;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: 3.05cqw;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color 0.4s var(--ease-out);
+}
+
+.hm-card__label .ev-arrow {
+  width: 0.85em;
+  height: 0.85em;
+  stroke-width: 2;
+}
+
+.hm-card:hover,
+.hm-card:focus-visible {
+  translate: 0 -0.8cqw;
+  box-shadow: 0 2.4cqw 3.4cqw -1.6cqw rgba(36, 52, 176, 0.5);
+}
+
+.hm-card:hover .hm-card__art img,
+.hm-card:focus-visible .hm-card__art img {
+  scale: 1.06;
+}
+
+.hm-card:hover .hm-card__label,
+.hm-card:focus-visible .hm-card__label {
+  color: var(--des-blue);
+}
+
+.hm-card:hover .ev-arrow,
+.hm-card:focus-visible .ev-arrow {
+  transform: translate(3px, -3px);
+}
+
+
+/* ---------- About us ---------- */
+
+.hm-about {
+  padding-bottom: clamp(3rem, 6vw, 6rem);
+  background: var(--des-white);
+}
+
+.hm-about__title {
+  margin: 0;
+  padding-block: clamp(1rem, 3.4vw, 3.25rem) clamp(1.5rem, 5.4vw, 5rem);
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(3rem, 7.6vw, 7.5rem);
+  line-height: 0.9;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.hm-about__title span {
+  color: var(--des-blue-deep);
+}
+
+/* Strip of photos you can drag or swipe through; the line shows how far along you are */
+.hm-slider {
+  position: relative;
+  background: #e3e3e3;
+}
+
+.hm-slider__track {
+  display: flex;
+  gap: clamp(0.4rem, 0.7vw, 0.75rem);
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  list-style: none;
+  cursor: grab;
+}
+
+.hm-slider__track::-webkit-scrollbar {
+  display: none;
+}
+
+.hm-slider__track.is-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+}
+
+.hm-slider__track.is-dragging * {
+  user-select: none;
+  pointer-events: none;
+}
+
+.hm-slider__track li {
+  flex: 0 0 auto;
+  height: clamp(15rem, 36.5vw, 36rem);
+  aspect-ratio: 3 / 2;
+  scroll-snap-align: center;
+}
+
+.hm-slider__track img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hm-slider__progress {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1rem, 2.4vw, 2.25rem);
+  width: 47.7%;
+  height: 6px;
+  translate: -50% 0;
+  pointer-events: none;
+  /* thin line through the middle; white so it shows on any photo */
+  background: linear-gradient(var(--des-white), var(--des-white)) center / 100% 2px no-repeat;
+  filter: drop-shadow(0 1px 3px rgba(13, 13, 40, 0.45));
+}
+
+.hm-slider__progress span {
+  position: absolute;
+  top: 0;
+  left: calc(var(--pos, 0) * 66%);
+  width: 34%;
+  height: 100%;
+  background: var(--des-lime);
+  border-radius: 6px;
+  transition: left 0.25s var(--ease-out);
+}
+
+
+/* ---------- Phones ---------- */
+
+@media (max-width: 47.99em) {
+  .theme-des27 {
+    --hm-wave: 26vw;
+  }
+
+  .hm-hero {
+    padding-top: 1.75rem;
+  }
+
+  .hm-hero__line {
+    display: none;
+  }
+
+  .hm-hero__star {
+    top: -9vw;
+    right: -10vw;
+    width: 30vw;
+  }
+
+  .hm-title {
+    gap: 0.2em;
+    font-size: 13.4vw;
+    line-height: 1;
+  }
+
+  .hm-row {
+    flex-wrap: wrap;
+    gap: 0.2em 0.26em;
+  }
+
+  .hm-photo,
+  .hm-photo--wide {
+    flex: 1 1 1.4em;
+    height: 0.9em;
+  }
+
+  /* buttons stack on the right, the hand points at them from the left */
+  .hm-cta {
+    margin-top: 2.75rem;
+    padding-bottom: calc(var(--hm-wave) * 0.8);
+  }
+
+  .hm-cta__burst {
+    top: -1.75rem;
+    left: -8vw;
+    width: 116vw;
+    height: calc(100% - var(--hm-wave) * 0.8 + 3.5rem);
+  }
+
+  .hm-cta__hand {
+    top: 1.6rem;
+    width: 31vw;
+  }
+
+  .hm-cta__buttons {
+    flex-direction: column;
+    padding-left: 33%;
+  }
+
+  .hm-btn {
+    padding-inline: 1em;
+    font-size: 1rem;
+  }
+
+  /* Featured: text first, the cut-out underneath */
+  .hm-featured--art {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hm-featured .ev-featured__inner {
+    min-height: 0;
+    padding-block: 2.5rem 1.5rem;
+  }
+
+  .hm-featured__art {
+    position: static;
+    order: 2;
+    width: 94%;
+  }
+
+  .hm-featured .ev-featured__media {
+    top: 0;
+    order: -1;
+  }
+
+  /* Explore: two cards per row, without the threaded line */
+  .hm-explore__inner {
+    padding-block: 9cqw 10cqw;
+  }
+
+  .hm-explore__line,
+  .hm-explore__star {
+    display: none;
+  }
+
+  .hm-explore__title {
+    height: 15cqw;
+    font-size: 30cqw;
+  }
+
+  .hm-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4.5cqw;
+  }
+
+  .hm-card__label {
+    font-size: 7.2cqw;
+  }
+
+  .hm-about__title {
+    font-size: 17vw;
+  }
+
+  .hm-slider__track li {
+    height: 62vw;
+    scroll-snap-align: center;
+  }
+
+  .hm-slider__progress {
+    width: 70%;
+  }
+}
