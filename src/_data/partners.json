@@ -1,26 +1,9 @@
 [
-  {
-    "id": "partner-a",
-    "name": "Partner Name A",
-    "description": "Placeholder partner description.",
-    "logo": null,
-    "website": null,
-    "placeholder": true
-  },
-  {
-    "id": "partner-b",
-    "name": "Partner Name B",
-    "description": "Placeholder partner description.",
-    "logo": null,
-    "website": null,
-    "placeholder": true
-  },
-  {
-    "id": "partner-c",
-    "name": "Partner Name C",
-    "description": "Placeholder partner description.",
-    "logo": null,
-    "website": null,
-    "placeholder": true
-  }
+  { "id": "gray-puksand", "name": "Gray Puksand", "logo": "/assets/images/partners/gray-puksand.png", "logoHeight": 1.4, "website": "https://www.graypuksand.com.au/" },
+  { "id": "cox", "name": "COX Architecture", "logo": "/assets/images/partners/cox.png", "logoHeight": 2.25, "website": "https://www.coxarchitecture.com.au/" },
+  { "id": "bates-smart", "name": "Bates Smart", "logo": "/assets/images/partners/bates-smart.png", "logoHeight": 1.65, "website": "https://www.batessmart.com/" },
+  { "id": "rlb", "name": "Rider Levett Bucknall", "logo": "/assets/images/partners/rlb.png", "logoHeight": 2.9, "website": "https://www.rlb.com/oceania/" },
+  { "id": "billard-leece", "name": "Billard Leece Partnership", "logo": "/assets/images/partners/billard-leece.png", "logoHeight": 2.4, "website": "https://www.blp.com.au/" },
+  { "id": "designinc", "name": "DesignInc", "logo": "/assets/images/partners/designinc.png", "logoHeight": 2.2, "website": "https://www.designinc.com.au/" },
+  { "id": "dko", "name": "DKO", "logo": "/assets/images/partners/dko.png", "logoHeight": 3, "website": "https://dko.com.au/" }
 ]

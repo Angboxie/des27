@@ -685,3 +685,117 @@
     width: 70%;
   }
 }
+
+
+/* ---------- Sponsors ---------- */
+
+.hm-sponsors {
+  padding-block: clamp(3rem, 7vw, 7rem);
+  background: var(--des-cream);
+}
+
+.hm-sponsors__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(2.6rem, 6vw, 6rem);
+  line-height: 0.9;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.hm-sponsors__title span {
+  color: var(--des-blue-deep);
+}
+
+.hm-sponsors__intro {
+  margin: 1rem auto 0;
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Logo strip: a white band that scrolls slowly sideways and pauses on hover.
+   Three copies of the list each slide one list-width, so the loop is seamless. */
+.hm-marquee {
+  display: flex;
+  margin-top: clamp(2rem, 4vw, 3.5rem);
+  overflow: hidden;
+  background: var(--des-white);
+  border-block: 2px solid var(--des-blue);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.hm-marquee__track {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: clamp(3rem, 6vw, 6rem);
+  margin: 0;
+  padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 3vw, 3rem);
+  padding-left: 0;
+  padding-right: clamp(3rem, 6vw, 6rem);
+  list-style: none;
+  animation: hm-marquee calc(var(--count, 7) * 6s) linear infinite;
+}
+
+.hm-marquee:hover .hm-marquee__track {
+  animation-play-state: paused;
+}
+
+@keyframes hm-marquee {
+  to { transform: translateX(-100%); }
+}
+
+.hm-logo {
+  display: block;
+  transition: opacity 0.3s, scale 0.4s var(--ease-out);
+}
+
+.hm-logo img {
+  display: block;
+  width: auto;
+  height: var(--h, 2.2rem);
+}
+
+.hm-marquee:hover .hm-logo { opacity: 0.45; }
+.hm-marquee:hover .hm-logo:hover { opacity: 1; scale: 1.06; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hm-marquee {
+    justify-content: center;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .hm-marquee__track {
+    flex-wrap: wrap;
+    justify-content: center;
+    flex: 1;
+    padding-inline: var(--des-gutter);
+    animation: none;
+  }
+
+  .hm-marquee__track[aria-hidden] { display: none; }
+}
+
+.hm-sponsors__cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem 2rem;
+  margin-top: clamp(2rem, 4vw, 3.5rem);
+  text-align: center;
+}
+
+.hm-sponsors__cta p {
+  margin: 0;
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  font-weight: 600;
+}
+
+@media (max-width: 47.99em) {
+  .hm-logo img { height: calc(var(--h, 2.2rem) * 0.75); }
+}

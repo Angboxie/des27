@@ -1,35 +1,13 @@
 [
   {
-    "id": "design-workshop",
-    "title": "Design Workshop",
-    "headline": "Design",
-    "headlineAccent": "Workshop",
-    "date": "2027-03-16",
-    "startTime": "10:00",
-    "endTime": "16:00",
-    "location": "MSD",
-    "summary": "A one-day, hands-on workshop to turn ideas into real design concepts.",
-    "description": "Placeholder: a longer description of the workshop - what you'll make, who it's for and what to bring.",
-    "image": "/assets/images/des-general-5.jpg",
-    "registration": {
-      "status": "open",
-      "url": null,
-      "deadline": "2027-03-12"
-    },
-    "remindUrl": null,
-    "requested": true,
-    "status": "upcoming",
-    "placeholder": true
-  },
-  {
     "id": "open-city-2027",
     "title": "OPEN CITY 2027",
     "headline": "Open City",
     "headlineAccent": "2027",
-    "date": "2026-12-01",
+    "date": "2026-12-23",
     "location": "Online, with the finale at the Melbourne School of Design",
     "summary": "A summer design challenge for architecture, UI/UX and graphic design students from every university in Melbourne.",
-    "description": "Over eight weeks of summer, students from different design disciplines take on one shared challenge facing Melbourne. The best work is presented at a live crit, awards night and open exhibition in Week 2 of Semester 1, 2027.",
+    "description": "Over the summer break, students from different design disciplines take on one shared challenge facing Melbourne. The best work is presented at a live crit, awards night and open exhibition in Week 2 of Semester 1, 2027.",
     "image": "/assets/images/open-city.jpg",
     "homeArt": "/assets/images/home/open-city-collage.webp",
     "registration": {
@@ -40,17 +18,17 @@
     "remindUrl": null,
     "flagship": true,
     "featured": true,
-    "dateNote": "Launch date to be locked in. The finale is around 9–11 March 2027.",
+    "dateNote": "Competition launch. The finale is around 9–11 March 2027.",
     "details": {
-      "brief": "The theme and full brief are released at launch in early December 2026, along with mentor videos from the judges on the OPEN CITY Discord.",
+      "brief": "The theme and full brief are released at launch on 23 December 2026, along with mentor videos from the judges on the OPEN CITY Discord.",
       "keyDates": [
         {
           "label": "Competition launches",
-          "when": "Early Dec 2026"
+          "when": "23 Dec 2026"
         },
         {
           "label": "Submissions close",
-          "when": "Late Feb – 1 Mar 2027"
+          "when": "29 Jan 2027"
         },
         {
           "label": "Finale: live crit, awards and exhibition",
@@ -74,29 +52,58 @@
       ]
     },
     "status": "upcoming",
-    "placeholder": false,
-    "dateDisplay": {
-      "big": "Early",
-      "script": "Dec",
-      "text": "Early December 2026"
-    }
+    "placeholder": false
   },
   {
-    "id": "poster-design-lab-1",
-    "title": "Poster Design Lab",
-    "date": "2027-03-23",
-    "startTime": "18:00",
-    "endTime": "20:00",
-    "location": "MSD",
-    "summary": "Placeholder description. Replace with event details.",
+    "id": "des-movie-night",
+    "title": "DES Movie Night",
+    "headline": "DES",
+    "headlineAccent": "Movie Night",
+    "date": "2027-03-05",
+    "location": null,
+    "summary": "Grab some snacks and settle in for a night at the movies with DES.",
+    "description": "Placeholder: the film, the venue, start time and what is included.",
     "image": "/assets/images/des-general-3.jpg",
     "registration": {
-      "status": "open",
+      "status": "coming-soon",
       "url": null,
-      "deadline": "2027-03-20"
+      "deadline": null
     },
-    "requested": true,
+    "remindUrl": null,
     "status": "upcoming",
+    "placeholder": true
+  },
+  {
+    "id": "gray-puksand-studio-tour",
+    "title": "Gray Puksand Studio Tour",
+    "headline": "Gray Puksand",
+    "headlineAccent": "Studio Tour",
+    "date": "2027-03-18",
+    "location": "Gray Puksand studio",
+    "summary": "A behind-the-scenes look at the Gray Puksand studio and how the team works.",
+    "description": "Placeholder: what you will see on the tour, who will show you around and how to sign up.",
+    "image": "/assets/images/des-general-4.jpg",
+    "registration": {
+      "status": "coming-soon",
+      "url": null,
+      "deadline": null
+    },
+    "remindUrl": null,
+    "status": "upcoming",
+    "placeholder": true
+  },
+  {
+    "id": "portfolio-workshop",
+    "title": "Portfolio Workshop",
+    "headline": "Portfolio",
+    "headlineAccent": "Workshop",
+    "date": "2026-10-16",
+    "location": "MSD",
+    "summary": "A hands-on workshop to plan, lay out and polish your design portfolio.",
+    "recap": "Placeholder recap: what we covered, who ran the session and highlights from the workshop.",
+    "image": "/assets/images/des-general-5.jpg",
+    "gallery": [],
+    "status": "past",
     "placeholder": true
   },
   {

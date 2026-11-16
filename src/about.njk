@@ -29,8 +29,9 @@ scripts:
         <span class="ev-heading__script script">we are</span>
       </h2>
       <div class="ed-prose reveal" style="--delay: 120ms">
-        <p>The Design Student Society (DES) is a student-run club at the University of Melbourne, affiliated with the Faculty of Architecture, Building and Planning. We represent every Bachelor of Design student, plus the Masters programs that follow, from our home at the Melbourne School of Design.</p>
-        <p>We&rsquo;re here to make design school less lonely: helping first years settle in, connecting students across majors, backing you up academically and opening doors to the design industry.</p>
+        <p>Design Student Society (DES) is an ABP affiliated, student-run club at the University of Melbourne. Since its inception, DES has been dedicated to representing all Bachelor of Design students and their associated Masters programs.</p>
+        <p>We aim to foster a fun and welcoming environment for students from all backgrounds. Our committee is large and full of friendly faces, so feel free to approach us at any time with questions or concerns!</p>
+        <p>We host a mix of social and networking events throughout the academic year. From our outstanding Design Ball to Industry Nights, there&rsquo;s bound to be an event for you, whether you want to get to know other students or meet design industry professionals.</p>
       </div>
     </div>
 
@@ -39,6 +40,56 @@ scripts:
       <li class="reveal" style="--delay: 180ms"><strong>12</strong><span>Bachelor of Design majors, one community</span></li>
       <li class="reveal" style="--delay: 260ms"><strong>ABP</strong><span>affiliated club, based at the Melbourne School of Design</span></li>
       <li class="reveal" style="--delay: 340ms"><strong>Every year</strong><span>O-Week camp, the cruise, Industry Night and the Design Ball</span></li>
+    </ul>
+  </div>
+</section>
+
+{# ---------- Club aims ---------- #}
+<section class="ed-section" aria-labelledby="aims-title">
+  <div class="des-container">
+    <h2 id="aims-title" class="ev-heading reveal">
+      <span class="ev-heading__big">Our</span>
+      <span class="ev-heading__script script">aims</span>
+    </h2>
+    <ol class="ab-aims">
+      {% for aim in [
+        "Provide academic assistance to all students in the Bachelor of Design.",
+        "Provide a social network for all students in the Bachelor of Design.",
+        "Help first-year Bachelor of Design students make the transition into university life.",
+        "Share information and opportunities from the Bachelor of Design with our members.",
+        "Promote the opportunities offered by the 12 course majors and their associated clubs.",
+        "Unite Bachelor of Design students across all year levels within their chosen majors."
+      ] %}
+        <li class="reveal" style="--delay: {{ (loop.index0 % 3) * 90 }}ms"><span class="ab-aims__num" aria-hidden="true">{{ "0" + loop.index }}</span><p>{{ aim }}</p></li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+
+{# ---------- Committee (from _data/committee.json; add a "photo" path to replace the initials) ---------- #}
+<section class="ed-section ed-section--cream" aria-labelledby="committee-title">
+  <div class="des-container">
+    <div class="ed-head">
+      <h2 id="committee-title" class="ev-heading reveal">
+        <span class="ev-heading__big">Meet the</span>
+        <span class="ev-heading__script script">Committee</span>
+      </h2>
+      <p class="ed-head__text reveal" style="--delay: 120ms">Friendly faces you can<br>come to with anything.</p>
+    </div>
+
+    <ul class="ab-committee">
+      {% for person in committee %}
+        {% set parts = person.name.split(" ") %}
+        <li class="ab-member reveal" style="--delay: {{ (loop.index0 % 4) * 70 }}ms">
+          <span class="ab-member__photo" aria-hidden="true">
+            {% if person.photo %}<img src="{{ person.photo }}" alt="" loading="lazy">{% else %}{{ parts[0][0] }}{{ parts[parts.length - 1][0] }}{% endif %}
+          </span>
+          <span class="ab-member__text">
+            <strong class="ab-member__name">{{ person.name }}</strong>
+            <span class="ab-member__role">{{ person.role }}</span>
+          </span>
+        </li>
+      {% endfor %}
     </ul>
   </div>
 </section>

@@ -915,6 +915,20 @@
 
 .ed-person__photo { aspect-ratio: 1 / 1.08; }
 
+/* initials until there is a photo */
+.ed-person__initials {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(3rem, 6vw, 5rem);
+  color: var(--des-on-blue);
+  background: var(--des-blue-surface);
+  background-blend-mode: soft-light, normal;
+}
+
 .ed-person__body { display: flex; flex: 1; flex-direction: column; }
 
 .ed-person__name { max-width: none; margin-bottom: 0.1rem; }

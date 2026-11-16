@@ -177,3 +177,36 @@ scripts:
     <div class="hm-slider__progress" data-carousel-progress aria-hidden="true"><span></span></div>
   </div>
 </section>
+
+
+{# ---------- Sponsors ----------
+   Logos come from _data/partners.json (images in assets/images/partners/).
+   "logoHeight" (rem) evens out wide and compact logos so they look the same size.
+   The strip is drawn three times so it can loop on wide screens; the copies are hidden from screen readers. #}
+<section class="hm-sponsors" aria-labelledby="sponsors-title">
+  <div class="des-container">
+    <h2 id="sponsors-title" class="hm-sponsors__title reveal">Our <span>Sponsors</span></h2>
+    <p class="hm-sponsors__intro reveal" style="--delay: 100ms">The studios and companies who make our events possible.</p>
+  </div>
+
+  <div class="hm-marquee reveal" style="--delay: 180ms; --count: {{ partners.length }}">
+    {% for copy in [1, 2, 3] %}
+      <ul class="hm-marquee__track"{% if copy > 1 %} aria-hidden="true"{% else %} aria-label="Sponsors"{% endif %}>
+        {% for sponsor in partners %}
+          <li>
+            <a class="hm-logo" href="{{ sponsor.website }}" target="_blank" rel="noopener"{% if copy > 1 %} tabindex="-1"{% endif %} style="--h: {{ sponsor.logoHeight or 2.2 }}rem">
+              <img src="{{ sponsor.logo }}" alt="{{ sponsor.name if copy == 1 else '' }}" loading="lazy" draggable="false">
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endfor %}
+  </div>
+
+  <div class="des-container">
+    <div class="hm-sponsors__cta reveal">
+      <p>Want to support the next generation of designers?</p>
+      <a class="hm-btn hm-btn--lime" data-magnetic href="mailto:{{ site.join.email }}?subject=Sponsoring%20DES">Become a sponsor {{ arrow | safe }}</a>
+    </div>
+  </div>
+</section>

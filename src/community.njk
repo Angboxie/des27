@@ -9,7 +9,7 @@ scripts:
   - /assets/js/events.js
   - /assets/js/learn.js
 ---
-{# Community Hub - team in _data/team.json, FAQ in _data/faq.json, links and poll in site.json (education) #}
+{# Community Hub - Education Officers from _data/committee.json, FAQ in _data/faq.json, links and poll in site.json (education) #}
 {% set edu = site.education %}
 {% set heroScript = "Community" %}
 {% set heroTags = ["Meet the team", "peer support", "&amp; polls"] %}
@@ -30,19 +30,20 @@ scripts:
     {# A grid on desktop; on phones a swipe row like the events carousel #}
     <div class="ed-team-wrap" data-carousel>
     <ul class="ed-team" data-carousel-track>
-      {% for person in team %}
+      {% for person in committee | withRole("Education Officer") %}
+        {% set parts = person.name.split(" ") %}
         <li class="ev-card ed-person reveal" data-tilt style="--delay: {{ (loop.index0 % 4) * 90 }}ms">
           <div class="ev-frame">
             <div class="ev-card__media ed-person__photo">
-              {% if person.photo %}<img src="{{ person.photo }}" alt="{{ person.name }}" loading="lazy">{% endif %}
+              {% if person.photo %}<img src="{{ person.photo }}" alt="{{ person.name }}" loading="lazy">{% else %}<span class="ed-person__initials" aria-hidden="true">{{ parts[0][0] }}{{ parts[parts.length - 1][0] }}</span>{% endif %}
             </div>
           </div>
           <div class="ev-card__body ed-person__body">
             <h3 class="ev-card__title ed-person__name">{{ person.name }}</h3>
             <p class="ed-person__role">{{ person.role }}</p>
-            <p class="ed-person__meta">{{ person.discipline }} · {{ person.year }}</p>
-            <p class="ed-person__bio">{{ person.bio }}</p>
-            <ul class="ed-chips" aria-label="Software">{% for tool in person.software %}<li>{{ tool }}</li>{% endfor %}</ul>
+            {% if person.discipline %}<p class="ed-person__meta">{{ person.discipline }}{% if person.year %} · {{ person.year }}{% endif %}</p>{% endif %}
+            {% if person.bio %}<p class="ed-person__bio">{{ person.bio }}</p>{% endif %}
+            {% if person.software %}<ul class="ed-chips" aria-label="Software">{% for tool in person.software %}<li>{{ tool }}</li>{% endfor %}</ul>{% endif %}
             {% set askTo = person.email or edu.askQuestionEmail %}
             {% if askTo %}
               <a class="des-btn ed-person__ask" href="mailto:{{ askTo }}?subject=Question for the DES Education Team">

@@ -42,6 +42,106 @@
   line-height: 1.35;
 }
 
+/* Club aims: numbered cards, three across on wide screens */
+.ab-aims {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  gap: clamp(0.75rem, 1.5vw, 1.25rem);
+  margin: clamp(1.5rem, 3vw, 2.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ab-aims li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: clamp(1.1rem, 2vw, 1.5rem);
+  background: var(--des-cream);
+  border-top: 2px solid var(--des-blue);
+  border-radius: 0 0 12px 12px;
+}
+
+.ab-aims__num {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(1.8rem, 2.6vw, 2.4rem);
+  line-height: 1;
+  color: var(--des-blue);
+}
+
+.ab-aims p {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+/* Committee: a card per person, initials until there's a photo */
+.ab-committee {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15.5rem), 1fr));
+  gap: clamp(0.75rem, 1.5vw, 1.25rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ab-member {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.1rem;
+  background: var(--des-white);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(13, 13, 13, 0.04), 0 8px 24px -16px rgba(13, 13, 13, 0.18);
+}
+
+.ab-member__photo {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 3.4rem;
+  height: 3.4rem;
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: 1.25rem;
+  color: var(--des-on-blue);
+  background: var(--des-blue-surface);
+  background-blend-mode: soft-light, normal;
+  border-radius: 50%;
+}
+
+.ab-member__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ab-member__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.ab-member__name {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: 1.15rem;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.ab-member__role {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--des-blue);
+}
+
 /* Join: everything centred around the one button */
 .ab-join__inner {
   display: flex;

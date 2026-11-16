@@ -36,6 +36,9 @@ module.exports = async function (eleventyConfig) {
     return events.filter((event) => event.status === "upcoming").sort(byDate);
   });
 
+  // People with a given role, e.g. committee | withRole("Education Officer")
+  eleventyConfig.addFilter("withRole", (people, role) => (people || []).filter((person) => person.role === role));
+
   eleventyConfig.addFilter("pastEvents", (events) => {
     return events.filter((event) => event.status === "past").sort(byDate).reverse();
   });
