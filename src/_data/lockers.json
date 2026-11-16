@@ -1,5 +1,5 @@
 {
-  "_note": "Locker Sales page. Prices are in AUD per semester. Set hireUrl to the booking/payment form when it is ready - until then the Continue button says bookings aren't open yet. The chosen size and quantity are added to that link as ?size=small&quantity=1.",
+  "_note": "Locker Sales page. Prices are in AUD per semester. hireUrl is the Shopify product page the Continue button goes to (set to null to show 'bookings aren't open yet' instead). Size and quantity are picked again on Shopify.",
   "year": "2027",
   "tagline": ["No more carrying", "your studio around"],
   "perLabel": "Per semester.",
@@ -11,7 +11,7 @@
   ],
   "defaultSize": "small",
   "maxQuantity": 5,
-  "hireUrl": null,
+  "hireUrl": "https://desunimelb.myshopify.com/products/des-locker-hire",
   "steps": [
     ["Choose your", "locker size"],
     ["Fill in your", "details and pay"],

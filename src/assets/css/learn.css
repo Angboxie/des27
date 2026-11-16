@@ -109,7 +109,7 @@
   font-size: 0.72rem;
   font-weight: 600;
   color: var(--des-blue);
-  background: rgba(58, 79, 224, 0.07);
+  background: rgba(43, 75, 196, 0.07);
   border-radius: 999px;
 }
 
@@ -355,7 +355,7 @@
 .ed-list li {
   position: relative;
   padding: 0.6rem 0 0.6rem 1.6rem;
-  border-bottom: 1px solid rgba(58, 79, 224, 0.18);
+  border-bottom: 1px solid rgba(43, 75, 196, 0.18);
 }
 
 .ed-list li::before {
@@ -437,7 +437,7 @@
   background: var(--des-white);
   border: 2px solid var(--des-blue);
   border-radius: 12px;
-  box-shadow: 0 24px 50px -36px rgba(58, 79, 224, 0.6);
+  box-shadow: 0 24px 50px -36px rgba(43, 75, 196, 0.6);
 }
 
 .ed-info__title {
@@ -452,7 +452,7 @@
 
 .ed-info dl > div {
   padding: 0.75rem 0;
-  border-bottom: 1px solid rgba(58, 79, 224, 0.18);
+  border-bottom: 1px solid rgba(43, 75, 196, 0.18);
 }
 
 .ed-info dt {
@@ -575,11 +575,11 @@
   padding: 1.1rem 0.5rem;
   color: var(--des-ink);
   text-decoration: none;
-  border-bottom: 1px solid rgba(58, 79, 224, 0.25);
+  border-bottom: 1px solid rgba(43, 75, 196, 0.25);
   transition: background-color 0.4s, padding 0.5s var(--ease-out);
 }
 
-.ed-past-list time { font-size: 0.875rem; font-weight: 600; color: var(--des-blue); }
+.ed-past-list time, .ed-past-list .ev-when { font-size: 0.875rem; font-weight: 600; color: var(--des-blue); }
 
 .ed-past-list__title {
   font-family: var(--font-display);
@@ -653,7 +653,7 @@
   outline: none;
 }
 
-.ed-search:focus-within { box-shadow: 0 0 0 3px rgba(58, 79, 224, 0.25); }
+.ed-search:focus-within { box-shadow: 0 0 0 3px rgba(43, 75, 196, 0.25); }
 
 .ed-select select {
   appearance: none;
@@ -810,11 +810,89 @@
 
 .ed-res__actions .des-btn { padding: 0.65em 1.1em; font-size: 0.85rem; }
 
+.ed-res__soon { font-size: 0.75rem; font-weight: 600; color: #6b6b78; }
+
+/* YouTube thumbnail with a play button, when a resource has no preview image */
+.ed-res__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ed-res__video img { transition: transform 0.8s var(--ease-out); }
+.ed-res:hover .ed-res__video img { transform: scale(1.05); }
+
+.ed-res__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  translate: -50% -50%;
+  color: var(--des-on-blue);
+  background: var(--des-blue);
+  border-radius: 50%;
+  box-shadow: 0 8px 20px -8px rgba(13, 13, 40, 0.6);
+  transition: scale 0.4s var(--ease-out);
+}
+
+.ed-res:hover .ed-res__play { scale: 1.1; }
+
+.ed-res__play svg { width: 1.3rem; height: 1.3rem; margin-left: 0.15rem; fill: currentColor; }
+
+/* the card's YouTube tutorials */
+.ed-res__videos {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.2rem 0 0;
+  padding: 0.7rem 0 0;
+  list-style: none;
+  border-top: 1px solid rgba(43, 75, 196, 0.15);
+}
+
+.ed-res__videos a {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0.3rem 0.35rem;
+  margin: 0 -0.35rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--des-ink);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.ed-res__videos a:hover { color: var(--des-blue); background: rgba(43, 75, 196, 0.07); }
+
+.ed-res__videos svg {
+  flex: 0 0 auto;
+  width: 1.1rem;
+  height: 1.1rem;
+  padding: 0.2rem;
+  margin-top: 0.05rem;
+  fill: var(--des-on-blue);
+  background: var(--des-blue);
+  border-radius: 50%;
+}
+
+.ed-res__videos small {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #6b6b78;
+}
+
 .ed-empty {
   padding: 2rem;
   text-align: center;
   font-weight: 500;
-  border: 2px dashed rgba(58, 79, 224, 0.35);
+  border: 2px dashed rgba(43, 75, 196, 0.35);
   border-radius: 12px;
 }
 
@@ -975,7 +1053,7 @@
 
 .ed-faq { border-top: 2px solid var(--des-blue); }
 
-.ed-faq details { border-bottom: 1px solid rgba(58, 79, 224, 0.25); }
+.ed-faq details { border-bottom: 1px solid rgba(43, 75, 196, 0.25); }
 
 .ed-faq summary {
   display: flex;
@@ -1082,7 +1160,7 @@
   .ed-head__text { text-align: left; }
   .ed-filters__count { margin-left: 0; }
   .ed-past-list a { grid-template-columns: minmax(0, 1fr) auto; gap: 0.25rem 1rem; }
-  .ed-past-list time { grid-column: 1 / -1; }
+  .ed-past-list time, .ed-past-list .ev-when { grid-column: 1 / -1; }
   .ed-past-list__meta { display: none; }
 
   /* Filters: search stays on the page, the rest slides up in a panel */
@@ -1278,6 +1356,10 @@
   .ed-projects .ev-card__status { top: 0.5rem; left: 0.5rem; font-size: 0.55rem; }
   .ed-res__actions { padding-top: 0.3rem; }
   .ed-res__actions .des-btn { font-size: 0.78rem; }
+  /* compact phone cards: the Watch button opens the first video */
+  .ed-res__videos, .ed-res__soon { display: none; }
+  .ed-res__play { width: 2.2rem; height: 2.2rem; }
+  .ed-res__play svg { width: 0.95rem; height: 0.95rem; }
 }
 
 /* the tab bar and header step aside while the filter panel is open */

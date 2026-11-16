@@ -20,7 +20,7 @@
   overflow: hidden;
   /* blue glow under the locker, running into the band below */
   background:
-    radial-gradient(ellipse 30vw 19vw at 81% 106%, var(--des-blue) 0%, rgba(58, 79, 224, 0.82) 30%, rgba(58, 79, 224, 0.35) 62%, rgba(58, 79, 224, 0) 100%),
+    radial-gradient(ellipse 30vw 19vw at 81% 106%, var(--des-blue) 0%, rgba(43, 75, 196, 0.82) 30%, rgba(43, 75, 196, 0.35) 62%, rgba(43, 75, 196, 0) 100%),
     var(--des-cream);
 }
 
@@ -109,16 +109,58 @@
   text-transform: uppercase;
 }
 
+/* "Hire a locker" button under the title - same look as the card's Continue button */
+.lk-hero__cta {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  margin-top: 3cqw;
+  padding: 0.85em 1.5em;
+  font-size: max(0.85rem, 1.25cqw);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--des-blue);
+  background: var(--des-lime);
+  border: max(1.5px, 0.14cqw) solid var(--des-blue);
+  border-radius: max(0.4rem, 0.55cqw);
+  transition: color 0.3s, background-color 0.3s, translate 0.6s var(--ease-out), scale 0.2s var(--ease-out);
+}
+
+.lk-hero__cta svg {
+  width: 1.6em;
+  height: 0.9em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  transition: translate 0.4s var(--ease-out);
+}
+
+.lk-hero__cta:hover,
+.lk-hero__cta:focus-visible {
+  color: var(--des-on-blue);
+  background: var(--des-blue);
+}
+
+.lk-hero__cta:hover svg { translate: 0.25em 0; }
+.lk-hero__cta:active { scale: 0.96; }
+
 @media (prefers-reduced-motion: no-preference) {
   .js .lk-title__big,
   .js .lk-title__hire,
   .js .lk-title__year,
-  .js .lk-hero__tag {
+  .js .lk-hero__tag,
+  .js .lk-hero__cta {
     animation: lk-rise 1s var(--ease-out) both;
   }
 
   .js .lk-title__hire { animation-delay: 120ms; }
   .js .lk-hero__tag { animation-delay: 260ms; }
+  .js .lk-hero__cta { animation-delay: 420ms; }
   .js .lk-title__year { animation-delay: 340ms; }
 
   .js .lk-hero__art {
@@ -589,7 +631,7 @@
   /* Hero: title, then the locker underneath */
   .lk-hero {
     background:
-      radial-gradient(ellipse 72vw 38vw at 64% 104%, var(--des-blue) 0%, rgba(58, 79, 224, 0.8) 30%, rgba(58, 79, 224, 0.3) 65%, rgba(58, 79, 224, 0) 100%),
+      radial-gradient(ellipse 72vw 38vw at 64% 104%, var(--des-blue) 0%, rgba(43, 75, 196, 0.8) 30%, rgba(43, 75, 196, 0.3) 65%, rgba(43, 75, 196, 0) 100%),
       var(--des-cream);
   }
 

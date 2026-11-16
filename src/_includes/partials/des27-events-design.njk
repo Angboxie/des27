@@ -141,7 +141,7 @@
                 {% if event.image %}<img src="{{ event.image }}" alt="" loading="lazy" draggable="false">{% else %}<div class="media-placeholder"></div>{% endif %}
                 <figcaption>
                   <span>{{ event.title }}</span>
-                  <time datetime="{{ event.date }}">{{ event.date | readableDate }}</time>
+                  {% if event.dateDisplay %}<span class="ev-when">{{ event.dateDisplay.text }}</span>{% else %}<time datetime="{{ event.date }}">{{ event.date | readableDate }}</time>{% endif %}
                 </figcaption>
               </figure>
               <a class="ev-archive__link" href="/events/{{ event.id }}/" aria-label="{{ event.title }} recap and photos" tabindex="-1">
@@ -167,7 +167,7 @@
         {% for event in past %}
           <li class="reveal" style="--delay: {{ loop.index0 * 70 }}ms">
             <a href="/events/{{ event.id }}/">
-              <time datetime="{{ event.date }}">{{ event.date | readableDate }}</time>
+              {% if event.dateDisplay %}<span class="ev-when">{{ event.dateDisplay.text }}</span>{% else %}<time datetime="{{ event.date }}">{{ event.date | readableDate }}</time>{% endif %}
               <span class="ed-past-list__title">{{ event.title }}</span>
               <span class="ed-past-list__meta">{% if event.gallery and event.gallery.length %}{{ event.gallery.length }} photos{% else %}Recap{% endif %}</span>
               <svg class="ev-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5" /></svg>

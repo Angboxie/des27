@@ -34,6 +34,10 @@ scripts:
         <span class="visually-hidden">DES Locker Hire {{ lockers.year }}</span>
       </h1>
       <p class="lk-hero__tag">{{ lockers.tagline | join("<br>") | safe }}</p>
+      <a class="lk-hero__cta" data-magnetic href="{{ lockers.hireUrl or '#hire' }}"{% if lockers.hireUrl %} target="_blank" rel="noopener"{% endif %}>
+        Hire a locker
+        <svg viewBox="0 0 28 16" aria-hidden="true"><path d="M2 8h23M18 2l7 6-7 6" /></svg>
+      </a>
     </div>
   </div>
 </section>

@@ -1,4 +1,67 @@
 ---
-layout: layouts/coming-soon.njk
+layout: layouts/base.njk
 title: About DES
+navLabel: About & Join
+theme: des27
+styles:
+  - /assets/css/events.css
+  - /assets/css/learn.css
+  - /assets/css/about.css
+scripts:
+  - /assets/js/events.js
 ---
+{# About DES and how to join. The join link and contact details live in _data/site.json ("join"). #}
+{% set join = site.join %}
+{% set arrow = '<svg class="ev-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5" /></svg>' %}
+
+{% set heroScript = "About" %}
+{% set heroTags = ["Socials", "industry nights", "workshops", "&amp; more"] %}
+{% set heroIntro = ["The student society", "for Bachelor of Design", "at Melbourne."] %}
+{% set heroLinks = [{ label: "Join DES", url: "#join" }, { label: "See events", url: "/events/" }] %}
+{% include "partials/des27-hero.njk" %}
+
+{# ---------- Who we are ---------- #}
+<section class="ed-section ed-section--cream" aria-labelledby="who-title">
+  <div class="des-container ab-who">
+    <div>
+      <h2 id="who-title" class="ev-heading reveal">
+        <span class="ev-heading__big">Who</span>
+        <span class="ev-heading__script script">we are</span>
+      </h2>
+      <div class="ed-prose reveal" style="--delay: 120ms">
+        <p>The Design Student Society (DES) is a student-run club at the University of Melbourne, affiliated with the Faculty of Architecture, Building and Planning. We represent every Bachelor of Design student, plus the Masters programs that follow, from our home at the Melbourne School of Design.</p>
+        <p>We&rsquo;re here to make design school less lonely: helping first years settle in, connecting students across majors, backing you up academically and opening doors to the design industry.</p>
+      </div>
+    </div>
+
+    <ul class="ab-facts" aria-label="DES in numbers">
+      <li class="reveal" style="--delay: 100ms"><strong>600+</strong><span>members across design and its Masters programs</span></li>
+      <li class="reveal" style="--delay: 180ms"><strong>12</strong><span>Bachelor of Design majors, one community</span></li>
+      <li class="reveal" style="--delay: 260ms"><strong>ABP</strong><span>affiliated club, based at the Melbourne School of Design</span></li>
+      <li class="reveal" style="--delay: 340ms"><strong>Every year</strong><span>O-Week camp, the cruise, Industry Night and the Design Ball</span></li>
+    </ul>
+  </div>
+</section>
+
+{# ---------- Join ---------- #}
+<section class="ed-band ab-join" id="join" data-cursor="light" aria-labelledby="join-title">
+  <div class="des-container ab-join__inner">
+    <h2 id="join-title" class="ev-heading ev-heading--center reveal">
+      <span class="ev-heading__big">Join</span>
+      <span class="ev-heading__script script">DES</span>
+    </h2>
+    <p class="ab-join__text reveal" style="--delay: 120ms">Joining DES is the easiest way to find your people in design. You&rsquo;ll hear first about camp, the cruise, the Design Ball and Industry Night, meet students from every major, get help when studio gets tough, and meet the professionals you&rsquo;ll be working alongside one day.</p>
+
+    <a class="ev-btn ed-btn--lime ab-join__btn reveal" data-magnetic style="--delay: 220ms" href="{{ join.url }}" target="_blank" rel="noopener">
+      Join DES on UMSU
+      {{ arrow | safe }}
+    </a>
+    <p class="ab-join__note reveal" style="--delay: 300ms">Membership is through UMSU. Log in with your University of Melbourne account to sign up.</p>
+
+    <ul class="ab-join__contact reveal" style="--delay: 360ms" aria-label="Contact DES">
+      <li><a href="mailto:{{ join.email }}">{{ join.email }}</a></li>
+      <li><a href="{{ join.instagram }}" target="_blank" rel="noopener">Instagram</a></li>
+      <li><a href="{{ join.facebook }}" target="_blank" rel="noopener">Facebook</a></li>
+    </ul>
+  </div>
+</section>

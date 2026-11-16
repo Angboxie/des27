@@ -36,7 +36,7 @@ eleventyComputed:
         <svg viewBox="0 0 24 12" aria-hidden="true"><path d="M22 6H3M8 1 3 6l5 5" /></svg>
         All events
       </a>
-      <p class="ev-eyebrow reveal">{% if isPast %}Past event{% elif event.flagship %}Flagship competition{% else %}Upcoming event{% endif %}</p>
+      <p class="ev-eyebrow reveal">{% if isPast %}Past event{% elif event.flagship %}Flagship competition{% else %}Upcoming event{% endif %}{% if event.annual %} · Every year{% endif %}</p>
       <h1 id="event-title" class="ev-featured__title">
         <span class="ev-featured__big reveal" style="--delay: 100ms">{{ parts.big }}</span>
         {% if parts.script %}<span class="script ev-featured__script reveal" style="--delay: 220ms">{{ parts.script }}</span>{% endif %}

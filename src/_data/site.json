@@ -29,6 +29,13 @@
     }
   ],
   "socials": [],
+  "join": {
+    "_note": "Join DES (About page). url is the UMSU club sign-up page.",
+    "url": "https://umsu.unimelb.edu.au/buddy-up/clubs/clubs-listing/join/6589/",
+    "email": "des.unimelb@gmail.com",
+    "instagram": "https://www.instagram.com/des.unimelb/",
+    "facebook": "https://www.facebook.com/des.unimelb"
+  },
   "des27Nav": [
     {
       "label": "Home",
@@ -56,12 +63,8 @@
       "url": "/merchandise/"
     },
     {
-      "label": "About",
+      "label": "About & Join",
       "url": "/about/"
-    },
-    {
-      "label": "Join Us",
-      "url": "/about/#join"
     }
   ],
   "learnNav": [
@@ -118,9 +121,19 @@
       ]
     },
     {
+      "label": "Lockers",
+      "url": "/lockers/",
+      "icon": "locker"
+    },
+    {
       "label": "Merch",
       "url": "/merchandise/",
       "icon": "bag"
+    },
+    {
+      "label": "About",
+      "url": "/about/",
+      "icon": "people"
     }
   ]
 }

@@ -1,31 +1,18 @@
 // Menu toggle, sticky header and page-transition click point
 
 const siteNav = document.getElementById("site-nav");
-// The header "Menu" button (older pages) and the phone tab bar's "Menu" button
-const menuToggles = Array.from(document.querySelectorAll(".nav-toggle, [data-menu-toggle]"));
-const root = document.documentElement;
+// The header "Menu" button on older pages (DES27 pages use the tab bar on phones instead)
+const menuToggles = Array.from(document.querySelectorAll(".nav-toggle"));
 
-function setMenu(open, origin) {
-  // The full-screen phone menu spreads out from the button that opened it
-  if (open && origin) {
-    const box = origin.getBoundingClientRect();
-    root.style.setProperty("--menu-x", `${Math.round(box.left + box.width / 2)}px`);
-    root.style.setProperty("--menu-y", `${Math.round(box.top + box.height / 2)}px`);
-  }
-
-  menuToggles.forEach((toggle) => {
-    toggle.setAttribute("aria-expanded", String(open));
-    const label = toggle.querySelector("[data-menu-label]");
-    if (label) label.textContent = open ? "Close" : "Menu";
-  });
+function setMenu(open) {
+  menuToggles.forEach((toggle) => toggle.setAttribute("aria-expanded", String(open)));
   siteNav.classList.toggle("is-open", open);
-  root.classList.toggle("menu-open", open);
 }
 
 if (menuToggles.length && siteNav) {
   menuToggles.forEach((toggle) => {
     toggle.addEventListener("click", () => {
-      setMenu(!siteNav.classList.contains("is-open"), toggle);
+      setMenu(!siteNav.classList.contains("is-open"));
     });
   });
 
@@ -59,7 +46,7 @@ if (stickyHeader) {
     const y = window.scrollY;
     stickyHeader.classList.toggle("is-scrolled", y > 8);
 
-    if (phone.matches && !root.classList.contains("menu-open")) {
+    if (phone.matches) {
       const goingDown = y > lastY + 4;
       const goingUp = y < lastY - 4;
       if (goingDown && y > 140) stickyHeader.classList.add("is-tucked");

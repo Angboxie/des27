@@ -1,0 +1,102 @@
+/* About & Join page (about.njk) */
+
+/* Who we are: text on the left, the numbers on the right */
+.ab-who {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+}
+
+.ab-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.75rem, 1.5vw, 1.25rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ab-facts li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: clamp(1.1rem, 2vw, 1.6rem);
+  background: var(--des-white);
+  border: 2px solid var(--des-blue);
+  border-radius: 12px;
+}
+
+.ab-facts strong {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(2rem, 3.6vw, 3.1rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  color: var(--des-blue);
+}
+
+.ab-facts span {
+  font-size: 0.88rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+/* Join: everything centred around the one button */
+.ab-join__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.ab-join .ev-heading { margin: 0 0 1.25rem; }
+
+.ab-join__text {
+  max-width: 36em;
+  margin: 0;
+  font-size: clamp(0.98rem, 1.3vw, 1.15rem);
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.ab-join__btn {
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+  padding: 1em 1.9em;
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+}
+
+.ab-join__note {
+  margin: 1rem 0 0;
+  font-size: 0.82rem;
+  opacity: 0.8;
+}
+
+.ab-join__contact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.5rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.ab-join__contact a {
+  color: inherit;
+  text-underline-offset: 0.25em;
+}
+
+.ab-join__contact a:hover { color: var(--des-lime); }
+
+@media (max-width: 59.99em) {
+  .ab-who { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 30em) {
+  .ab-facts { gap: 0.6rem; }
+  .ab-facts li { padding: 1rem; }
+  .ab-facts span { font-size: 0.8rem; }
+}
