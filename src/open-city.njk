@@ -49,7 +49,7 @@ scripts:
     <p class="ev-featured__date reveal" style="--delay: 200ms">
       <span class="ev-featured__month">{{ event.date | datePart("month") }}</span>
       <span class="ev-featured__day script">{{ event.date | datePart("day") }}</span>
-      <span class="ol-hero__datenote">Registration opens</span>
+      <span class="ol-hero__datenote">{% if isOpen %}Registration open{% else %}Registration opens{% endif %}</span>
     </p>
   </div>
 </section>

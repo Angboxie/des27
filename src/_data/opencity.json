@@ -1,7 +1,7 @@
 {
   "_note": "OPEN CITY registration system. supabaseUrl and supabaseAnonKey come from the Supabase project (Settings > API). Both are safe to publish: the anon key only lets a signed-in person call the oc_* functions. While either is null, the sign-up page just says when registration opens. See supabase/README.md.",
-  "supabaseUrl": null,
-  "supabaseAnonKey": null,
+  "supabaseUrl": "https://wrrrgsdazduiiwkuoubz.supabase.co",
+  "supabaseAnonKey": "sb_publishable_J2IeD8u6MTqeJAb-sS4TRg_HAWRPn2A",
   "opensText": "Registration opens 27 November 2026.",
   "contactEmail": "des.unimelb@gmail.com",
   "eventUrl": "/open-city/",

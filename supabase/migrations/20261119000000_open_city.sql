@@ -19,7 +19,7 @@ create table public.oc_settings (
 );
 
 insert into public.oc_settings (key, value) values
-  ('registration_open',  'false'),   -- Register / pay buttons work
+  ('registration_open',  'true'),    -- Register / pay buttons work (switch off in the dashboard)
   ('price_cents',        '1000'),    -- price of one entry, in cents
   ('currency',           '"aud"'),
   ('team_changes_open',  'true'),    -- participants can still form / change teams
