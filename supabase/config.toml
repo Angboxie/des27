@@ -1,12 +1,14 @@
 # Supabase project settings for the OPEN CITY registration system.
-# Stripe calls the webhook without a Supabase login, so it checks Stripe's
-# signature itself instead. The other functions need a signed-in person.
+# Each function checks who is calling in its own code (see _shared/backend.ts):
+# the webhook checks Stripe's signature, the others check the person's sign-in
+# token with Supabase's sign-in service. The gateway's own token check is off
+# because it doesn't understand the newer style of sign-in tokens.
 
 [functions.oc-stripe-webhook]
 verify_jwt = false
 
 [functions.oc-checkout]
-verify_jwt = true
+verify_jwt = false
 
 [functions.oc-mail]
-verify_jwt = true
+verify_jwt = false

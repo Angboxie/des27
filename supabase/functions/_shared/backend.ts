@@ -9,8 +9,17 @@ declare const Deno: { env: { get(name: string): string | undefined } };
 
 export const env = (name: string) => Deno.env.get(name);
 
+// Supabase gives functions these automatically. Newer projects name the keys
+// SUPABASE_SECRET_KEY / SUPABASE_PUBLISHABLE_KEY; older ones use the *_ROLE_KEY names.
+const serviceKey = () => env("SUPABASE_SERVICE_ROLE_KEY") || env("SUPABASE_SECRET_KEY") || "";
+
+function serviceClient() {
+  if (!env("SUPABASE_URL") || !serviceKey()) throw new Error("SUPABASE_URL or the service key is missing");
+  return createClient(env("SUPABASE_URL")!, serviceKey(), { auth: { persistSession: false, autoRefreshToken: false } });
+}
+
 export function serviceRpc() {
-  const client = createClient(env("SUPABASE_URL")!, env("SUPABASE_SERVICE_ROLE_KEY")!, { auth: { persistSession: false } });
+  const client = serviceClient();
   return async (fn: string, args: Record<string, unknown>) => {
     const { data, error } = await client.rpc(fn, args);
     if (error) throw new Error(`${fn}: ${error.message}`);
@@ -18,15 +27,12 @@ export function serviceRpc() {
   };
 }
 
-// Who is calling? Reads the sign-in token the website sends with each request.
+// Who is calling? The website sends the person's sign-in token; Supabase's own
+// sign-in service is asked whether it is genuine and whose it is.
 export async function currentUser(request: Request): Promise<{ id: string; email: string } | null> {
   const authorization = request.headers.get("Authorization") || "";
   if (!authorization.startsWith("Bearer ")) return null;
-  const client = createClient(env("SUPABASE_URL")!, env("SUPABASE_ANON_KEY")!, {
-    global: { headers: { Authorization: authorization } },
-    auth: { persistSession: false },
-  });
-  const { data, error } = await client.auth.getUser();
+  const { data, error } = await serviceClient().auth.getUser(authorization.slice(7));
   if (error || !data.user?.email || !data.user.email_confirmed_at) return null;
   return { id: data.user.id, email: data.user.email.toLowerCase() };
 }
