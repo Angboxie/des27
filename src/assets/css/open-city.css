@@ -785,3 +785,121 @@
 @media (max-width: 59.99em) {
   .oc-demo { top: 0.5rem; }
 }
+
+
+/* ---------- One step at a time ---------- */
+
+.oc-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.4rem;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+.oc-steps li { min-width: 0; }
+
+.oc-steps button,
+.oc-steps__later {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.5rem 0.7rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.15;
+  text-align: left;
+  color: var(--des-ink);
+  background: var(--des-white);
+  border: 2px solid #c9d0f5;
+  border-radius: 0.7rem;
+}
+
+.oc-steps button { cursor: pointer; }
+.oc-steps__later { color: #8a8a96; background: transparent; border-style: dashed; }
+
+.oc-steps__num {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+}
+
+.oc-steps .is-done .oc-steps__num {
+  background: var(--des-lime) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='%230d0d0d' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 75% no-repeat;
+  border-color: var(--des-ink);
+}
+
+.oc-steps .is-current button {
+  color: var(--des-white);
+  background: var(--des-blue);
+  border-color: var(--des-blue);
+}
+
+.oc-steps .is-shown button {
+  border-color: var(--des-ink);
+  box-shadow: 0.2rem 0.2rem 0 var(--des-ink);
+}
+
+.oc-steps button:hover { border-color: var(--des-blue); }
+
+.oc-backto {
+  padding: 0.7rem 0.9rem;
+  font-size: 0.92rem;
+  background: #eef1ff;
+  border-radius: 0.5rem;
+}
+
+.oc-teaser {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: #5f5f6b;
+}
+
+.oc-teaser svg {
+  flex: 0 0 auto;
+  width: 1.2rem;
+  height: 1.2rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.oc-center { text-align: center; }
+.oc-field[hidden] { display: none; }
+
+@media (max-width: 47.99em) {
+  /* numbers only, with the name of the step you are on */
+  .oc-steps button,
+  .oc-steps__later {
+    justify-content: center;
+    padding: 0.4rem;
+  }
+
+  .oc-steps li:not(.is-shown) .oc-steps__num + span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .oc-steps { grid-template-columns: auto auto auto auto; }
+  .oc-steps .is-shown { flex: 1; }
+  .oc-steps { display: flex; }
+  .oc-steps li { flex: 0 0 auto; }
+  .oc-steps li.is-shown { flex: 1 1 auto; }
+}

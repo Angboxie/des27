@@ -97,5 +97,17 @@
         "a": "As soon as your payment is confirmed. It isn't published anywhere else."
       }
     ]
-  }
+  },
+  "institutions": [
+    "University of Melbourne",
+    "RMIT University",
+    "Monash University",
+    "Swinburne University of Technology",
+    "Deakin University",
+    "La Trobe University",
+    "Victoria University",
+    "Australian Catholic University",
+    "Federation University",
+    "Torrens University"
+  ]
 }

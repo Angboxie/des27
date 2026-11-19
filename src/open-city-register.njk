@@ -33,6 +33,6 @@ scripts:
     <a hidden data-oc-link="portal" href="/open-city/register/"></a>
     <a hidden data-oc-link="admin" href="/open-city/admin/"></a>
     <a hidden data-oc-link="event" href="{{ opencity.eventUrl }}"></a>
-    <script type="application/json" id="oc-content">{{ { categories: opencity.categories, rules: opencity.rules, privacy: opencity.privacy } | dump | safe }}</script>
+    <script type="application/json" id="oc-content">{{ { categories: opencity.categories, institutions: opencity.institutions, rules: opencity.rules, privacy: opencity.privacy } | dump | safe }}</script>
   </div>
 </section>

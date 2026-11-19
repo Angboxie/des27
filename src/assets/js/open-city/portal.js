@@ -10,6 +10,8 @@
   let brief = null;       // paid-only material, loaded once access is confirmed
   let editing = false;    // registration form open for changes
   let notice = null;      // one-off message at the top, e.g. after paying
+  let viewing = null;     // a step the person has gone back to look at (null = their current step)
+  let lastStep = null;
 
   const PATHS = {
     solo: ["Entering individually", "Just me. No team to set up."],
@@ -24,14 +26,14 @@
     const team = me.team;
     if (!p) return ["Complete your registration", "Tell us who you are and how you're taking part. It takes about two minutes.", "#registration"];
     if (!me.paid) return ["Pay for your entry", "Every participant needs their own paid entry. If someone is paying for you, ask them to assign an entry to " + me.email + ".", "#payment"];
-    if (!team && me.invitations.length) return ["Answer your team invitation", `You've been invited to "${me.invitations[0].team}".`, "#team"];
-    if (!team && p.path === "looking") return ["Find your teammates", "Head to the team-finder on the DES Discord. When you've found a team, its leader invites you here. You won't need to register again.", "#discord"];
+    if (!team && me.invitations.length) return ["Answer your team invitation", `You've been invited to "${me.invitations[0].team}". Accept or decline below.`, "#team"];
+    if (!team && p.path === "looking") return ["Find your teammates", "Use the team-finder on the DES Discord (link below). When you've found a team, its leader registers it and invites you here. You won't need to register again.", "#discord"];
     if (!team) return ["Set up your team", "If you're the team leader, register the team now. Otherwise wait for your leader's invitation: it will appear here.", "#team"];
 
     const waitingOn = (test) => team.members.filter(test).map((m) => (m.me ? "you" : m.name)).join(", ");
     switch (team.status) {
       case "approved":
-        return [team.solo ? "You're in. Your entry is confirmed." : "You're in. Your team is confirmed.", "Read the brief, join the Discord and start designing.", "#brief", "ok"];
+        return [team.solo ? "You're in. Your entry is confirmed." : "You're in. Your team is confirmed.", "Your submission code, the brief and the Discord are all below. Start designing.", "#brief", "ok"];
       case "draft":
         return ["Invite a teammate", "A team needs two or three people. Invite someone, or switch to entering individually in your registration.", "#team"];
       case "pending_payment":
@@ -45,15 +47,28 @@
     }
   }
 
-  function progress() {
-    const team = me.team;
-    const steps = [
-      ["Registration", Boolean(me.participant)],
-      ["Payment verified", me.paid],
-      [me.participant && me.participant.path === "solo" ? "Individual entry" : "Team", Boolean(team) && !["draft"].includes(team.status)],
-      ["Confirmed", Boolean(team) && team.status === "approved"],
-    ];
-    return `<ol class="oc-progress">${steps.map(([label, done]) => `<li class="${done ? "is-done" : ""}"><span aria-hidden="true"></span>${esc(label)}<span class="visually-hidden">${done ? " (done)" : " (to do)"}</span></li>`).join("")}</ol>`;
+  // The journey is shown one step at a time. This is the step the person is up to.
+  const STEPS = ["Your details", "Payment", "Team", "Confirmed"];
+
+  function currentStep() {
+    if (!me.participant) return 1;
+    if (!me.paid) return 2;
+    if (!me.team || me.team.status !== "approved") return 3;
+    return 4;
+  }
+
+  function stepper(current, shown) {
+    const labels = STEPS.slice();
+    if (me.participant && me.participant.path === "solo") labels[2] = "Your entry";
+    return `<ol class="oc-steps">${labels.map((label, i) => {
+      const n = i + 1;
+      const state = n < current ? "is-done" : n === current ? "is-current" : "is-later";
+      const inner = `<span class="oc-steps__num" aria-hidden="true">${n < current ? "" : n}</span><span>${esc(label)}</span>`;
+      // steps already reached can be reopened; later ones can't be skipped to
+      return `<li class="${state}${n === shown ? " is-shown" : ""}">${n <= current
+        ? `<button type="button" data-action="goto" data-step="${n}"${n === shown ? ' aria-current="step"' : ""}>${inner}</button>`
+        : `<span class="oc-steps__later">${inner}</span>`}</li>`;
+    }).join("")}</ol>`;
   }
 
   /* ---------- Sections ---------- */
@@ -82,14 +97,23 @@
 
     const v = p || {};
     const inTeam = me.team && !me.team.solo;
+    const schools = content.institutions || [];
+    const listed = schools.includes(v.institution);
     const option = (list, value) => list.map(([id, label]) => `<option value="${esc(id)}"${id === value ? " selected" : ""}>${esc(label)}</option>`).join("");
     return `
       <form class="oc-card" id="registration" data-form="registration">
         <div class="oc-card__head"><h2>My registration</h2></div>
+        ${!p && me.invitations.length ? `<p class="oc-alert" data-tone="ok">${esc(me.invitations[0].leader || "A team leader")} has invited you to team "${esc(me.invitations[0].team)}". Finish these details and pay your entry, then you can accept.</p>` : ""}
         <p class="oc-hint">Signed in as ${esc(me.email)}. Everyone registers individually, including each member of a team.</p>
         <div class="oc-grid">
           <label class="oc-field"><span>Full name</span><input name="full_name" required maxlength="120" autocomplete="name" value="${esc(v.full_name)}"></label>
-          <label class="oc-field"><span>University / institution</span><input name="institution" required maxlength="160" autocomplete="organization" value="${esc(v.institution)}"></label>
+          <label class="oc-field"><span>University / institution</span>
+            <select name="institution_choice" required data-institution>
+              <option value="">Choose&hellip;</option>${option(schools.map((name) => [name, name]), listed ? v.institution : "")}
+              <option value="other"${v.institution && !listed ? " selected" : ""}>Other (type it in)</option>
+            </select>
+          </label>
+          <label class="oc-field" data-institution-other ${v.institution && !listed ? "" : "hidden"}><span>Which university or institution?</span><input name="institution_other" maxlength="160" autocomplete="organization" value="${esc(listed ? "" : v.institution)}"></label>
           <label class="oc-field"><span>Competition category</span>
             <select name="category" required ${inTeam ? "disabled" : ""}>
               <option value="">Choose&hellip;</option>${option((content.categories || []).map((c) => [c.id, c.label]), v.category)}
@@ -142,7 +166,7 @@
           </select>
         </label>
         <button class="oc-btn" type="submit">${me.paid ? "Buy more entries" : "Pay now"}</button>
-        <p class="oc-hint">Paying for friends? Buy up to three, then say who each one is for. Buying entries together doesn't put you in a team: that's a separate step below.</p>
+        <p class="oc-hint">Paying for friends? Buy up to three, then say who each one is for. Buying entries together doesn't put you in a team: that's the next step.</p>
         <div class="oc-alert" data-alert hidden></div>
       </form>`;
 
@@ -326,25 +350,48 @@
 
   function render() {
     if (!me) return;
-    const [title, text, href, tone] = nextStep();
+    const current = currentStep();
+    const moved = lastStep !== null && current !== lastStep;
+    if (current !== lastStep) { viewing = null; lastStep = current; }   // moved on: show the new step
+    const shown = viewing && viewing <= current ? viewing : current;
+    const [title, text, , tone] = nextStep();
+    const back = shown !== current;
+
+    // one step on screen at a time
+    const body = {
+      1: () => registrationSection(),
+      2: () => paymentSection(),
+      3: () => teamSection(),
+      4: () => teamSection(),
+    }[shown]();
+
+    // once the entry is paid, the brief and Discord sit under the team step
+    const unlocked = me.paid && shown >= 3 ? briefSection() + discordSection() : "";
+    const teaser = !me.paid && shown === current ? `
+      <p class="oc-teaser">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="9" width="12" height="8" rx="1.5"/><path d="M7 9V6.5a3 3 0 0 1 6 0V9"/></svg>
+        The full brief, your category challenge and the Discord unlock as soon as your entry is paid.
+      </p>` : "";
+
     app.innerHTML = `
       <div class="oc-bar">
         <span>Signed in as <strong>${esc(me.email)}</strong></span>
         <span>${me.is_admin ? `<a class="oc-link" href="${esc(window.OC.link("admin"))}">Organiser dashboard</a> &middot; ` : ""}<button class="oc-link" type="button" data-action="signout">Sign out</button></span>
       </div>
+      ${stepper(current, shown)}
       ${notice ? `<p class="oc-alert" data-tone="${esc(notice[1])}" role="status">${esc(notice[0])}</p>` : ""}
-      <div class="oc-next oc-next--${tone || "todo"}">
-        <p class="oc-next__label">${tone === "ok" ? "All done" : "Your next step"}</p>
-        <h2>${esc(title)}</h2>
-        <p>${esc(text)}</p>
-        <a class="oc-btn" href="${esc(href)}">${tone === "ok" ? "Read the brief" : "Go there"}</a>
-        ${progress()}
-      </div>
-      ${registrationSection()}
-      ${paymentSection()}
-      ${teamSection()}
-      ${briefSection()}
-      ${discordSection()}`;
+      ${back ? `
+        <p class="oc-backto">You're looking back at step ${shown}. <button class="oc-link" type="button" data-action="goto" data-step="${current}">Return to step ${current}: ${esc(title)}</button></p>` : `
+        <div class="oc-next oc-next--${tone || "todo"}">
+          <p class="oc-next__label">${tone === "ok" ? "All done" : `Step ${current} of 4`}</p>
+          <h2>${esc(title)}</h2>
+          <p>${esc(text)}</p>
+        </div>`}
+      ${body}
+      ${shown === 3 && me.paid && current === 3 && me.settings.registration_open ? `<p class="oc-hint oc-center">Paying for a teammate? <button class="oc-link" type="button" data-action="goto" data-step="2">Go back to Payment</button> to buy and assign entries.</p>` : ""}
+      ${unlocked}
+      ${teaser}`;
+    if (moved) window.scrollTo({ top: 0 });
   }
 
   async function refresh() {
@@ -388,6 +435,9 @@
 
     registration(form) {
       const data = Object.fromEntries(new FormData(form));
+      data.institution = data.institution_choice === "other" ? (data.institution_other || "") : data.institution_choice;
+      delete data.institution_choice;
+      delete data.institution_other;
       data.rules_accepted = form.rules_accepted ? form.rules_accepted.checked : true;
       // locked fields aren't sent by the browser; the database keeps the team's values
       if (!data.category && me.participant) data.category = me.participant.category;
@@ -440,7 +490,8 @@
   };
 
   const actions = {
-    edit() { editing = true; render(); document.getElementById("registration").scrollIntoView({ block: "start" }); },
+    goto(button) { viewing = Number(button.dataset.step); editing = false; notice = null; render(); window.scrollTo({ top: 0 }); },
+    edit() { editing = true; render(); },
     "cancel-edit"() { editing = false; render(); },
     async signout() { await sb.auth.signOut(); window.location.reload(); },
     accept(button) { act(button.closest("[data-invite]"), () => rpc("oc_respond_invite", { p_member: button.dataset.id, p_accept: true }), "You've joined the team."); },
@@ -472,6 +523,16 @@
   app.addEventListener("click", (event) => {
     const button = event.target.closest("[data-action]");
     if (button && actions[button.dataset.action]) actions[button.dataset.action](button);
+  });
+
+  // "Other" in the university list opens a box to type the name
+  app.addEventListener("change", (event) => {
+    if (!event.target.matches("[data-institution]")) return;
+    const box = app.querySelector("[data-institution-other]");
+    const other = event.target.value === "other";
+    box.hidden = !other;
+    box.querySelector("input").required = other;
+    if (other) box.querySelector("input").focus();
   });
 
   /* ---------- Start ---------- */
