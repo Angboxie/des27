@@ -60,9 +60,9 @@ window.OC = (() => {
         <span>Email address</span>
         <input type="email" name="email" required autocomplete="email" inputmode="email" placeholder="you@student.unimelb.edu.au">
       </label>
-      <p class="oc-hint">No password or account to set up. Use the same email every time: it's how your payment, registration and team are matched to you.</p>
+      <p class="oc-hint">We will email you a secure link to continue. Please use the same email address each time.</p>
       <div class="oc-alert" data-alert hidden></div>
-      <button class="oc-btn" type="submit">Send me the link</button>
+      <button class="oc-btn" type="submit">Continue</button>
     </form>`;
 
   const notOpenCard = () => `

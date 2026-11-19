@@ -33,7 +33,7 @@
     const waitingOn = (test) => team.members.filter(test).map((m) => (m.me ? "you" : m.name)).join(", ");
     switch (team.status) {
       case "approved":
-        return [team.solo ? "You're in. Your entry is confirmed." : "You're in. Your team is confirmed.", "Your submission code, the brief and the Discord are all below. Start designing.", "#brief", "ok"];
+        return [team.solo ? "Your entry is confirmed" : "Your team is confirmed", "Your submission code, the competition brief and the Discord link are below.", "#brief", "ok"];
       case "draft":
         return ["Invite a teammate", "A team needs two or three people. Invite someone, or switch to entering individually in your registration.", "#team"];
       case "pending_payment":
@@ -383,7 +383,7 @@
       ${back ? `
         <p class="oc-backto">You're looking back at step ${shown}. <button class="oc-link" type="button" data-action="goto" data-step="${current}">Return to step ${current}: ${esc(title)}</button></p>` : `
         <div class="oc-next oc-next--${tone || "todo"}">
-          <p class="oc-next__label">${tone === "ok" ? "All done" : `Step ${current} of 4`}</p>
+          <p class="oc-next__label">${tone === "ok" ? "Registration complete" : `Step ${current} of 4`}</p>
           <h2>${esc(title)}</h2>
           <p>${esc(text)}</p>
         </div>`}
@@ -426,7 +426,7 @@
       window.OC.setBusy(form, true);
       try {
         await window.OC.signIn(email);
-        form.innerHTML = `<h2>Check your inbox</h2><p>We've sent a link to <strong>${esc(email)}</strong>. Open it on this device to continue. It can take a minute to arrive; check spam too.</p>`;
+        form.innerHTML = `<h2>Check your email</h2><p>A link has been sent to <strong>${esc(email)}</strong>. Open it on this device to continue. It may take a minute to arrive; please check your spam folder.</p>`;
       } catch (error) {
         window.OC.setBusy(form, false);
         window.OC.alertIn(form, error.message);
@@ -494,7 +494,7 @@
     edit() { editing = true; render(); },
     "cancel-edit"() { editing = false; render(); },
     async signout() { await sb.auth.signOut(); window.location.reload(); },
-    accept(button) { act(button.closest("[data-invite]"), () => rpc("oc_respond_invite", { p_member: button.dataset.id, p_accept: true }), "You've joined the team."); },
+    accept(button) { act(button.closest("[data-invite]"), () => rpc("oc_respond_invite", { p_member: button.dataset.id, p_accept: true }), "You have joined the team."); },
     decline(button) {
       if (!window.confirm("Decline this team invitation?")) return;
       act(button.closest("[data-invite]"), () => rpc("oc_respond_invite", { p_member: button.dataset.id, p_accept: false }), "Invitation declined.");
@@ -505,7 +505,7 @@
     },
     "leave-team"(button) {
       if (!window.confirm("Leave this team? Your registration and payment stay as they are.")) return;
-      act(button.closest(".oc-actions"), () => rpc("oc_leave_team"), "You've left the team.");
+      act(button.closest(".oc-actions"), () => rpc("oc_leave_team"), "You have left the team.");
     },
     "cancel-team"(button) {
       if (!window.confirm("Cancel this team? Everyone is released and can join or create another team.")) return;
@@ -553,7 +553,7 @@
     };
     if (me.purchases.length > before) return verified();
 
-    notice = ["Thanks! Confirming your payment with Stripe…", "ok"];
+    notice = ["Confirming your payment…", "ok"];
     render();
     for (let i = 0; i < 20; i++) {
       await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -573,7 +573,7 @@
     const params = new URLSearchParams(window.location.search);
     const { data } = await sb.auth.getSession();
     if (!data.session) {
-      app.innerHTML = window.OC.signInCard("Start with your email", "Entering OPEN CITY 2027? Pop in your email and we'll send you a link. Open it and you can register, pay and set up your team. Already started? The same link takes you back to where you left off.");
+      app.innerHTML = window.OC.signInCard("Registration", "Enter your email address to begin or continue your registration.");
       return;
     }
 
