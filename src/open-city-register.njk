@@ -1,0 +1,38 @@
+---
+layout: layouts/base.njk
+title: OPEN CITY sign-up
+description: Register for DES OPEN CITY 2027, pay for your entry, set up your team and read the full competition brief.
+permalink: /open-city/register/
+theme: des27
+styles:
+  - /assets/css/open-city.css
+scripts:
+  - https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js
+  - /assets/js/open-city/client.js
+  - /assets/js/open-city/portal.js
+---
+{# The participant area. Everything below the heading is drawn by portal.js once it knows who is signed in. #}
+<section class="oc-page">
+  <div class="des-container">
+    <header class="oc-head">
+      <a class="oc-back" href="/open-city/">&larr; About OPEN CITY</a>
+      <p class="oc-eyebrow">DES OPEN CITY <span class="script">2027</span></p>
+      <h1 class="oc-title">Your entry</h1>
+    </header>
+
+    <div id="oc-app"
+         data-supabase-url="{{ opencity.supabaseUrl or '' }}"
+         data-supabase-key="{{ opencity.supabaseAnonKey or '' }}"
+         data-contact="{{ opencity.contactEmail }}"
+         data-opens="{{ opencity.opensText }}">
+      <noscript><p class="oc-card">Registration needs JavaScript switched on in your browser.</p></noscript>
+      <p class="oc-card oc-loading" data-oc-loading>Loading&hellip;</p>
+    </div>
+
+    {# links and wording the script reads, so site paths stay correct on every host #}
+    <a hidden data-oc-link="portal" href="/open-city/register/"></a>
+    <a hidden data-oc-link="admin" href="/open-city/admin/"></a>
+    <a hidden data-oc-link="event" href="{{ opencity.eventUrl }}"></a>
+    <script type="application/json" id="oc-content">{{ { categories: opencity.categories, rules: opencity.rules, privacy: opencity.privacy } | dump | safe }}</script>
+  </div>
+</section>

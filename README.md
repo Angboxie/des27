@@ -67,6 +67,10 @@ Import a macro at the top of a page, then call it:
 {{ card({ title: "Title", text: "Description", meta: "Date", image: "/assets/images/x.jpg", url: "/link/" }) }}
 ```
 
+## OPEN CITY registration
+
+The registration system for DES OPEN CITY 2027 (sign-in, Stripe payments, teams, the paid-only brief and the organisers' dashboard) lives at `/open-city/register/` and `/open-city/admin/`, behind the public competition page at `/open-city/`. Its database, server code, tests and setup steps are in [`supabase/`](supabase/README.md). The site's connection settings are in `src/_data/opencity.json`.
+
 ## Not built yet
 
 - Merchandise ordering / payments

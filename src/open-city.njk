@@ -1,0 +1,177 @@
+---
+layout: layouts/base.njk
+title: OPEN CITY 2027
+description: DES OPEN CITY 2027 is a summer design competition for architecture, UI/UX and graphic design students across Melbourne. Enter alone or in a team of up to three.
+permalink: /open-city/
+theme: des27
+styles:
+  - /assets/css/events.css
+  - /assets/css/learn.css
+  - /assets/css/open-city-landing.css
+scripts:
+  - /assets/js/events.js
+---
+{# Public page about the competition. Wording: _data/opencity.json (landing).
+   Dates, eligibility and prizes: the OPEN CITY entry in _data/events.json. #}
+{% set event = events | byId(opencity.eventId) %}
+{% set page_ = opencity.landing %}
+{% set isOpen = event.registration and event.registration.status == "open" %}
+{% set arrow = '<svg class="ev-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5" /></svg>' %}
+{% macro registerButton(extra = "") %}
+  <a class="ev-btn ev-btn--lime ol-cta {{ extra }}" data-magnetic href="{{ opencity.registerUrl }}">
+    {% if isOpen %}Register now{% else %}{{ opencity.opensShort }}{% endif %}
+    {{ arrow | safe }}
+  </a>
+{% endmacro %}
+
+{# ---------- Hero ---------- #}
+<section class="ev-featured ol-hero" data-cursor="light" aria-labelledby="oc-title">
+  <div class="ev-featured__glow" aria-hidden="true"></div>
+  <svg class="ev-featured__curve draw-line" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path pathLength="1" d="M400 20 C 250 40, 150 120, 120 260 C 105 330, 70 380, 10 420" />
+  </svg>
+  {% if event.homeArt %}<img class="ol-hero__art" src="{{ event.homeArt }}" alt="" width="1360" height="1163">{% endif %}
+
+  <div class="des-container ev-featured__inner">
+    <div class="ev-featured__content">
+      <p class="ev-eyebrow reveal">DES flagship competition</p>
+      <h1 id="oc-title" class="ev-featured__title">
+        <span class="ev-featured__big reveal" style="--delay: 100ms">{{ event.headline }}</span>
+        <span class="script ev-featured__script reveal" style="--delay: 220ms">{{ event.headlineAccent }}</span>
+      </h1>
+      <p class="ev-featured__text reveal" style="--delay: 320ms">{{ event.summary }}</p>
+      <div class="ol-hero__actions reveal" style="--delay: 420ms">
+        {{ registerButton() }}
+        <a class="ev-btn" href="#how">How it works</a>
+      </div>
+    </div>
+
+    <p class="ev-featured__date reveal" style="--delay: 200ms">
+      <span class="ev-featured__month">{{ event.date | datePart("month") }}</span>
+      <span class="ev-featured__day script">{{ event.date | datePart("day") }}</span>
+      <span class="ol-hero__datenote">Registration opens</span>
+    </p>
+  </div>
+</section>
+
+{# ---------- What it is ---------- #}
+<section class="ed-section ed-section--cream" aria-labelledby="about-title">
+  <div class="des-container ol-about">
+    <div>
+      <h2 id="about-title" class="ev-heading reveal">
+        <span class="ev-heading__big">What is</span>
+        <span class="ev-heading__script script">Open City</span>
+      </h2>
+      <div class="ed-prose ol-prose reveal" style="--delay: 120ms">
+        {% for para in page_.intro %}<p>{{ para }}</p>{% endfor %}
+      </div>
+    </div>
+    <ul class="ol-facts">
+      {% for fact in page_.facts %}
+        <li class="reveal" style="--delay: {{ loop.index0 * 90 + 150 }}ms"><strong>{{ fact.big }}</strong><span>{{ fact.label }}</span></li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+{# ---------- Categories ---------- #}
+<section class="ed-section" aria-labelledby="categories-title">
+  <div class="des-container">
+    <h2 id="categories-title" class="ev-heading reveal">
+      <span class="ev-heading__big">Three</span>
+      <span class="ev-heading__script script">Categories</span>
+    </h2>
+    <ul class="ol-cats">
+      {% for cat in opencity.categories %}
+        <li class="ol-cat reveal" style="--delay: {{ loop.index0 * 100 }}ms">
+          <span class="ol-cat__letter script" aria-hidden="true">{{ "ABC"[loop.index0] }}</span>
+          <h3>{{ cat.label }}</h3>
+          <p>{{ cat.blurb }}</p>
+          <p class="ol-cat__lock">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="9" width="12" height="8" rx="1.5"/><path d="M7 9V6.5a3 3 0 0 1 6 0V9"/></svg>
+            Challenge unlocks with your entry
+          </p>
+        </li>
+      {% endfor %}
+    </ul>
+    <p class="ol-locked reveal">{{ page_.locked }}</p>
+  </div>
+</section>
+
+{# ---------- How it works ---------- #}
+<section class="ed-section ed-section--cream" id="how" aria-labelledby="how-title">
+  <div class="des-container">
+    <h2 id="how-title" class="ev-heading reveal">
+      <span class="ev-heading__big">How it</span>
+      <span class="ev-heading__script script">Works</span>
+    </h2>
+    <ol class="ol-steps">
+      {% for step in page_.steps %}
+        <li class="reveal" style="--delay: {{ loop.index0 * 80 }}ms">
+          <span class="ol-steps__num script" aria-hidden="true">{{ loop.index }}</span>
+          <h3>{{ step.title }}</h3>
+          <p>{{ step.text }}</p>
+        </li>
+      {% endfor %}
+    </ol>
+    <div class="ol-center reveal">{{ registerButton("ol-cta--dark") }}</div>
+  </div>
+</section>
+
+{# ---------- Dates, who can enter, prizes ---------- #}
+<section class="ed-section" aria-labelledby="dates-title">
+  <div class="des-container">
+    <h2 id="dates-title" class="ev-heading reveal">
+      <span class="ev-heading__big">Key</span>
+      <span class="ev-heading__script script">Dates</span>
+    </h2>
+    <ol class="ed-timeline reveal">
+      {% for item in event.details.keyDates %}
+        <li style="--i: {{ loop.index0 }}"><span class="ed-timeline__when">{{ item.when }}</span><span>{{ item.label }}</span></li>
+      {% endfor %}
+    </ol>
+
+    <div class="ed-block-row">
+      <div class="ed-block reveal">
+        <h3>Who can enter</h3>
+        <ul class="ed-list">{% for item in event.details.eligibility %}<li>{{ item }}</li>{% endfor %}</ul>
+      </div>
+      <div class="ed-block reveal" style="--delay: 80ms">
+        <h3>Prizes</h3>
+        <ul class="ed-list">{% for item in event.details.prizes %}<li>{{ item }}</li>{% endfor %}</ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ---------- Questions ---------- #}
+<section class="ed-section ed-section--cream" aria-labelledby="faq-title">
+  <div class="des-container ol-narrow">
+    <h2 id="faq-title" class="ev-heading reveal">
+      <span class="ev-heading__big">Good to</span>
+      <span class="ev-heading__script script">Know</span>
+    </h2>
+    <div class="ol-faq">
+      {% for item in page_.faq %}
+        <details class="reveal" style="--delay: {{ loop.index0 * 60 }}ms">
+          <summary>{{ item.q }}</summary>
+          <p>{{ item.a }}</p>
+        </details>
+      {% endfor %}
+    </div>
+    <p class="ol-contact reveal">Something else? Email <a href="mailto:{{ opencity.contactEmail }}">{{ opencity.contactEmail }}</a>.</p>
+  </div>
+</section>
+
+{# ---------- Sign up ---------- #}
+<section class="ev-featured ol-final" data-cursor="light" aria-labelledby="final-title">
+  <div class="ev-featured__glow" aria-hidden="true"></div>
+  <div class="des-container ol-final__inner">
+    <h2 id="final-title" class="reveal"><span class="ev-featured__big">Ready to</span> <span class="script ev-featured__script">enter?</span></h2>
+    <p class="reveal" style="--delay: 100ms">{% if isOpen %}Sign up, pay your entry and the brief is yours.{% else %}{{ opencity.opensText }} Already have an entry? Sign in to your participant area.{% endif %}</p>
+    <div class="ol-hero__actions reveal" style="--delay: 200ms">
+      {{ registerButton() }}
+      <a class="ev-btn" href="{{ opencity.registerUrl }}">Sign in</a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,101 @@
+{
+  "_note": "OPEN CITY registration system. supabaseUrl and supabaseAnonKey come from the Supabase project (Settings > API). Both are safe to publish: the anon key only lets a signed-in person call the oc_* functions. While either is null, the sign-up page just says when registration opens. See supabase/README.md.",
+  "supabaseUrl": null,
+  "supabaseAnonKey": null,
+  "opensText": "Registration opens 27 November 2026.",
+  "contactEmail": "des.unimelb@gmail.com",
+  "eventUrl": "/open-city/",
+  "categories": [
+    {
+      "id": "architecture",
+      "label": "Architecture",
+      "blurb": "Buildings, spaces and places in the city."
+    },
+    {
+      "id": "uiux",
+      "label": "UI/UX Design",
+      "blurb": "Digital products and services people use to get around city life."
+    },
+    {
+      "id": "graphic",
+      "label": "Graphic Design",
+      "blurb": "Identity, print and visual communication for the city."
+    }
+  ],
+  "rules": [
+    "One paid entry per participant. Entries are personal and can't be shared.",
+    "Enter individually or in a team of up to three. You can only be in one team.",
+    "Every team member registers, pays and confirms their own place.",
+    "Team changes after approval go through DES."
+  ],
+  "privacy": "DES uses these details only to run OPEN CITY 2027: to confirm your entry, contact you about the competition and report totals to sponsors. They are not sold or shared with judges. Email us to have them corrected or deleted.",
+  "eventId": "open-city-2027",
+  "registerUrl": "/open-city/register/",
+  "opensShort": "Registration opens 27 Nov",
+  "landing": {
+    "_note": "Wording for the public OPEN CITY page (/open-city/). Dates, eligibility and prizes come from the OPEN CITY entry in events.json.",
+    "intro": [
+      "OPEN CITY is the Design Student Society's flagship competition: one shared challenge facing Melbourne, taken on by students from three design disciplines over the summer break.",
+      "Enter on your own or in a team of up to three. The best work is shown at the final exhibition in March 2027."
+    ],
+    "facts": [
+      {
+        "big": "3",
+        "label": "Categories"
+      },
+      {
+        "big": "1–3",
+        "label": "People per entry"
+      },
+      {
+        "big": "12 Mar",
+        "label": "Final exhibition"
+      }
+    ],
+    "locked": "The full brief and each category's challenge are for entrants only. They unlock in your participant area as soon as your entry is paid.",
+    "steps": [
+      {
+        "title": "Sign up",
+        "text": "Sign in with your email and fill in a two-minute form: name, university, category, Discord."
+      },
+      {
+        "title": "Pay your entry",
+        "text": "Every participant needs their own paid entry. You can buy up to three at once and say who each is for."
+      },
+      {
+        "title": "Unlock the brief",
+        "text": "The full brief, your category challenge, the rules and the Discord open up as soon as payment is confirmed."
+      },
+      {
+        "title": "Solo or team",
+        "text": "Enter alone, register your team of two or three, or find teammates in the Discord team-finder and join later."
+      },
+      {
+        "title": "Design and submit",
+        "text": "Round 1 submissions close 29 January 2027. Judging is anonymous: your work carries a code, not your name."
+      }
+    ],
+    "faq": [
+      {
+        "q": "Do I need a team?",
+        "a": "No. You can enter individually, or in a team of two or three."
+      },
+      {
+        "q": "I don't have teammates yet. Can I still sign up?",
+        "a": "Yes. Sign up and pay as “looking for teammates”, then use the team-finder forum on the DES Discord. When you've found a team, its leader invites you. You won't need to register again."
+      },
+      {
+        "q": "Does one person pay for the whole team?",
+        "a": "Each member needs their own paid entry. One person can buy up to three entries and assign them by email, but buying together doesn't create the team: the team leader registers it and every member confirms."
+      },
+      {
+        "q": "Can I be in more than one team?",
+        "a": "No. One entry per person, and one team per person."
+      },
+      {
+        "q": "When do I see the brief?",
+        "a": "As soon as your payment is confirmed. It isn't published anywhere else."
+      }
+    ]
+  }
+}

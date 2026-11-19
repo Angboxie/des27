@@ -54,6 +54,9 @@ module.exports = async function (eleventyConfig) {
     return "$" + Number(value).toFixed(2);
   });
 
+  // One item from a data file by its id, e.g. events | byId("open-city-2027")
+  eleventyConfig.addFilter("byId", (items, id) => (items || []).find((item) => item.id === id));
+
   eleventyConfig.addFilter("limit", (items, count) => items.slice(0, count));
 
   // Unique values of a field across items, e.g. every software in resources.json

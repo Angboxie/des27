@@ -1,0 +1,36 @@
+---
+layout: layouts/base.njk
+title: OPEN CITY admin
+permalink: /open-city/admin/
+theme: des27
+eleventyExcludeFromCollections: true
+styles:
+  - /assets/css/open-city.css
+scripts:
+  - https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js
+  - /assets/js/open-city/client.js
+  - /assets/js/open-city/admin.js
+---
+{# Organisers' dashboard. The page itself holds no data: admin.js asks the database, which only answers DES organisers. #}
+<section class="oc-page oc-page--admin">
+  <div class="des-container oc-wide">
+    <header class="oc-head">
+      <p class="oc-eyebrow">DES OPEN CITY <span class="script">2027</span></p>
+      <h1 class="oc-title">Organisers</h1>
+    </header>
+
+    <div id="oc-app"
+         data-supabase-url="{{ opencity.supabaseUrl or '' }}"
+         data-supabase-key="{{ opencity.supabaseAnonKey or '' }}"
+         data-contact="{{ opencity.contactEmail }}"
+         data-opens="{{ opencity.opensText }}">
+      <noscript><p class="oc-card">The dashboard needs JavaScript switched on in your browser.</p></noscript>
+      <p class="oc-card oc-loading" data-oc-loading>Loading&hellip;</p>
+    </div>
+
+    <a hidden data-oc-link="portal" href="/open-city/register/"></a>
+    <a hidden data-oc-link="admin" href="/open-city/admin/"></a>
+    <a hidden data-oc-link="event" href="{{ opencity.eventUrl }}"></a>
+    <script type="application/json" id="oc-content">{{ { categories: opencity.categories, rules: opencity.rules, privacy: opencity.privacy } | dump | safe }}</script>
+  </div>
+</section>

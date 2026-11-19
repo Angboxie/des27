@@ -1,0 +1,16 @@
+# Supabase project settings for the OPEN CITY registration system.
+# Stripe calls the webhook without a Supabase login, so it checks Stripe's
+# signature itself instead. The other functions need a signed-in person.
+
+[functions.oc-stripe-webhook]
+verify_jwt = false
+
+[functions.oc-checkout]
+verify_jwt = true
+
+[functions.oc-mail]
+verify_jwt = true
+
+# Called by the DES Google Sheet, which sends a shared secret (SHEET_TOKEN) instead
+[functions.oc-sheet]
+verify_jwt = false

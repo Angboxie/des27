@@ -1,0 +1,12 @@
+{
+  "name": "open-city-tests",
+  "private": true,
+  "type": "module",
+  "description": "Tests for the OPEN CITY registration rules. Runs the real migration in an in-process Postgres (PGlite) - no Supabase account or Docker needed.",
+  "scripts": {
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.2.17"
+  }
+}
