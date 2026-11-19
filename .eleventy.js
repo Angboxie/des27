@@ -5,6 +5,8 @@ module.exports = async function (eleventyConfig) {
 
   // CSS, JS and images are copied across as-is
   eleventyConfig.addPassthroughCopy("src/assets");
+  // The OPEN CITY demo page runs the real database rules in the browser, so it needs the SQL file
+  eleventyConfig.addPassthroughCopy({ "supabase/migrations/20261119000000_open_city.sql": "assets/open-city-demo/schema.sql" });
 
   eleventyConfig.addFilter("readableDate", (value) => {
     if (!value) return "Date TBC";

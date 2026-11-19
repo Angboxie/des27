@@ -1,0 +1,57 @@
+---
+layout: layouts/base.njk
+title: OPEN CITY demo
+permalink: /open-city/demo/
+noindex: true
+eleventyExcludeFromCollections: true
+theme: des27
+styles:
+  - /assets/css/open-city.css
+scripts:
+  - /assets/js/open-city/demo.js
+  - /assets/js/open-city/client.js
+  - /assets/js/open-city/portal.js
+---
+{# DEMO copy of the participant area (see assets/js/open-city/demo.js). Everything below the heading is drawn by portal.js once it knows who is signed in. #}
+<section class="oc-page">
+  <div class="des-container">
+    <header class="oc-head">
+      <a class="oc-back" href="/open-city/">&larr; About OPEN CITY</a>
+      <p class="oc-eyebrow">DES OPEN CITY <span class="script">2027</span></p>
+      <h1 class="oc-title">Your entry</h1>
+    </header>
+
+    <div class="oc-demo" id="oc-demo-bar">
+      <p><strong>Demo.</strong> A practice copy that runs only in your browser. Nothing here is a real registration, no email is sent and no payment is taken.</p>
+      <div class="oc-demo__controls">
+        <label>Be someone:
+          <select data-demo-person>
+            <option value="">(signed out)</option>
+            <option value="alex@demo.example">Alex, team leader</option>
+            <option value="olivia@demo.example">Olivia, teammate</option>
+            <option value="james@demo.example">James, teammate</option>
+            <option value="sam@demo.example">Sam, entering alone</option>
+            <option value="organiser@demo.example">DES organiser</option>
+          </select>
+        </label>
+        <a class="oc-link" data-demo-switch href="/open-city/demo/admin/">Organiser dashboard</a>
+        <button class="oc-link" type="button" data-demo-reset>Start over</button>
+      </div>
+    </div>
+    <a hidden data-oc-link="schema" href="/assets/open-city-demo/schema.sql"></a>
+    <div id="oc-app"
+         data-supabase-url="demo"
+         data-supabase-key="demo"
+         data-contact="{{ opencity.contactEmail }}"
+         data-opens="{{ opencity.opensText }}">
+      <noscript><p class="oc-card">Registration needs JavaScript switched on in your browser.</p></noscript>
+      <p class="oc-card oc-loading" data-oc-loading>Loading&hellip;</p>
+    </div>
+
+    {# links and wording the script reads, so site paths stay correct on every host #}
+    <a hidden data-oc-link="portal" href="/open-city/demo/"></a>
+    <a hidden data-oc-link="admin" href="/open-city/demo/admin/"></a>
+    <a hidden data-oc-link="event" href="{{ opencity.eventUrl }}"></a>
+    <script type="application/json" id="oc-content">{{ { categories: opencity.categories, rules: opencity.rules, privacy: opencity.privacy } | dump | safe }}</script>
+  </div>
+</section>
