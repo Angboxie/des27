@@ -150,15 +150,7 @@ test("every email the database can queue has wording, and the queue is sent once
   assert.equal(new Set(delivered.map((m) => m.to + m.subject + m.text)).size <= total, true);
 });
 
-test("the Google Sheet feed: rows for the sheet, behind a shared secret", async () => {
-  const { hasToken } = await import("../functions/_shared/http.ts");
-  const secret = "a-long-random-secret-of-40-characters-xx";
-  assert.equal(hasToken(`Bearer ${secret}`, secret), true);
-  assert.equal(hasToken(`Bearer ${secret}x`, secret), false);
-  assert.equal(hasToken(null, secret), false);
-  assert.equal(hasToken("Bearer short", "short"), false, "a short secret is never accepted");
-  assert.equal(hasToken("Bearer ", undefined), false, "no secret configured");
-
+test("the Google Sheet feed: rows for the sheet, behind a secret", async () => {
   const api = await startDatabase();
   const [alex, olivia] = await Promise.all(["alex", "olivia"].map((n) => api.person(`${n}@student.example.edu`)));
   await alex.call("oc_save_registration", details("=HYPERLINK(\"https://evil.example\")"));
@@ -166,11 +158,21 @@ test("the Google Sheet feed: rows for the sheet, behind a shared secret", async 
   await api.pay(alex, 2);
   await alex.call("oc_create_team", "Sheet Team", "architecture", [{ name: "Olivia", email: olivia.email }]);
 
-  // only the server may read the feed
+  // the raw export and the stored secret are closed to everyone on the website
   await assert.rejects(alex.call("oc_sheet_export"), /permission denied/);
   await assert.rejects(api.anon("select public.oc_sheet_export()"), /permission denied/);
+  await assert.rejects(api.anon("select * from public.oc_private"), /permission denied/);
+  await assert.rejects(api.as(alex, "select * from public.oc_private"), /permission denied/);
 
-  const feed = await api.service("oc_sheet_export");
+  // the sheet gets in with its secret, and only with its secret
+  const secret = (await api.sql("select value from oc_private where key = 'sheet_token'"))[0].value;
+  assert.ok(secret.length >= 40);
+  await assert.rejects(api.anon("select public.oc_sheet_feed($1)", ["wrong-secret-wrong-secret-wrong-secret-wrong"]), /Not allowed/);
+  await assert.rejects(api.anon("select public.oc_sheet_feed($1)", [""]), /Not allowed/);
+  await assert.rejects(api.anon("select public.oc_sheet_feed(null)"), /Not allowed/);
+  const feed = (await api.anon("select public.oc_sheet_feed($1) as result", [secret]))[0].result;
+  await api.sql("delete from oc_private where key = 'sheet_token'");
+  await assert.rejects(api.anon("select public.oc_sheet_feed($1)", [secret]), /Not allowed/, "deleting the secret cuts the sheet off");
   assert.deepEqual(Object.keys(feed).sort(), ["Participants", "Payments", "Summary", "Teams"]);
   for (const [tab, rows] of Object.entries(feed)) {
     assert.ok(rows.every((row) => row.length === rows[0].length), `${tab}: every row is as wide as its headings`);

@@ -21,14 +21,3 @@ export function siteUrl(list: string | undefined, origin: string | null): string
   const match = origin && allowed.find((url) => url === origin || url.startsWith(origin + "/"));
   return match || allowed[0];
 }
-
-// Does the request carry the shared secret? Used by the Google Sheet feed, which
-// has no signed-in person. Short or missing secrets are refused outright.
-export function hasToken(header: string | null, expected: string | undefined): boolean {
-  if (!expected || expected.length < 24 || !header) return false;
-  const given = header.replace(/^Bearer\s+/i, "");
-  if (given.length !== expected.length) return false;
-  let diff = 0;
-  for (let i = 0; i < given.length; i++) diff |= given.charCodeAt(i) ^ expected.charCodeAt(i);
-  return diff === 0;
-}

@@ -5,12 +5,16 @@
  * registration system and refreshes them every five minutes.
  *
  * Set-up (once): Extensions > Apps Script, paste this file, save, reload the
- * sheet, then use the menu  OPEN CITY > Connect.
+ * sheet, then use the menu  OPEN CITY > Connect  and paste the secret.
  *
  * These tabs are overwritten on every refresh, so don't type in them. Put your
  * own notes, charts and formulas on other tabs: they can read from these.
- * To change anything about a registration, use the organisers' dashboard.
+ * To change anything about a registration, use the admin dashboard.
  */
+
+// The registration database. Both values are public (they are in the website too).
+var PROJECT_URL = 'https://wrrrgsdazduiiwkuoubz.supabase.co';
+var PUBLIC_KEY = 'sb_publishable_J2IeD8u6MTqeJAb-sS4TRg_HAWRPn2A';
 
 var TABS = ['Summary', 'Participants', 'Teams', 'Payments'];
 
@@ -22,22 +26,16 @@ function onOpen() {
     .addToUi();
 }
 
-/** Asks for the feed address and secret, stores them out of sight, starts the timer. */
+/** Asks for the secret, stores it out of sight (not in any cell), starts the timer. */
 function connect() {
   var ui = SpreadsheetApp.getUi();
-  var url = ui.prompt('Feed address', 'https://YOUR-PROJECT.supabase.co/functions/v1/oc-sheet', ui.ButtonSet.OK_CANCEL);
-  if (url.getSelectedButton() !== ui.Button.OK) return;
-  var token = ui.prompt('Secret', 'The SHEET_TOKEN value. It is stored with the script, not in any cell.', ui.ButtonSet.OK_CANCEL);
-  if (token.getSelectedButton() !== ui.Button.OK) return;
+  var answer = ui.prompt('Connect to OPEN CITY registrations', 'Paste the secret for the Google Sheet:', ui.ButtonSet.OK_CANCEL);
+  if (answer.getSelectedButton() !== ui.Button.OK) return;
 
-  PropertiesService.getScriptProperties().setProperties({
-    OC_URL: url.getResponseText().trim(),
-    OC_TOKEN: token.getResponseText().trim()
-  });
-
+  PropertiesService.getScriptProperties().setProperty('OC_TOKEN', answer.getResponseText().trim());
   disconnect();
+  refresh();   // stops here with a message if the secret is wrong
   ScriptApp.newTrigger('refresh').timeBased().everyMinutes(5).create();
-  refresh();
   ui.alert('Connected. The tabs now refresh every five minutes.');
 }
 
@@ -48,14 +46,18 @@ function disconnect() {
 }
 
 function refresh() {
-  var props = PropertiesService.getScriptProperties();
-  var url = props.getProperty('OC_URL');
-  var token = props.getProperty('OC_TOKEN');
-  if (!url || !token) throw new Error('Not connected yet. Use OPEN CITY > Connect.');
+  var token = PropertiesService.getScriptProperties().getProperty('OC_TOKEN');
+  if (!token) throw new Error('Not connected yet. Use OPEN CITY > Connect.');
 
-  var response = UrlFetchApp.fetch(url, { headers: { Authorization: 'Bearer ' + token }, muteHttpExceptions: true });
+  var response = UrlFetchApp.fetch(PROJECT_URL + '/rest/v1/rpc/oc_sheet_feed', {
+    method: 'post',
+    contentType: 'application/json',
+    headers: { apikey: PUBLIC_KEY },
+    payload: JSON.stringify({ p_token: token }),
+    muteHttpExceptions: true
+  });
   if (response.getResponseCode() !== 200) {
-    throw new Error('The registration system answered ' + response.getResponseCode() + '. Check the address and secret.');
+    throw new Error('Could not read the registrations (' + response.getResponseCode() + '). Check the secret with OPEN CITY > Connect.');
   }
   var data = JSON.parse(response.getContentText());
   var book = SpreadsheetApp.getActiveSpreadsheet();
@@ -70,7 +72,7 @@ function refresh() {
     sheet.setFrozenRows(1);
   });
 
-  var stamp = Utilities.formatDate(new Date(), 'Australia/Melbourne', "d MMM yyyy, h:mm a");
+  var stamp = Utilities.formatDate(new Date(), 'Australia/Melbourne', 'd MMM yyyy, h:mm a');
   book.getSheetByName('Summary').getRange(1, 4, 1, 2).setValues([['Last updated', stamp]]);
 }
 

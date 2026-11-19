@@ -1202,7 +1202,7 @@ end $$;
 
 -- ------------------------------------------------------ Google Sheet feed --
 -- Everything the DES spreadsheet shows, as ready-made rows (first row = headings).
--- Called only by the oc-sheet function. Anonymous judging codes are left out
+-- Reached only through oc_sheet_feed (next migration file). Anonymous judging codes are left out
 -- on purpose: the link between codes and teams stays in the dashboard.
 
 create function public.oc_sheet_export() returns jsonb

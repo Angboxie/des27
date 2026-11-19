@@ -10,7 +10,3 @@ verify_jwt = true
 
 [functions.oc-mail]
 verify_jwt = true
-
-# Called by the DES Google Sheet, which sends a shared secret (SHEET_TOKEN) instead
-[functions.oc-sheet]
-verify_jwt = false

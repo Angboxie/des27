@@ -36,7 +36,8 @@ You need three free accounts. Do everything in Stripe's **test mode** first.
 
 1. Create a project at supabase.com. Choose the Sydney region.
 2. Open the SQL editor, paste in the whole of
-   `migrations/20261119000000_open_city.sql`, and run it once.
+   `migrations/20261119000000_open_city.sql`, and run it once. (The second file in
+   that folder is for the Google Sheet, below.)
 3. Add the organisers (lower-case email addresses), in the SQL editor:
 
    ```sql
@@ -112,12 +113,11 @@ The sheet is a live, read-only copy of the registrations: tabs for Summary,
 Participants, Teams and Payments (one row per entry, showing who paid and who
 each entry covers), refreshed every five minutes.
 
-1. Put a long random value in `SHEET_TOKEN` in `supabase/.env` and run the
-   `secrets set` command again (step 4).
+1. In Supabase's SQL editor, paste in `migrations/20261119010000_sheet_feed.sql` and
+   run it. The result is one line: the secret for the sheet. Copy it.
 2. In the Google Sheet: Extensions > Apps Script. Paste in
    `google-sheet/Code.gs`, save, and reload the sheet.
-3. Use the new menu **OPEN CITY > Connect**. Give it the address
-   `https://YOUR-PROJECT.supabase.co/functions/v1/oc-sheet` and the `SHEET_TOKEN` value.
+3. Use the new menu **OPEN CITY > Connect** and paste the secret.
 
 Those four tabs are overwritten on each refresh, so keep your own notes, charts
 and formulas on other tabs. Changes are made in the dashboard, not the sheet.
