@@ -38,7 +38,9 @@ window.OC = (() => {
     if (error) {
       if (error.code === "P0001") throw new Error(error.message);
       console.error(fn, error);
-      throw new Error("Something went wrong. Please try again, or email DES if it keeps happening.");
+      // keep the technical reason visible: it is what DES needs to fix the problem
+      const reason = [fn, error.code, error.status, String(error.message || "").slice(0, 200)].filter(Boolean).join(" | ");
+      throw new Error("Something went wrong. Please try again, or email DES if it keeps happening. (Details for DES: " + reason + ")");
     }
     return data;
   }
