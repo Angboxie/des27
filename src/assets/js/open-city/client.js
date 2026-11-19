@@ -49,7 +49,7 @@ window.OC = (() => {
 
   async function signIn(email) {
     const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin + window.location.pathname } });
-    if (error) throw new Error(error.status === 429 ? "Too many sign-in emails just now. Please wait a minute and try again." : "Couldn't send the sign-in email. Check the address and try again.");
+    if (error) throw new Error(error.status === 429 ? "Too many emails just now. Please wait a minute and try again." : "Couldn't send the email. Check the address and try again.");
   }
 
   const signInCard = (heading, intro) => `
@@ -60,9 +60,9 @@ window.OC = (() => {
         <span>Email address</span>
         <input type="email" name="email" required autocomplete="email" inputmode="email" placeholder="you@student.unimelb.edu.au">
       </label>
-      <p class="oc-hint">We'll email you a sign-in link. No password needed. Use the same address every time: it's how your payment, registration and team are matched to you.</p>
+      <p class="oc-hint">No password or account to set up. Use the same email every time: it's how your payment, registration and team are matched to you.</p>
       <div class="oc-alert" data-alert hidden></div>
-      <button class="oc-btn" type="submit">Email me a sign-in link</button>
+      <button class="oc-btn" type="submit">Send me the link</button>
     </form>`;
 
   const notOpenCard = () => `

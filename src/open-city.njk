@@ -168,10 +168,10 @@ scripts:
   <div class="ev-featured__glow" aria-hidden="true"></div>
   <div class="des-container ol-final__inner">
     <h2 id="final-title" class="reveal"><span class="ev-featured__big">Ready to</span> <span class="script ev-featured__script">enter?</span></h2>
-    <p class="reveal" style="--delay: 100ms">{% if isOpen %}Sign up, pay your entry and the brief is yours.{% else %}{{ opencity.opensText }} Already have an entry? Sign in to your participant area.{% endif %}</p>
+    <p class="reveal" style="--delay: 100ms">{% if isOpen %}Sign up, pay your entry and the brief is yours.{% else %}{{ opencity.opensText }} Already started? Pick up where you left off.{% endif %}</p>
     <div class="ol-hero__actions reveal" style="--delay: 200ms">
       {{ registerButton() }}
-      <a class="ev-btn" href="{{ opencity.registerUrl }}">Sign in</a>
+      <a class="ev-btn" href="{{ opencity.registerUrl }}">Continue my entry</a>
     </div>
   </div>
 </section>

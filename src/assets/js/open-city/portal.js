@@ -182,7 +182,7 @@
                  <button class="oc-btn oc-btn--line" type="submit">${entry.assigned_email ? "Change" : "Assign"}</button>
                  <div class="oc-alert" data-alert hidden></div>
                </form>
-               ${entry.assigned_email ? `<small>Waiting for ${esc(entry.assigned_email)} to sign in with that address. Clear the box and press Change to take it back.</small>` : ""}</li>`).join("")}
+               ${entry.assigned_email ? `<small>Waiting for ${esc(entry.assigned_email)} to open their link with that address. Clear the box and press Change to take it back.</small>` : ""}</li>`).join("")}
         </ul>
       </div>`;
 
@@ -426,7 +426,7 @@
       window.OC.setBusy(form, true);
       try {
         await window.OC.signIn(email);
-        form.innerHTML = `<h2>Check your inbox</h2><p>We've sent a sign-in link to <strong>${esc(email)}</strong>. Open it on this device to continue. It can take a minute to arrive; check spam too.</p>`;
+        form.innerHTML = `<h2>Check your inbox</h2><p>We've sent a link to <strong>${esc(email)}</strong>. Open it on this device to continue. It can take a minute to arrive; check spam too.</p>`;
       } catch (error) {
         window.OC.setBusy(form, false);
         window.OC.alertIn(form, error.message);
@@ -573,7 +573,7 @@
     const params = new URLSearchParams(window.location.search);
     const { data } = await sb.auth.getSession();
     if (!data.session) {
-      app.innerHTML = window.OC.signInCard("Sign in to register", "Register for OPEN CITY 2027, pay for your entry, set up your team and read the full brief, all from this page.");
+      app.innerHTML = window.OC.signInCard("Start with your email", "Entering OPEN CITY 2027? Pop in your email and we'll send you a link. Open it and you can register, pay and set up your team. Already started? The same link takes you back to where you left off.");
       return;
     }
 
