@@ -49,7 +49,7 @@ window.OC = (() => {
 
   async function signIn(email) {
     const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin + window.location.pathname } });
-    if (error) throw new Error(error.status === 429 ? "Too many emails just now. Please wait a minute and try again." : "Couldn't send the email. Check the address and try again.");
+    if (error) throw new Error(error.status === 429 ? "Too many requests at the moment. Please try again in a few minutes." : "Couldn't send the email. Check the address and try again.");
   }
 
   const signInCard = (heading, intro) => `
