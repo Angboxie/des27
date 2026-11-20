@@ -903,3 +903,27 @@
   .oc-steps li { flex: 0 0 auto; }
   .oc-steps li.is-shown { flex: 1 1 auto; }
 }
+
+
+/* ---------- Payment summary ---------- */
+
+.oc-facts--boxed {
+  padding: 1rem 1.1rem;
+  background: #f6f7fd;
+  border-radius: 0.6rem;
+}
+
+.oc-facts--boxed dd { font-size: 1.15rem; }
+.oc-facts--boxed dd small { font-size: 0.8rem; }
+
+.oc-more { margin-top: 0.5rem; }
+
+.oc-more summary {
+  font-weight: 600;
+  color: var(--des-blue-deep);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.oc-more[open] summary { margin-bottom: 0.9rem; }

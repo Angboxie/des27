@@ -151,24 +151,68 @@
 
   function paymentSection() {
     const price = Number(me.settings.price_cents);
-    const spare = me.purchases.flatMap((pay) => (pay.entries || []).filter((e) => e.status === "valid" && !e.mine).map((e) => ({ ...e, payment: pay })));
+    const team = me.team && !me.team.solo ? me.team : null;
+    const bought = me.purchases.flatMap((pay) => (pay.entries || []).filter((e) => e.status === "valid").map((e) => ({ ...e, payment: pay })));
+    const spare = bought.filter((e) => !e.mine);
+    const unassigned = spare.filter((e) => !e.claimed && !e.assigned_email).length;
     const troubled = me.purchases.filter((pay) => pay.status !== "paid");
+    const totalPaid = me.purchases.reduce((sum, pay) => sum + Number(pay.amount_cents || 0) - (pay.status === "refunded" ? Number(pay.amount_cents || 0) : 0), 0);
+
+    // How many entries are still needed: for a team, its unpaid members; otherwise just your own
+    const unpaid = team ? team.members.filter((m) => !m.paid) : [];
+    const needed = team ? Math.max(0, unpaid.length - unassigned) : (me.paid ? 0 : 1);
+    // nobody needs more than three entries in total (a full team)
+    const boughtByOther = me.paid && !bought.some((e) => e.mine) ? 1 : 0;
+    const cap = Math.max(0, 3 - bought.length - boughtByOther);
 
     const status = me.paid
       ? `<p class="oc-good">Your entry is paid and verified${me.entry && me.entry.bought_by !== me.email ? ` (paid for by ${esc(me.entry.bought_by)})` : ""}.</p>`
-      : `<p>You don't have a paid entry yet. One entry is <strong>${esc(money(price))}</strong> per person.</p>`;
+      : `<p>You do not have a paid entry yet. One entry is <strong>${esc(money(price))}</strong> per person.</p>`;
 
-    const buy = !me.settings.registration_open ? `<p class="oc-hint">${esc(config.opens)}</p>` : `
+    const summary = !me.purchases.length && !team ? "" : `
+      <dl class="oc-facts oc-facts--boxed">
+        ${me.purchases.length ? `
+          <div><dt>You have paid</dt><dd><strong>${esc(money(totalPaid))}</strong></dd></div>
+          <div><dt>Entries bought</dt><dd><strong>${bought.length}</strong>${unassigned ? ` <small>(${unassigned} not yet assigned)</small>` : ""}</dd></div>` : ""}
+        ${team ? `
+          <div><dt>Team members paid</dt><dd><strong>${team.members.length - unpaid.length} of ${team.members.length}</strong></dd></div>` : ""}
+        <div><dt>Still to pay</dt><dd><strong>${needed ? `${needed} ${needed === 1 ? "entry" : "entries"} &middot; ${esc(money(price * needed))}` : "Nothing"}</strong></dd></div>
+      </dl>
+      ${team && unpaid.length ? `<p class="oc-hint">Without a paid entry: ${esc(unpaid.map((m) => (m.me ? "you" : m.name)).join(", "))}.${unassigned ? ` You have ${unassigned} unassigned ${unassigned === 1 ? "entry" : "entries"} below that can cover ${unassigned === 1 ? "one of them" : "them"}.` : ""}</p>` : ""}`;
+
+    const history = !me.purchases.length ? "" : `
+      <div class="oc-sub">
+        <h3>Your payments</h3>
+        <ul class="oc-list">
+          ${me.purchases.map((pay) => `<li>
+            <span><strong>${esc(money(pay.amount_cents))}</strong><small>${esc(window.OC.date(pay.created_at))} &middot; ${pay.quantity} ${pay.quantity === 1 ? "entry" : "entries"}</small></span>
+            <span class="oc-pill oc-pill--${pay.status === "paid" ? "ok" : "hold"}">${esc(pay.status.replace("_", " "))}</span>
+          </li>`).join("")}
+        </ul>
+      </div>`;
+
+    const options = Array.from({ length: cap }, (_, i) => i + 1);
+    const preselect = Math.min(Math.max(needed, 1), cap);
+    const buyForm = `
       <form class="oc-buy" data-form="buy">
-        <label class="oc-field"><span>${me.paid ? "Buy entries for teammates" : "Entries"}</span>
+        <label class="oc-field"><span>${me.paid ? "Entries for teammates" : "Entries"}</span>
           <select name="quantity">
-            ${[1, 2, 3].map((n) => `<option value="${n}">${n} ${n === 1 ? "entry" : "entries"} &middot; ${esc(money(price * n))}</option>`).join("")}
+            ${options.map((n) => `<option value="${n}"${n === preselect ? " selected" : ""}>${n} ${n === 1 ? "entry" : "entries"} &middot; ${esc(money(price * n))}${team && n === needed ? " (what your team still needs)" : ""}</option>`).join("")}
           </select>
         </label>
-        <button class="oc-btn" type="submit">${me.paid ? "Buy more entries" : "Pay now"}</button>
-        <p class="oc-hint">Paying for friends? Buy up to three, then say who each one is for. Buying entries together doesn't put you in a team: that's the next step.</p>
+        <button class="oc-btn" type="submit">${me.paid ? "Buy entries" : "Pay now"}</button>
+        <p class="oc-hint">You may pay for teammates: buy up to three entries in total, then assign each one by email. Buying entries does not create a team; that is the next step.</p>
         <div class="oc-alert" data-alert hidden></div>
       </form>`;
+
+    const buy = !me.settings.registration_open ? `<p class="oc-hint">${esc(config.opens)}</p>`
+      : cap === 0 ? `<p class="oc-hint">You have bought three entries, the most one team can use.</p>`
+      : needed === 0 && me.paid ? `
+        <details class="oc-more">
+          <summary>Buy an entry for someone else</summary>
+          ${buyForm}
+        </details>`
+      : buyForm;
 
     const spareList = !spare.length ? "" : `
       <div class="oc-sub">
@@ -190,9 +234,11 @@
       <section class="oc-card" id="payment">
         <div class="oc-card__head"><h2>Payment</h2>${me.paid ? `<span class="oc-pill oc-pill--ok">Verified</span>` : `<span class="oc-pill oc-pill--wait">Not paid</span>`}</div>
         ${status}
-        ${troubled.map((pay) => `<p class="oc-alert" data-tone="bad">A payment of ${esc(money(pay.amount_cents))} was ${esc(pay.status.replace("_", " "))}. Email DES if this wasn't expected.</p>`).join("")}
+        ${summary}
+        ${troubled.map((pay) => `<p class="oc-alert" data-tone="bad">A payment of ${esc(money(pay.amount_cents))} was ${esc(pay.status.replace("_", " "))}. Email DES if this was not expected.</p>`).join("")}
         ${buy}
         ${spareList}
+        ${history}
       </section>`;
   }
 
