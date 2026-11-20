@@ -19,7 +19,7 @@ const PATHS: Record<string, string> = {
 const TEMPLATES: Record<string, (d: Data) => Draft> = {
   registration_received: (d) => ({
     subject: "OPEN CITY 2027: registration received",
-    body: [`Hi ${s(d.name)},`, "Thanks for registering for DES OPEN CITY 2027. We've got your details.", PATHS[s(d.path)] || "",
+    body: [`Dear ${s(d.name)},`, "Thank you for registering for DES OPEN CITY 2027. Your details have been received.", PATHS[s(d.path)] || "",
       "Every participant needs their own paid entry. If you haven't paid yet, you can do it from your OPEN CITY page."],
   }),
   payment_confirmation: (d) => ({
@@ -32,7 +32,7 @@ const TEMPLATES: Record<string, (d: Data) => Draft> = {
   entry_assigned: (d) => ({
     subject: "OPEN CITY 2027: your entry has been paid for",
     body: [`${s(d.from)} has paid for your OPEN CITY 2027 entry.`,
-      "Sign in with this email address to complete your registration and unlock the full brief."],
+      "Open the registration page and enter this email address to complete your registration and access the full brief."],
   }),
   team_created: (d) => ({
     subject: `OPEN CITY 2027: team "${s(d.team)}" registered`,
@@ -41,10 +41,10 @@ const TEMPLATES: Record<string, (d: Data) => Draft> = {
       "The team is approved automatically once every member has confirmed, completed their registration and has a paid entry. You can follow progress on your OPEN CITY page."],
   }),
   team_invite: (d) => ({
-    subject: `OPEN CITY 2027: ${s(d.leader)} invited you to team "${s(d.team)}"`,
-    body: [`Hi ${s(d.name)},`, `${s(d.leader)} has listed you as a member of team "${s(d.team)}" (Team ID ${s(d.code)}) for DES OPEN CITY 2027.`,
-      "To confirm, sign in with this email address, complete your own registration and accept the invitation. If this isn't right, you can decline it there.",
-      "Every member needs their own paid entry."],
+    subject: `DES OPEN CITY 2027: ${s(d.leader)} has invited you to join team "${s(d.team)}"`,
+    body: [`Dear ${s(d.name)},`, `${s(d.leader)} has invited you to join team "${s(d.team)}" (Team ID ${s(d.code)}) for DES OPEN CITY 2027.`,
+      "To respond, open the registration page using the button below and enter this email address. You will be asked to complete your own registration, after which you can accept or decline the invitation.",
+      "Each team member requires their own paid entry."],
   }),
   invite_accepted: (d) => ({
     subject: `OPEN CITY 2027: ${s(d.member)} joined "${s(d.team)}"`,
@@ -95,7 +95,7 @@ const TEMPLATES: Record<string, (d: Data) => Draft> = {
   }),
   reminder_no_team: (d) => ({
     subject: "OPEN CITY 2027: your entry isn't complete yet",
-    body: [`Hi ${s(d.name)},`, "You're registered for OPEN CITY 2027 but not yet part of an entry.",
+    body: [`Dear ${s(d.name)},`, "You're registered for OPEN CITY 2027 but not yet part of an entry.",
       d.paid ? "" : "You also still need a paid entry.",
       "Create a team, accept an invitation, or switch to entering individually from your OPEN CITY page."],
   }),
@@ -115,11 +115,11 @@ export function renderEmail(template: string, data: Data, portalUrl: string): Om
   const body = draft.body.filter(Boolean);
   const footer = "DES OPEN CITY 2027 · Design Student Society, University of Melbourne";
 
-  const text = [...body, "", `Your OPEN CITY page: ${portalUrl}`, "", footer].join("\n");
+  const text = [...body, "", `Registration page: ${portalUrl}`, "", footer].join("\n");
   const html =
     `<div style="font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.5;color:#0d0d0d;max-width:34em">` +
     body.map((line) => `<p>${escapeHtml(line)}</p>`).join("") +
-    `<p><a href="${escapeHtml(portalUrl)}" style="display:inline-block;padding:12px 22px;background:#d8f26d;color:#0d0d0d;border:2px solid #0d0d0d;border-radius:8px;text-decoration:none;font-weight:bold">Open your OPEN CITY page</a></p>` +
+    `<p><a href="${escapeHtml(portalUrl)}" style="display:inline-block;padding:12px 22px;background:#d8f26d;color:#0d0d0d;border:2px solid #0d0d0d;border-radius:8px;text-decoration:none;font-weight:bold">Open the registration page</a></p>` +
     `<p style="font-size:13px;color:#5f5f5f">${escapeHtml(footer)}</p></div>`;
   return { subject: draft.subject, text, html };
 }

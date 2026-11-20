@@ -130,7 +130,7 @@ test("every email the database can queue has wording, and the queue is sent once
   assert.ok(queued.length >= 12);
 
   const invite = renderEmail("team_invite", { name: "<b>Olivia</b>", team: "Urban Futures", code: "OC27-ABCDE", leader: "Alex" }, "https://des.example/open-city/");
-  assert.match(invite.subject, /Alex invited you to team "Urban Futures"/);
+  assert.match(invite.subject, /Alex has invited you to join team "Urban Futures"/);
   assert.ok(invite.html.includes("&lt;b&gt;Olivia&lt;/b&gt;"), "names can't inject HTML into emails");
 
   const delivered = [];
