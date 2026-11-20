@@ -192,8 +192,9 @@
       reset.addEventListener("click", async () => {
         if (!window.confirm("Clear the demo and start over?")) return;
         setPerson("");
-        try { (await database).close(); } catch (e) { /* already closed */ }
-        await wipe();
+        // forgetting the stored version makes the next page load wipe the data
+        // before it opens the database (wiping here can be blocked while it is open)
+        try { localStorage.removeItem("oc-demo-schema"); } catch (e) { /* private mode */ }
         window.location.assign(linkTo("portal"));
       });
     }
