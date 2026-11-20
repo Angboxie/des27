@@ -307,7 +307,7 @@
             <li><strong>The leader registers the team</strong> below. Everyone else receives an invitation and accepts it on their own page.</li>
           </ol>
           ${finder ? `<p><a class="oc-btn" href="${esc(finder)}" target="_blank" rel="noopener">Open the Discord team-finder</a></p>` : ""}
-          <details class="oc-more"><summary>I have a team and I am its leader: register it</summary>`
+          <details class="oc-more"><summary>Register a team (team leader only)</summary>`
         : `<p><strong>Only the team leader fills this in.</strong> Everyone else receives an invitation by email and accepts it on their own page.</p>`}
         <form data-form="create-team">
           <div class="oc-grid">

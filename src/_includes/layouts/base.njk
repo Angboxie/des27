@@ -7,8 +7,9 @@
   <meta name="description" content="{{ description or site.description }}">
   {% if noindex %}<meta name="robots" content="noindex, nofollow">{% endif %}
 
-  <!-- TODO: swap for the real favicon once branding is ready -->
-  <link rel="icon" href="data:,">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/assets/images/favicon-512.png">
+  <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
 
   {% if theme == "des27" %}
     <meta name="theme-color" content="#f7f5f1">
