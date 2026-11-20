@@ -1,4 +1,4 @@
-// Starts a Stripe Checkout for 1 to 3 OPEN CITY entries.
+// Starts a Stripe Checkout for the signed-in person's own OPEN CITY entry.
 // The price comes from the database (oc_settings), never from the browser.
 
 import { cors, json } from "../_shared/http.ts";
@@ -17,8 +17,9 @@ Deno.serve(async (request) => {
 
     const body = await request.json().catch(() => ({}));
     const quantity = Number(body.quantity);
-    if (!Number.isInteger(quantity) || quantity < 1 || quantity > 3) {
-      return json({ error: "You can buy one, two or three entries at a time." }, 400);
+    // each participant pays for their own entry
+    if (quantity !== 1) {
+      return json({ error: "Each participant pays for one entry." }, 400);
     }
 
     const rpc = serviceRpc();
@@ -28,6 +29,10 @@ Deno.serve(async (request) => {
     const unitAmount = Number(await rpc("oc_setting", { p_key: "price_cents" }));
     const currency = String((await rpc("oc_setting", { p_key: "currency" })) || "aud");
     if (!Number.isInteger(unitAmount) || unitAmount < 100) throw new Error("price_cents is not set");
+
+    if (await rpc("oc_email_paid", { p_email: user.email })) {
+      return json({ error: "You already have a paid entry." }, 400);
+    }
 
     const back = portalUrl(request.headers.get("Origin"));
     const session = await createCheckoutSession({

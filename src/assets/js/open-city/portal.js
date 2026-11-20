@@ -25,9 +25,9 @@
     const p = me.participant;
     const team = me.team;
     if (!p) return ["Complete your registration", "Tell us who you are and how you're taking part. It takes about two minutes.", "#registration"];
-    if (!me.paid) return ["Pay for your entry", "Every participant needs their own paid entry. If someone is paying for you, ask them to assign an entry to " + me.email + ".", "#payment"];
+    if (!me.paid) return ["Pay for your entry", "Each participant pays for their own entry. The full brief and the Discord are available once payment is confirmed.", "#payment"];
     if (!team && me.invitations.length) return ["Answer your team invitation", `You've been invited to "${me.invitations[0].team}". Accept or decline below.`, "#team"];
-    if (!team && p.path === "looking") return ["Find your teammates", "Use the team-finder on the DES Discord (link below). When you've found a team, its leader registers it and invites you here. You won't need to register again.", "#discord"];
+    if (!team && p.path === "looking") return ["Find your teammates", "Join the DES Discord and use the team-finder. Once you have a team, one member registers it here and invites the others. You will not need to register again.", "#discord"];
     if (!team) return ["Set up your team", "If you're the team leader, register the team now. Otherwise wait for your leader's invitation: it will appear here.", "#team"];
 
     const waitingOn = (test) => team.members.filter(test).map((m) => (m.me ? "you" : m.name)).join(", ");
@@ -149,74 +149,39 @@
       </form>`;
   }
 
+  // Each participant pays for their own entry. (Entries bought for other
+  // people before this rule, or granted by DES, are still listed so they can be assigned.)
   function paymentSection() {
     const price = Number(me.settings.price_cents);
     const team = me.team && !me.team.solo ? me.team : null;
-    const bought = me.purchases.flatMap((pay) => (pay.entries || []).filter((e) => e.status === "valid").map((e) => ({ ...e, payment: pay })));
-    const spare = bought.filter((e) => !e.mine);
-    const unassigned = spare.filter((e) => !e.claimed && !e.assigned_email).length;
+    const spare = me.purchases.flatMap((pay) => (pay.entries || []).filter((e) => e.status === "valid" && !e.mine));
     const troubled = me.purchases.filter((pay) => pay.status !== "paid");
-    const totalPaid = me.purchases.reduce((sum, pay) => sum + Number(pay.amount_cents || 0) - (pay.status === "refunded" ? Number(pay.amount_cents || 0) : 0), 0);
-
-    // How many entries are still needed: for a team, its unpaid members; otherwise just your own
     const unpaid = team ? team.members.filter((m) => !m.paid) : [];
-    const needed = team ? Math.max(0, unpaid.length - unassigned) : (me.paid ? 0 : 1);
-    // nobody needs more than three entries in total (a full team)
-    const boughtByOther = me.paid && !bought.some((e) => e.mine) ? 1 : 0;
-    const cap = Math.max(0, 3 - bought.length - boughtByOther);
 
     const status = me.paid
       ? `<p class="oc-good">Your entry is paid and verified${me.entry && me.entry.bought_by !== me.email ? ` (paid for by ${esc(me.entry.bought_by)})` : ""}.</p>`
-      : `<p>You do not have a paid entry yet. One entry is <strong>${esc(money(price))}</strong> per person.</p>`;
+      : `<p>The entry fee is <strong>${esc(money(price))}</strong> per participant. Each participant pays for their own entry.</p>`;
 
-    const summary = !me.purchases.length && !team ? "" : `
-      <dl class="oc-facts oc-facts--boxed">
-        ${me.purchases.length ? `
-          <div><dt>You have paid</dt><dd><strong>${esc(money(totalPaid))}</strong></dd></div>
-          <div><dt>Entries bought</dt><dd><strong>${bought.length}</strong>${unassigned ? ` <small>(${unassigned} not yet assigned)</small>` : ""}</dd></div>` : ""}
-        ${team ? `
-          <div><dt>Team members paid</dt><dd><strong>${team.members.length - unpaid.length} of ${team.members.length}</strong></dd></div>` : ""}
-        <div><dt>Still to pay</dt><dd><strong>${needed ? `${needed} ${needed === 1 ? "entry" : "entries"} &middot; ${esc(money(price * needed))}` : "Nothing"}</strong></dd></div>
-      </dl>
-      ${team && unpaid.length ? `<p class="oc-hint">Without a paid entry: ${esc(unpaid.map((m) => (m.me ? "you" : m.name)).join(", "))}.${unassigned ? ` You have ${unassigned} unassigned ${unassigned === 1 ? "entry" : "entries"} below that can cover ${unassigned === 1 ? "one of them" : "them"}.` : ""}</p>` : ""}`;
-
-    const history = !me.purchases.length ? "" : `
-      <div class="oc-sub">
-        <h3>Your payments</h3>
-        <ul class="oc-list">
-          ${me.purchases.map((pay) => `<li>
-            <span><strong>${esc(money(pay.amount_cents))}</strong><small>${esc(window.OC.date(pay.created_at))} &middot; ${pay.quantity} ${pay.quantity === 1 ? "entry" : "entries"}</small></span>
-            <span class="oc-pill oc-pill--${pay.status === "paid" ? "ok" : "hold"}">${esc(pay.status.replace("_", " "))}</span>
-          </li>`).join("")}
-        </ul>
-      </div>`;
-
-    const options = Array.from({ length: cap }, (_, i) => i + 1);
-    const preselect = Math.min(Math.max(needed, 1), cap);
-    const buyForm = `
+    const buy = me.paid ? ""
+      : !me.settings.registration_open ? `<p class="oc-hint">${esc(config.opens)}</p>`
+      : `
       <form class="oc-buy" data-form="buy">
-        <label class="oc-field"><span>${me.paid ? "Entries for teammates" : "Entries"}</span>
-          <select name="quantity">
-            ${options.map((n) => `<option value="${n}"${n === preselect ? " selected" : ""}>${n} ${n === 1 ? "entry" : "entries"} &middot; ${esc(money(price * n))}${team && n === needed ? " (what your team still needs)" : ""}</option>`).join("")}
-          </select>
-        </label>
-        <button class="oc-btn" type="submit">${me.paid ? "Buy entries" : "Pay now"}</button>
-        <p class="oc-hint">You may pay for teammates: buy up to three entries in total, then assign each one by email. Buying entries does not create a team; that is the next step.</p>
+        <input type="hidden" name="quantity" value="1">
+        <button class="oc-btn" type="submit">Pay ${esc(money(price))}</button>
+        <p class="oc-hint">Payment is taken securely by Stripe. You will return to this page afterwards.</p>
         <div class="oc-alert" data-alert hidden></div>
       </form>`;
 
-    const buy = !me.settings.registration_open ? `<p class="oc-hint">${esc(config.opens)}</p>`
-      : cap === 0 ? `<p class="oc-hint">You have bought three entries, the most one team can use.</p>`
-      : needed === 0 && me.paid ? `
-        <details class="oc-more">
-          <summary>Buy an entry for someone else</summary>
-          ${buyForm}
-        </details>`
-      : buyForm;
+    const teamStatus = !team ? "" : `
+      <dl class="oc-facts oc-facts--boxed">
+        <div><dt>Team members paid</dt><dd><strong>${team.members.length - unpaid.length} of ${team.members.length}</strong></dd></div>
+        <div><dt>Still to pay</dt><dd><strong>${unpaid.length ? esc(unpaid.map((m) => (m.me ? "You" : m.name)).join(", ")) : "No one"}</strong></dd></div>
+      </dl>
+      ${unpaid.some((m) => !m.me) ? `<p class="oc-hint">Each member pays from their own registration page. The team is confirmed once everyone has paid.</p>` : ""}`;
 
     const spareList = !spare.length ? "" : `
       <div class="oc-sub">
-        <h3>Entries you bought for other people</h3>
+        <h3>Entries you hold for other people</h3>
         <ul class="oc-list">
           ${spare.map((entry) => entry.claimed
             ? `<li><span><strong>${esc(entry.name || entry.assigned_email)}</strong><small>${entry.name ? esc(entry.assigned_email || "") + " &middot; " : ""}in use</small></span></li>`
@@ -225,8 +190,18 @@
                    <input type="email" name="email" placeholder="their email address" value="${esc(entry.assigned_email)}" ${entry.assigned_email ? "" : "required"}></label>
                  <button class="oc-btn oc-btn--line" type="submit">${entry.assigned_email ? "Change" : "Assign"}</button>
                  <div class="oc-alert" data-alert hidden></div>
-               </form>
-               ${entry.assigned_email ? `<small>Waiting for ${esc(entry.assigned_email)} to open their link with that address. Clear the box and press Change to take it back.</small>` : ""}</li>`).join("")}
+               </form></li>`).join("")}
+        </ul>
+      </div>`;
+
+    const history = !me.purchases.length ? "" : `
+      <div class="oc-sub">
+        <h3>Your payments</h3>
+        <ul class="oc-list">
+          ${me.purchases.map((pay) => `<li>
+            <span><strong>${esc(money(pay.amount_cents))}</strong><small>${esc(window.OC.date(pay.created_at))}</small></span>
+            <span class="oc-pill oc-pill--${pay.status === "paid" ? "ok" : "hold"}">${esc(pay.status.replace("_", " "))}</span>
+          </li>`).join("")}
         </ul>
       </div>`;
 
@@ -234,9 +209,9 @@
       <section class="oc-card" id="payment">
         <div class="oc-card__head"><h2>Payment</h2>${me.paid ? `<span class="oc-pill oc-pill--ok">Verified</span>` : `<span class="oc-pill oc-pill--wait">Not paid</span>`}</div>
         ${status}
-        ${summary}
         ${troubled.map((pay) => `<p class="oc-alert" data-tone="bad">A payment of ${esc(money(pay.amount_cents))} was ${esc(pay.status.replace("_", " "))}. Email DES if this was not expected.</p>`).join("")}
         ${buy}
+        ${teamStatus}
         ${spareList}
         ${history}
       </section>`;
@@ -322,10 +297,18 @@
     } else if (!open) {
       body = `<p>Team changes are closed. Email DES at ${esc(config.contact)} if something needs fixing.</p>`;
     } else {
+      const looking = p.path === "looking";
+      const finder = [me.settings.team_finder_url, me.settings.discord_invite].find((url) => /^https:\/\//.test(url || ""));
       body = `
-        <p>${p.path === "looking"
-          ? "No team yet. Once you've found teammates, <strong>one of you</strong> (the leader) registers the team here and invites the others."
-          : "<strong>Only the team leader fills this in.</strong> Everyone else gets an invitation by email and accepts it on their own page."}</p>
+        ${looking ? `
+          <ol class="oc-howto">
+            <li><strong>Join the DES Discord</strong> and post in the team-finder to meet other entrants.</li>
+            <li><strong>Agree on a team</strong> of two or three, and choose one member as leader.</li>
+            <li><strong>The leader registers the team</strong> below. Everyone else receives an invitation and accepts it on their own page.</li>
+          </ol>
+          ${finder ? `<p><a class="oc-btn" href="${esc(finder)}" target="_blank" rel="noopener">Open the Discord team-finder</a></p>` : ""}
+          <details class="oc-more"><summary>I have a team and I am its leader: register it</summary>`
+        : `<p><strong>Only the team leader fills this in.</strong> Everyone else receives an invitation by email and accepts it on their own page.</p>`}
         <form data-form="create-team">
           <div class="oc-grid">
             <label class="oc-field"><span>Team name</span><input name="name" required minlength="2" maxlength="80"></label>
@@ -340,7 +323,8 @@
           <p class="oc-hint">Use the email address each teammate signs in with. They can only join by accepting from that address.</p>
           <div class="oc-alert" data-alert hidden></div>
           <button class="oc-btn" type="submit">Register team and send invitations</button>
-        </form>`;
+        </form>
+        ${looking ? "</details>" : ""}`;
     }
 
     return `
@@ -434,7 +418,6 @@
           <p>${esc(text)}</p>
         </div>`}
       ${body}
-      ${shown === 3 && me.paid && current === 3 && me.settings.registration_open ? `<p class="oc-hint oc-center">Paying for a teammate? <button class="oc-link" type="button" data-action="goto" data-step="2">Go back to Payment</button> to buy and assign entries.</p>` : ""}
       ${unlocked}
       ${teaser}`;
     if (moved) window.scrollTo({ top: 0 });

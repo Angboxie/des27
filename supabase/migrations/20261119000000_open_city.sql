@@ -1301,7 +1301,7 @@ grant execute on function
   public.oc_record_payment(text, text, uuid, text, int, int, text),
   public.oc_record_refund(text, int, boolean), public.oc_record_dispute(text),
   public.oc_outbox_take(int), public.oc_outbox_done(bigint, text),
-  public.oc_setting(text), public.oc_flag(text), public.oc_sheet_export()
+  public.oc_setting(text), public.oc_flag(text), public.oc_sheet_export(), public.oc_email_paid(text)
 to service_role;
 
 

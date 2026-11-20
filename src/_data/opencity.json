@@ -60,7 +60,7 @@
       },
       {
         "title": "Pay your entry",
-        "text": "Every participant needs their own paid entry. You can buy up to three at once and say who each is for."
+        "text": "Each participant pays for their own entry, securely by card."
       },
       {
         "title": "Unlock the brief",
@@ -68,7 +68,7 @@
       },
       {
         "title": "Solo or team",
-        "text": "Enter alone, register your team of two or three, or find teammates in the Discord team-finder and join later."
+        "text": "Enter alone, register your team of two or three, or find teammates in the Discord team-finder and form a team afterwards."
       },
       {
         "title": "Design and submit",
@@ -81,12 +81,12 @@
         "a": "No. You can enter individually, or in a team of two or three."
       },
       {
-        "q": "I don't have teammates yet. Can I still sign up?",
-        "a": "Yes. Sign up and pay as “looking for teammates”, then use the team-finder forum on the DES Discord. When you've found a team, its leader invites you. You won't need to register again."
+        "q": "I do not have teammates yet. Can I still register?",
+        "a": "Yes. Register and pay as “looking for teammates”, then use the team-finder on the DES Discord, which opens once your entry is paid. When you have a team, one member registers it and invites the others. You will not need to register again."
       },
       {
         "q": "Does one person pay for the whole team?",
-        "a": "Each member needs their own paid entry. One person can buy up to three entries and assign them by email, but buying together doesn't create the team: the team leader registers it and every member confirms."
+        "a": "No. Each member pays for their own entry from their own registration. The team leader then registers the team and each member confirms."
       },
       {
         "q": "Can I be in more than one team?",
