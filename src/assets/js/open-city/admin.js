@@ -381,6 +381,7 @@
     }
     try {
       await load();
+      sendMail();   // send any emails still waiting
     } catch (error) {
       app.innerHTML = `<div class="oc-card"><p class="oc-alert" data-tone="bad">${esc(error.message)}</p><p><a class="oc-btn oc-btn--line" href="${esc(window.OC.link("portal"))}">Go to my entry</a> <button class="oc-link" type="button" data-action="signout">Sign out</button></p></div>`;
     }

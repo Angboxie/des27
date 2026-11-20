@@ -625,6 +625,7 @@
 
     try {
       await refresh();
+      sendMail();   // send any emails still waiting, e.g. after a problem earlier
     } catch (error) {
       app.innerHTML = `<p class="oc-card oc-alert" data-tone="bad">${esc(error.message)}</p>`;
       return;
