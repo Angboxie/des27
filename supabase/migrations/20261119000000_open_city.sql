@@ -1316,3 +1316,34 @@ insert into public.oc_resources (kind, category, title, body, sort) values
   ('challenge',  'graphic',      'Graphic Design challenge', 'Placeholder: the Graphic Design challenge goes here.', 22),
   ('rules',      null,           'Rules and guidelines',     'Placeholder: the official rules and guidelines go here.', 30),
   ('submission', null,           'Submission requirements',  'Placeholder: what to submit, in what format, and by when.', 40);
+
+-- From the DES27 OPEN CITY judging framework: what entrants need to know
+insert into public.oc_resources (kind, category, title, body, sort)
+select 'rules', null, 'Judging and assessment criteria', $body$Entries are judged anonymously. Each submission is identified only by its submission code; judges do not see entrants' names or universities.
+
+Each category has a panel of four judges. Every judge scores every eligible entry out of 100 using the criteria below, and the four scores are averaged equally.
+
+Architecture (Category A)
+Response to the Brief & Site Context: 30
+Accessibility & Inclusion: 30
+Design Quality & Creativity: 25
+Communication & Presentation: 15
+
+UI/UX Design (Category B)
+Problem Understanding & User Research: 25
+Accessibility & Inclusion: 30
+UX Design Quality & Innovation: 30
+Communication & Presentation: 15
+
+Graphic Design (Category C)
+Response to the Brief & Research: 25
+Accessibility & Inclusion: 30
+Visual Design Quality & Creativity: 30
+Communication & Presentation: 15
+
+Round 1. Submissions close on Friday 29 January 2027. The four highest-ranked eligible entries in each category become finalists, announced on Monday 8 February 2027.
+
+Final Round. Finalists submit a developed proposal by Monday 1 March 2027 and present at the final exhibition on Friday 12 March 2027: five minutes to present, followed by three minutes of questions from the judges. Finalists are scored afresh out of 100 on the same criteria; Round 1 scores do not carry over. First, second and third place are awarded in each category.
+
+Questions may be asked on the competition Discord. Requests for assessment feedback are handled by DES. All dates are subject to final confirmation by DES.$body$, 35
+where not exists (select 1 from public.oc_resources where title = 'Judging and assessment criteria');
