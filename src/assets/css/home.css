@@ -748,6 +748,11 @@
   to { transform: translateX(-100%); }
 }
 
+/* each logo keeps its own width, so neighbours can never overlap */
+.hm-marquee__track li {
+  flex: none;
+}
+
 .hm-logo {
   display: block;
   transition: opacity 0.3s, scale 0.4s var(--ease-out);
@@ -756,6 +761,7 @@
 .hm-logo img {
   display: block;
   width: auto;
+  max-width: none;
   height: var(--h, 2.2rem);
 }
 
@@ -798,4 +804,16 @@
 
 @media (max-width: 47.99em) {
   .hm-logo img { height: calc(var(--h, 2.2rem) * 0.75); }
+}
+
+
+/* ---------- Our team ---------- */
+
+.hm-team {
+  padding-block: clamp(3rem, 7vw, 7rem);
+  background: var(--des-white);
+}
+
+.hm-team .hm-team__list {
+  margin-top: clamp(2rem, 4vw, 3.5rem);
 }

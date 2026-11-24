@@ -6,6 +6,7 @@ theme: des27
 styles:
   - /assets/css/events.css
   - /assets/css/home.css
+  - /assets/css/about.css
 scripts:
   - /assets/js/events.js
 ---
@@ -179,6 +180,30 @@ scripts:
 </section>
 
 
+{# ---------- Our team (everyone in _data/committee.json; add a "photo" path to replace the initials) ---------- #}
+<section class="hm-team" aria-labelledby="team-title">
+  <div class="des-container">
+    <h2 id="team-title" class="hm-sponsors__title reveal">Our <span>Team</span></h2>
+    <p class="hm-sponsors__intro reveal" style="--delay: 100ms">The committee running DES this year.</p>
+
+    <ul class="ab-committee hm-team__list">
+      {% for person in committee %}
+        {% set parts = person.name.split(" ") %}
+        <li class="ab-member reveal" style="--delay: {{ (loop.index0 % 4) * 70 }}ms">
+          <span class="ab-member__photo" aria-hidden="true">
+            {% if person.photo %}<img src="{{ person.photo }}" alt="" loading="lazy">{% else %}{{ parts[0][0] }}{{ parts[parts.length - 1][0] }}{% endif %}
+          </span>
+          <span class="ab-member__text">
+            <strong class="ab-member__name">{{ person.name }}</strong>
+            <span class="ab-member__role">{{ person.role }}</span>
+          </span>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+
 {# ---------- Sponsors ----------
    Logos come from _data/partners.json (images in assets/images/partners/).
    "logoHeight" (rem) evens out wide and compact logos so they look the same size.
@@ -195,7 +220,7 @@ scripts:
         {% for sponsor in partners %}
           <li>
             <a class="hm-logo" href="{{ sponsor.website }}" target="_blank" rel="noopener"{% if copy > 1 %} tabindex="-1"{% endif %} style="--h: {{ sponsor.logoHeight or 2.2 }}rem">
-              <img src="{{ sponsor.logo }}" alt="{{ sponsor.name if copy == 1 else '' }}" loading="lazy" draggable="false">
+              <img src="{{ sponsor.logo }}" alt="{{ sponsor.name if copy == 1 else '' }}" width="{{ sponsor.width }}" height="{{ sponsor.height }}" draggable="false">
             </a>
           </li>
         {% endfor %}
