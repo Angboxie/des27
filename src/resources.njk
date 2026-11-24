@@ -14,7 +14,6 @@ scripts:
 {% set heroTags = ["Cheat sheets", "templates", "reading lists", "&amp; handouts"] %}
 {% set heroIntro = ["Tools and guides", "to keep you going", "between events."] %}
 {% include "partials/des27-hero.njk" %}
-{% include "partials/learn-subnav.njk" %}
 
 <section class="ed-section ed-section--cream" aria-labelledby="toolkit-title">
   <div class="des-container">
@@ -129,7 +128,7 @@ scripts:
         </li>
       {% endfor %}
     </ul>
-    <p class="ed-empty" data-filter-empty hidden>No resources match those filters yet. Try clearing one, or <a href="/community/">ask the team</a>.</p>
+    <p class="ed-empty" data-filter-empty hidden>No resources match those filters yet. Try clearing one, or <a href="mailto:{{ site.join.email }}">ask the team</a>.</p>
   </div>
 </section>
 
@@ -140,7 +139,7 @@ scripts:
       <span class="ev-heading__script script">else?</span>
     </h2>
     <p class="reveal" style="--delay: 120ms">Tell the Education Team what would help,<br>and we'll make it.</p>
-    <a class="ev-btn reveal" data-magnetic style="--delay: 220ms" href="/community/">
+    <a class="ev-btn reveal" data-magnetic style="--delay: 220ms" href="mailto:{{ site.join.email }}?subject=Resource%20request">
       Ask the team
       <svg class="ev-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5" /></svg>
     </a>

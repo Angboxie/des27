@@ -47,12 +47,7 @@
     },
     {
       "label": "Learn",
-      "url": "/resources/",
-      "activeFor": [
-        "/resources/",
-        "/community/",
-        "/showcase/"
-      ]
+      "url": "/resources/"
     },
     {
       "label": "Locker Sales",
@@ -67,38 +62,6 @@
       "url": "/about/"
     }
   ],
-  "learnNav": [
-    {
-      "label": "Resources",
-      "url": "/resources/"
-    },
-    {
-      "label": "Community",
-      "url": "/community/"
-    },
-    {
-      "label": "Showcase",
-      "url": "/showcase/"
-    }
-  ],
-  "education": {
-    "_note": "Links for the Learn pages. Leave as null until ready - those buttons show as 'Coming soon'.",
-    "discordUrl": null,
-    "whatsappUrl": null,
-    "suggestionFormUrl": null,
-    "askQuestionEmail": null,
-    "poll": {
-      "question": "Which software masterclass do you need most for mid-sem review?",
-      "options": [
-        "Rhino",
-        "Grasshopper",
-        "Revit",
-        "Adobe Creative Cloud",
-        "Enscape/V-Ray"
-      ],
-      "url": null
-    }
-  },
   "des27Dock": [
     {
       "label": "Home",
@@ -113,12 +76,7 @@
     {
       "label": "Learn",
       "url": "/resources/",
-      "icon": "book",
-      "activeFor": [
-        "/resources/",
-        "/community/",
-        "/showcase/"
-      ]
+      "icon": "book"
     },
     {
       "label": "Lockers",
