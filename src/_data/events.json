@@ -82,6 +82,25 @@
     "placeholder": true
   },
   {
+    "id": "des-cruise-2027",
+    "title": "DES Cruise",
+    "headline": "DES",
+    "headlineAccent": "Cruise",
+    "date": "2027-03-12",
+    "location": null,
+    "summary": "The DES Cruise returns: an evening on the water with the Design Student Society.",
+    "description": "Details, including the boarding location, time and tickets, will be announced closer to the date.",
+    "image": "/assets/images/des-cruise-1.jpg",
+    "registration": {
+      "status": "coming-soon",
+      "url": null,
+      "deadline": null
+    },
+    "remindUrl": null,
+    "status": "upcoming",
+    "placeholder": false
+  },
+  {
     "id": "gray-puksand-studio-tour",
     "title": "Gray Puksand Studio Tour",
     "headline": "Gray Puksand",

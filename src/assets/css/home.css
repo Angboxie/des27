@@ -807,13 +807,215 @@
 }
 
 
-/* ---------- Our team ---------- */
+/* ---------- Our team ----------
+   A wall of name cards, pinned up slightly crooked. Each card straightens and
+   lifts when you point at it. Tiles cycle through blue, lime and white. */
 
 .hm-team {
+  position: relative;
+  isolation: isolate;
   padding-block: clamp(3rem, 7vw, 7rem);
+  overflow: hidden;
   background: var(--des-white);
 }
 
-.hm-team .hm-team__list {
-  margin-top: clamp(2rem, 4vw, 3.5rem);
+.hm-team__burst {
+  position: absolute;
+  z-index: -1;
+  top: clamp(0.5rem, 2vw, 2rem);
+  left: 50%;
+  width: min(74rem, 96vw);
+  height: clamp(9rem, 17vw, 16rem);
+  translate: -50% 0;
+  fill: #edf1ff;
+}
+
+/* the team video, framed like the cards and leaning the other way */
+.hm-team__film {
+  width: min(100%, 54rem);
+  margin: clamp(2.5rem, 5vw, 4.5rem) auto 0;
+  rotate: -1.2deg;
+  background: var(--des-ink);
+  border: clamp(2px, 0.22vw, 3px) solid var(--des-blue);
+  border-radius: clamp(0.8rem, 1.3vw, 1.2rem);
+  box-shadow: 0.6rem 0.7rem 0 var(--des-lime), 0.6rem 0.7rem 0 2px var(--des-ink);
+  overflow: hidden;
+  transition: rotate 0.6s var(--ease-out);
+}
+
+.hm-team__film:hover {
+  rotate: 0deg;
+}
+
+.hm-team__film video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 832 / 464;
+  object-fit: cover;
+}
+
+.hm-crew {
+  --gap: clamp(0.9rem, 1.8vw, 1.75rem);
+  --per-row: 6;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(1.75rem, 3vw, 2.75rem) var(--gap);
+  margin: clamp(2.5rem, 5vw, 4.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hm-crew__card {
+  flex: 0 0 calc((100% - (var(--per-row) - 1) * var(--gap)) / var(--per-row));
+  min-width: 0;
+  rotate: var(--tilt, 0deg);
+  transition: rotate 0.6s var(--ease-out), translate 0.6s var(--ease-out);
+}
+
+/* a different lean for each card, so the wall doesn't look ruled */
+.hm-crew__card:nth-child(4n + 1) { --tilt: -2.2deg; }
+.hm-crew__card:nth-child(4n + 2) { --tilt: 1.4deg; }
+.hm-crew__card:nth-child(4n + 3) { --tilt: -0.9deg; }
+.hm-crew__card:nth-child(4n + 4) { --tilt: 2deg; }
+
+.hm-crew__card:hover {
+  rotate: 0deg;
+  translate: 0 -0.5rem;
+}
+
+.hm-crew__tile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 5;
+  color: var(--des-on-blue);
+  background: var(--des-blue-surface);
+  background-blend-mode: soft-light, normal;
+  border: clamp(2px, 0.2vw, 3px) solid var(--des-blue);
+  border-radius: clamp(0.7rem, 1.1vw, 1rem);
+  box-shadow: 0.4rem 0.4rem 0 rgba(58, 79, 224, 0.16);
+  transition: box-shadow 0.6s var(--ease-out);
+}
+
+.hm-crew__card:nth-child(3n + 2) .hm-crew__tile {
+  color: var(--des-blue-deep);
+  background: var(--des-lime);
+  border-color: var(--des-ink);
+  box-shadow: 0.4rem 0.4rem 0 rgba(13, 13, 13, 0.14);
+}
+
+.hm-crew__card:nth-child(3n + 3) .hm-crew__tile {
+  color: var(--des-blue);
+  background: var(--des-white);
+}
+
+.hm-crew__card:hover .hm-crew__tile {
+  box-shadow: 0.7rem 0.9rem 0 rgba(58, 79, 224, 0.22);
+}
+
+.hm-crew__tile img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+/* on a photo the card number sits on a small dark tab so it stays readable */
+.hm-crew__tile:has(img) .hm-crew__num {
+  padding: 0.2em 0.5em;
+  color: var(--des-white);
+  background: rgba(13, 13, 13, 0.55);
+  border-radius: 0.4em;
+  opacity: 1;
+}
+
+.hm-crew__initials {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(3rem, 5.6vw, 5.5rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  transition: scale 0.6s var(--ease-out);
+}
+
+.hm-crew__card:hover .hm-crew__initials {
+  scale: 1.08;
+}
+
+.hm-crew__num {
+  position: absolute;
+  top: 0.7em;
+  left: 0.85em;
+  font-size: clamp(0.65rem, 0.85vw, 0.8rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+}
+
+/* star pinned to the corner of the executives' cards */
+.hm-crew__star {
+  position: absolute;
+  top: -1.1rem;
+  right: -1.1rem;
+  width: clamp(2.4rem, 3.6vw, 3.5rem);
+  overflow: visible;
+  fill: var(--des-lime);
+  stroke: var(--des-blue);
+  stroke-width: 9;
+  stroke-linejoin: round;
+}
+
+.hm-crew__card:nth-child(3n + 2) .hm-crew__star {
+  fill: var(--des-blue);
+  stroke: var(--des-lime);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hm-crew__star {
+    animation: hm-spin 26s linear infinite;
+  }
+}
+
+.hm-crew__name {
+  margin: 0.85rem 0 0;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(1.1rem, 1.55vw, 1.45rem);
+  line-height: 1;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.hm-crew__role {
+  margin: 0.4rem 0 0;
+  font-size: clamp(0.68rem, 0.85vw, 0.8rem);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: var(--des-blue);
+}
+
+.hm-crew__card--exec .hm-crew__role {
+  display: inline-block;
+  padding: 0.3em 0.75em;
+  color: var(--des-ink);
+  background: var(--des-lime);
+  border: 1.5px solid var(--des-ink);
+  border-radius: 99px;
+}
+
+@media (max-width: 63.99em) {
+  .hm-crew { --per-row: 4; }
+}
+
+@media (max-width: 47.99em) {
+  .hm-crew { --per-row: 2; --gap: 1.1rem; }
+  .hm-crew__initials { font-size: 19vw; }
+  .hm-crew__star { top: -0.8rem; right: -0.6rem; }
+  .hm-team__burst { width: 130vw; }
 }
