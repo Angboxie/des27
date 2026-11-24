@@ -33,7 +33,7 @@
     const waitingOn = (test) => team.members.filter(test).map((m) => (m.me ? "you" : m.name)).join(", ");
     switch (team.status) {
       case "approved":
-        return [team.solo ? "Your entry is confirmed" : "Your team is confirmed", "Your submission code, the competition brief and the Discord link are below.", "#brief", "ok"];
+        return [team.solo ? "Your entry is confirmed" : "Your team is confirmed", "The competition brief and the Discord link are below.", "#brief", "ok"];
       case "draft":
         return ["Invite a teammate", "A team needs two or three people. Invite someone, or switch to entering individually in your registration.", "#team"];
       case "pending_payment":
@@ -259,11 +259,9 @@
         ${team.review_reason ? `<p class="oc-alert" data-tone="hold">${esc(team.review_reason)}</p>` : ""}
         <ul class="oc-list oc-members">${team.members.map((m) => memberRow(m, team)).join("")}</ul>
 
-        ${sub ? `
+        ${sub && ((team.is_leader && me.settings.submissions_open) || sub.link) ? `
           <div class="oc-sub">
-            <h3>Submission code</h3>
-            <p><code class="oc-code">${esc(sub.code)}</code></p>
-            <p class="oc-hint">Put this code on your submission instead of your names or university. Judges only ever see the code.</p>
+            <h3>Submission</h3>
             ${team.is_leader && me.settings.submissions_open ? `
               <form data-form="submit">
                 <label class="oc-field"><span>Link to your submission</span><input type="url" name="link" required placeholder="https://" value="${esc(sub.link)}"></label>

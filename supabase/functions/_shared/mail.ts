@@ -79,7 +79,6 @@ const TEMPLATES: Record<string, (d: Data) => Draft> = {
     subject: d.solo ? "OPEN CITY 2027: your entry is confirmed" : `OPEN CITY 2027: team "${s(d.team)}" is confirmed`,
     body: [d.solo ? "Your individual entry is officially confirmed." : `Team "${s(d.team)}" is officially confirmed. Every member has registered, confirmed and paid.`,
       `Entry ID: ${s(d.code)}`,
-      `Submission code: ${s(d.submission_code)}. Put this code on your submission instead of your names, so judging stays anonymous.`,
       "The brief, rules, submission requirements and Discord are on your OPEN CITY page."],
   }),
   payment_refunded: (d) => ({
