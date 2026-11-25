@@ -77,20 +77,24 @@ scripts:
       <p class="ed-head__text reveal" style="--delay: 120ms">Friendly faces you can<br>come to with anything.</p>
     </div>
 
+    {# split into Executive / Directors / Officers by the teamGroups filter in .eleventy.js #}
+    {% for group in committee | teamGroups %}
+    <h3 class="ab-group ab-group--{{ group.key }} reveal">{{ group.label }}</h3>
     <ul class="ab-committee">
-      {% for person in committee %}
+      {% for person in group.people %}
         {% set parts = person.name.split(" ") %}
         <li class="ab-member reveal" style="--delay: {{ (loop.index0 % 4) * 70 }}ms">
           <span class="ab-member__photo" aria-hidden="true">
             {% if person.photo %}<img src="{{ person.photo }}" alt="" loading="lazy">{% else %}{{ parts[0][0] }}{{ parts[parts.length - 1][0] }}{% endif %}
           </span>
           <span class="ab-member__text">
-            <strong class="ab-member__name">{{ person.name }}</strong>
+            <strong class="ab-member__name">{{ person.name }}{% if person.goesBy %} <span class="ab-member__aka">aka {{ person.goesBy }}</span>{% endif %}</strong>
             <span class="ab-member__role">{{ person.role }}</span>
           </span>
         </li>
       {% endfor %}
     </ul>
+    {% endfor %}
   </div>
 </section>
 

@@ -469,7 +469,201 @@
 
 .hm-about {
   padding-bottom: clamp(3rem, 6vw, 6rem);
+  /* the tape runs wider than the screen; keep it from adding a sideways scroll */
+  overflow-x: clip;
   background: var(--des-white);
+}
+
+/* one-line pitch under the title */
+.hm-about__lede {
+  max-width: 22em;
+  margin: calc(clamp(1.5rem, 5.4vw, 5rem) * -0.55) auto clamp(2.5rem, 5vw, 4.5rem);
+  padding-inline: var(--des-gutter, 1.25rem);
+  font-size: clamp(1.3rem, 2.6vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.hm-about__lede em {
+  position: relative;
+  padding-inline: 0.12em;
+  font-style: normal;
+  font-size: 1.15em;
+  color: var(--des-blue-deep);
+  /* lime marker stroke behind the word */
+  background: linear-gradient(var(--des-lime), var(--des-lime)) 0 88% / 100% 0.42em no-repeat;
+}
+
+/* the photo strip, with the tape across its top and stickers on its bottom edge */
+.hm-about__stage {
+  position: relative;
+  margin-bottom: clamp(4.5rem, 7vw, 6.5rem);
+}
+
+.hm-about .hm-slider__progress {
+  width: 38%;
+}
+
+/* lime tape of the yearly events, stuck on at a slant and scrolling slowly */
+.hm-tape {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: -4%;
+  right: -4%;
+  display: flex;
+  overflow: hidden;
+  translate: 0 -55%;
+  rotate: -1.6deg;
+  background: var(--des-lime);
+  border-block: 2px solid var(--des-ink);
+  box-shadow: 0 0.35rem 0 rgba(13, 13, 13, 0.12);
+  pointer-events: none;
+}
+
+.hm-tape__track {
+  display: flex;
+  flex: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  animation: hm-marquee 32s linear infinite;
+}
+
+.hm-tape__track li {
+  display: flex;
+  align-items: center;
+  padding: 0.5em 0 0.42em;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(1.05rem, 1.9vw, 1.75rem);
+  line-height: 1;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--des-ink);
+}
+
+/* a blue four-point spark between the event names */
+.hm-tape__track li::after {
+  content: "";
+  width: 0.7em;
+  height: 0.7em;
+  margin-inline: 0.9em;
+  background: var(--des-blue);
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hm-tape__track { animation: none; }
+}
+
+/* number stickers pinned over the bottom edge of the photos, like the team cards */
+.hm-stickers {
+  position: absolute;
+  z-index: 2;
+  left: clamp(1rem, 4vw, 4rem);
+  right: clamp(1rem, 4vw, 4rem);
+  bottom: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(0.8rem, 1.6vw, 1.5rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  translate: 0 55%;
+  pointer-events: none;
+}
+
+/* first sticker on the left, the other two together on the right */
+.hm-sticker:nth-child(2) { margin-left: auto; }
+
+.hm-sticker {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.6rem;
+  width: clamp(8.5rem, 12vw, 11.5rem);
+  aspect-ratio: 1;
+  padding: clamp(0.8rem, 1.2vw, 1.15rem);
+  color: var(--des-on-blue);
+  background: var(--des-blue-surface);
+  background-blend-mode: soft-light, normal;
+  border: clamp(2px, 0.2vw, 3px) solid var(--des-ink);
+  border-radius: clamp(0.8rem, 1.2vw, 1.1rem);
+  box-shadow: 0.4rem 0.45rem 0 var(--des-ink);
+  rotate: -4deg;
+}
+
+.hm-sticker:nth-child(2) {
+  color: var(--des-blue-deep);
+  background: var(--des-lime);
+  rotate: 3deg;
+}
+
+.hm-sticker:nth-child(3) {
+  color: var(--des-blue);
+  background: var(--des-white);
+  rotate: -2deg;
+}
+
+.hm-sticker strong {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(2.6rem, 4.6vw, 4.4rem);
+  line-height: 0.85;
+}
+
+.hm-sticker span {
+  font-size: clamp(0.66rem, 0.85vw, 0.8rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.hm-sticker__star {
+  position: absolute;
+  top: -1.1rem;
+  right: -1.1rem;
+  width: clamp(2.2rem, 3.2vw, 3rem);
+  overflow: visible;
+  fill: var(--des-blue);
+  stroke: var(--des-lime);
+  stroke-width: 9;
+  stroke-linejoin: round;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hm-sticker__star { animation: hm-spin 26s linear infinite; }
+}
+
+.hm-about__more {
+  margin: 0;
+  text-align: center;
+}
+
+@media (max-width: 47.99em) {
+  .hm-about__stage { margin-bottom: 2rem; }
+  .hm-about .hm-slider__progress { width: 60%; }
+
+  /* stickers drop below the photos in one row, still overlapping the edge a little */
+  .hm-stickers {
+    position: static;
+    justify-content: center;
+    margin-top: -2.2rem;
+    translate: none;
+  }
+
+  .hm-sticker:nth-child(2) { margin-left: 0; }
+  .hm-sticker { width: 29vw; padding: 0.6rem; gap: 0.3rem; }
+  .hm-sticker strong { font-size: 9.5vw; }
+  .hm-sticker span { font-size: 0.6rem; letter-spacing: 0.03em; }
+  .hm-sticker__star { top: -0.8rem; right: -0.7rem; }
 }
 
 .hm-about__title {
@@ -830,29 +1024,47 @@
   fill: #edf1ff;
 }
 
-/* the team video, framed like the cards and leaning the other way */
+/* the team video as a background film behind the whole card wall:
+   greyscale screened onto DES blue (a blue/white duotone), then washed with
+   white and faded out at the top and bottom so it melts into the page.
+   No controls, no pointer events: it's scenery, not a player. */
 .hm-team__film {
-  width: min(100%, 54rem);
-  margin: clamp(2.5rem, 5vw, 4.5rem) auto 0;
-  rotate: -1.2deg;
-  background: var(--des-ink);
-  border: clamp(2px, 0.22vw, 3px) solid var(--des-blue);
-  border-radius: clamp(0.8rem, 1.3vw, 1.2rem);
-  box-shadow: 0.6rem 0.7rem 0 var(--des-lime), 0.6rem 0.7rem 0 2px var(--des-ink);
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  /* sit the film a little high so the group lines up with the top rows of cards;
+     its bottom edge already fades to white, so the gap below it is invisible */
+  translate: 0 -12%;
+  isolation: isolate;
   overflow: hidden;
-  transition: rotate 0.6s var(--ease-out);
-}
-
-.hm-team__film:hover {
-  rotate: 0deg;
+  pointer-events: none;
+  user-select: none;
+  background: var(--des-blue);
 }
 
 .hm-team__film video {
   display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 832 / 464;
+  height: 100%;
   object-fit: cover;
+  object-position: 50% 60%;
+  filter: grayscale(1) contrast(1.15) brightness(1.05);
+  mix-blend-mode: screen;
+}
+
+.hm-team__film::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    var(--des-white) 0%,
+    rgba(255, 255, 255, 0.9) 16%,
+    rgba(255, 255, 255, 0.78) 45%,
+    rgba(255, 255, 255, 0.74) 70%,
+    rgba(255, 255, 255, 0.9) 90%,
+    var(--des-white) 100%
+  );
 }
 
 .hm-crew {
@@ -870,19 +1082,22 @@
 .hm-crew__card {
   flex: 0 0 calc((100% - (var(--per-row) - 1) * var(--gap)) / var(--per-row));
   min-width: 0;
-  rotate: var(--tilt, 0deg);
-  transition: rotate 0.6s var(--ease-out), translate 0.6s var(--ease-out);
+  transition: translate 0.6s var(--ease-out);
 }
 
-/* a different lean for each card, so the wall doesn't look ruled */
-.hm-crew__card:nth-child(4n + 1) { --tilt: -2.2deg; }
-.hm-crew__card:nth-child(4n + 2) { --tilt: 1.4deg; }
-.hm-crew__card:nth-child(4n + 3) { --tilt: -0.9deg; }
-.hm-crew__card:nth-child(4n + 4) { --tilt: 2deg; }
+/* a different lean for each picture tile, so the wall doesn't look ruled.
+   Only the tile leans: names and roles stay level and line up across a row. */
+.hm-crew__card:nth-child(4n + 1) { --tilt: -1.6deg; }
+.hm-crew__card:nth-child(4n + 2) { --tilt: 1.1deg; }
+.hm-crew__card:nth-child(4n + 3) { --tilt: -0.7deg; }
+.hm-crew__card:nth-child(4n + 4) { --tilt: 1.4deg; }
 
 .hm-crew__card:hover {
-  rotate: 0deg;
   translate: 0 -0.5rem;
+}
+
+.hm-crew__card:hover .hm-crew__tile {
+  rotate: 0deg;
 }
 
 .hm-crew__tile {
@@ -890,13 +1105,14 @@
   display: grid;
   place-items: center;
   aspect-ratio: 4 / 5;
+  rotate: var(--tilt, 0deg);
+  transition: rotate 0.6s var(--ease-out), box-shadow 0.6s var(--ease-out);
   color: var(--des-on-blue);
   background: var(--des-blue-surface);
   background-blend-mode: soft-light, normal;
   border: clamp(2px, 0.2vw, 3px) solid var(--des-blue);
   border-radius: clamp(0.7rem, 1.1vw, 1rem);
   box-shadow: 0.4rem 0.4rem 0 rgba(58, 79, 224, 0.16);
-  transition: box-shadow 0.6s var(--ease-out);
 }
 
 .hm-crew__card:nth-child(3n + 2) .hm-crew__tile {
@@ -981,13 +1197,25 @@
 }
 
 .hm-crew__name {
-  margin: 0.85rem 0 0;
+  margin: 1.05rem 0 0;
   font-family: var(--font-display);
   font-weight: var(--display-weight);
   font-size: clamp(1.1rem, 1.55vw, 1.45rem);
   line-height: 1;
   text-transform: uppercase;
   overflow-wrap: anywhere;
+}
+
+/* the name someone goes by, under their full name */
+.hm-crew__aka {
+  display: block;
+  margin-top: 0.25em;
+  font-family: var(--font-body);
+  font-size: 0.62em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--des-blue);
 }
 
 .hm-crew__role {
@@ -1009,12 +1237,160 @@
   border-radius: 99px;
 }
 
+/* ----- Executive / Directors / Officers -----
+   Each group opens with a label on a rule, and the cards step down in size
+   and loudness: big blue executive cards, the usual mixed director cards,
+   then smaller outlined officer cards. */
+
+.hm-crew-group {
+  margin-top: clamp(3rem, 5.5vw, 5rem);
+}
+
+.hm-crew-group:first-of-type {
+  margin-top: clamp(2.5rem, 4.5vw, 4rem);
+}
+
+.hm-crew-group .hm-crew {
+  margin-top: clamp(1.6rem, 2.6vw, 2.4rem);
+}
+
+.hm-crew-group__head {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0;
+}
+
+/* the rule running out to the right of the label */
+.hm-crew-group__head::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: var(--des-blue);
+  opacity: 0.35;
+}
+
+.hm-crew-group__label {
+  padding: 0.45em 0.9em 0.38em;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(1.1rem, 1.8vw, 1.6rem);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 2px solid var(--des-ink);
+  border-radius: 99px;
+  rotate: -2deg;
+}
+
+.hm-crew-group__count {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(0.85rem, 1.2vw, 1.05rem);
+  letter-spacing: 0.06em;
+  color: var(--des-blue);
+}
+
+.hm-crew-group--exec .hm-crew-group__label {
+  color: var(--des-ink);
+  background: var(--des-lime);
+  box-shadow: 0.2em 0.22em 0 var(--des-ink);
+}
+
+.hm-crew-group--directors .hm-crew-group__label {
+  color: var(--des-white);
+  background: var(--des-blue);
+  border-color: var(--des-blue-deep);
+  box-shadow: 0.2em 0.22em 0 var(--des-lime);
+}
+
+.hm-crew-group--officers .hm-crew-group__label {
+  color: var(--des-blue);
+  background: var(--des-white);
+  border-color: var(--des-blue);
+  border-style: dashed;
+}
+
+/* Executive: four big cards, all blue, framed in lime like a sticker */
+.hm-crew--exec {
+  --per-row: 4;
+  --gap: clamp(1.2rem, 2.6vw, 2.5rem);
+}
+
+.hm-crew--exec .hm-crew__card .hm-crew__tile {
+  color: var(--des-on-blue);
+  background: var(--des-blue-surface);
+  background-blend-mode: soft-light, normal;
+  border-color: var(--des-ink);
+  box-shadow: 0.55rem 0.6rem 0 var(--des-lime), 0.55rem 0.6rem 0 2px var(--des-ink);
+}
+
+.hm-crew--exec .hm-crew__card:hover .hm-crew__tile {
+  box-shadow: 0.8rem 0.95rem 0 var(--des-lime), 0.8rem 0.95rem 0 2px var(--des-ink);
+}
+
+.hm-crew--exec .hm-crew__star {
+  fill: var(--des-lime);
+  stroke: var(--des-ink);
+}
+
+.hm-crew--exec .hm-crew__initials {
+  font-size: clamp(3.4rem, 7vw, 7rem);
+}
+
+/* the lime frame sticks out ~0.6rem below the tile, so the name starts clear of it */
+.hm-crew--exec .hm-crew__name {
+  margin-top: clamp(1.3rem, 1.9vw, 1.75rem);
+  font-size: clamp(1.25rem, 1.9vw, 1.8rem);
+}
+
+.hm-crew--exec .hm-crew__role {
+  margin-top: 0.55rem;
+}
+
+/* Directors: the mixed lime / white / blue wall, four to a row in a narrower column */
+.hm-crew--directors {
+  --per-row: 4;
+  max-width: 60rem;
+  margin-inline: auto;
+}
+
+/* Officers: three smaller white cards with outlined initials */
+.hm-crew--officers {
+  --per-row: 3;
+  max-width: 40rem;
+  margin-inline: auto;
+}
+
+.hm-crew--officers .hm-crew__card .hm-crew__tile {
+  color: var(--des-blue);
+  background: var(--des-white);
+  border-color: var(--des-blue);
+  border-style: dashed;
+  box-shadow: none;
+}
+
+.hm-crew--officers .hm-crew__initials {
+  font-size: clamp(2.4rem, 4.2vw, 4rem);
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--des-blue);
+}
+
+.hm-crew--officers .hm-crew__name {
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
+}
+
 @media (max-width: 63.99em) {
   .hm-crew { --per-row: 4; }
+  .hm-crew--officers { --per-row: 3; }
 }
 
 @media (max-width: 47.99em) {
   .hm-crew { --per-row: 2; --gap: 1.1rem; }
+  .hm-crew--directors,
+  .hm-crew--officers { --per-row: 2; max-width: none; }
+  .hm-crew--exec .hm-crew__initials,
+  .hm-crew--officers .hm-crew__initials { font-size: 17vw; }
   .hm-crew__initials { font-size: 19vw; }
   .hm-crew__star { top: -0.8rem; right: -0.6rem; }
   .hm-team__burst { width: 130vw; }

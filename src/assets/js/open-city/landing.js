@@ -24,6 +24,7 @@
       const eased = 1 - Math.pow(1 - t, 4);
       el.textContent = prefix + format.format(Math.round(target * eased)) + suffix;
       if (t < 1) requestAnimationFrame(frame);
+      else el.style.minWidth = ""; // done: let the text set its own width again
     }
     requestAnimationFrame(frame);
   }
@@ -36,5 +37,7 @@
     });
   }, { threshold: 0.6 });
 
-  numbers.forEach((el) => observer.observe(el));
+  // measure widths in the real display font, not the wider fallback
+  const ready = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+  ready.then(() => numbers.forEach((el) => observer.observe(el)));
 })();

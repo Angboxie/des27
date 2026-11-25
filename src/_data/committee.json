@@ -26,8 +26,9 @@
   },
   {
     "name": "Hoang Khanh Tam Tran",
+    "goesBy": "Adeline",
     "role": "Education Officer",
-    "photo": null
+    "photo": "/assets/images/team/adeline-tran.jpg"
   },
   {
     "name": "Myrto Melliou",
@@ -63,5 +64,10 @@
     "name": "Kathryn McInerney Sotomayor",
     "role": "Social Events Director",
     "photo": null
+  },
+  {
+    "name": "Kaitlyn Williams",
+    "role": "Student Advocacy Director",
+    "photo": "/assets/images/team/kaitlyn-williams.jpg"
   }
 ]

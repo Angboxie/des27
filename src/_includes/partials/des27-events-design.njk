@@ -33,10 +33,10 @@
         <span class="ev-featured__big reveal" style="--delay: 100ms">{{ featured.headline or featured.title }}</span>
         {% if featured.headlineAccent %}<span class="script ev-featured__script reveal" style="--delay: 220ms">{{ featured.headlineAccent }}</span>{% endif %}
       </h2>
-      <p class="ev-featured__text reveal" style="--delay: 320ms">{{ featured.summary }}</p>
       {% if featured.prize %}
-      <p class="ev-prize reveal" style="--delay: 360ms"><strong>{{ featured.prize.big }}</strong> <span class="script">{{ featured.prize.label }}</span></p>
+      <p class="ev-prize reveal" style="--delay: 280ms"><strong>{{ featured.prize.big }}</strong> <span class="script">{{ featured.prize.label }}</span></p>
       {% endif %}
+      <p class="ev-featured__text reveal" style="--delay: 340ms">{{ featured.summary }}</p>
 
       <a class="ev-btn ev-btn--lime reveal" data-magnetic style="--delay: 420ms" href="{{ (featured.registration and featured.registration.url) or ('/events/' + featured.id + '/') }}">
         {% if featured.registration and featured.registration.status == "open" %}Sign Up Now{% else %}Find Out More{% endif %}

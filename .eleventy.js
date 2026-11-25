@@ -61,6 +61,24 @@ module.exports = async function (eleventyConfig) {
 
   eleventyConfig.addFilter("limit", (items, count) => items.slice(0, count));
 
+  // The committee split into Executive, Directors and Officers, keeping the
+  // order of committee.json inside each group. A person's group comes from
+  // their role; set "group" ("exec", "directors" or "officers") on someone to override it.
+  const execRoles = ["President", "Vice President", "Secretary", "Treasurer"];
+  eleventyConfig.addFilter("teamGroups", (people) => {
+    const groups = [
+      { key: "exec", label: "Executive", people: [] },
+      { key: "directors", label: "Directors", people: [] },
+      { key: "officers", label: "Officers", people: [] }
+    ];
+    for (const person of people || []) {
+      const key = person.group
+        || (execRoles.includes(person.role) ? "exec" : /director/i.test(person.role) ? "directors" : "officers");
+      (groups.find((g) => g.key === key) || groups[2]).people.push(person);
+    }
+    return groups.filter((g) => g.people.length);
+  });
+
   // Unique values of a field across items, e.g. every software in resources.json
   eleventyConfig.addFilter("uniqueValues", (items, key) => {
     const values = items.flatMap((item) => [].concat(item[key] || []));

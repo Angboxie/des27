@@ -41,10 +41,10 @@ scripts:
         <span class="ev-featured__big reveal" style="--delay: 100ms">{{ event.headline }}</span>
         <span class="script ev-featured__script reveal" style="--delay: 220ms">{{ event.headlineAccent }}</span>
       </h1>
-      <p class="ev-featured__text reveal" style="--delay: 320ms">{{ event.summary }}</p>
       {% if event.prize %}
-      <p class="ev-prize reveal" style="--delay: 360ms"><strong data-count>{{ event.prize.big }}</strong> <span class="script">{{ event.prize.label }}</span></p>
+      <p class="ev-prize reveal" style="--delay: 280ms"><strong data-count>{{ event.prize.big }}</strong> <span class="script">{{ event.prize.label }}</span></p>
       {% endif %}
+      <p class="ev-featured__text reveal" style="--delay: 340ms">{{ event.summary }}</p>
       <div class="ol-hero__actions reveal" style="--delay: 420ms">
         {{ registerButton() }}
         <a class="ev-btn" href="#brief">The brief</a>
