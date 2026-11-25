@@ -54,18 +54,72 @@ window.OC = (() => {
     if (error) throw new Error(error.status === 429 ? "Too many requests at the moment. Please try again in a few minutes." : "Couldn't send the email. Check the address and try again.");
   }
 
+  // emails from DES link here with the recipient's address, so it is filled in ready
+  const emailFromLink = () => { try { return new URLSearchParams(window.location.search).get("email") || ""; } catch (e) { return ""; } };
+
+  // Optional quicker ways in, switched on in _data/opencity.json (signIn) once Supabase is set up for them
+  const withGoogle = config.signinGoogle === "true";
+  const withCode = config.signinCode === "true";
+
   const signInCard = (heading, intro) => `
     <form class="oc-card oc-signin" data-form="signin">
       <h2>${esc(heading)}</h2>
       <p>${esc(intro)}</p>
+      ${withGoogle ? `
+        <button class="oc-btn oc-google" type="button" data-oc-google>Continue with Google</button>
+        <p class="oc-or"><span>or use your email</span></p>` : ""}
       <label class="oc-field">
         <span>Email address</span>
-        <input type="email" name="email" required autocomplete="email" inputmode="email" placeholder="you@student.unimelb.edu.au">
+        <input type="email" name="email" required autocomplete="email" inputmode="email" placeholder="you@student.unimelb.edu.au" value="${esc(emailFromLink())}">
       </label>
-      <p class="oc-hint">We will email you a secure link to continue. Please use the same email address each time.</p>
+      <p class="oc-hint">${withCode ? "We will email you a 6-digit code and a secure link." : "We will email you a secure link to continue."} You stay signed in on this device afterwards. Please use the same email address each time.</p>
       <div class="oc-alert" data-alert hidden></div>
       <button class="oc-btn" type="submit">Continue</button>
     </form>`;
+
+  // After the email has gone: where to type the code (if codes are on), or just what to do next
+  function showEmailSent(form, email) {
+    form.outerHTML = withCode ? `
+      <form class="oc-card oc-signin" data-oc-code data-email="${esc(email)}">
+        <h2>Check your email</h2>
+        <p>We have sent a 6-digit code to <strong>${esc(email)}</strong>. Type it in here. It may take a minute to arrive; please check your spam folder.</p>
+        <label class="oc-field">
+          <span>Code from the email</span>
+          <input name="code" required inputmode="numeric" autocomplete="one-time-code" pattern="[0-9 ]{6,12}" maxlength="12" placeholder="123456">
+        </label>
+        <p class="oc-hint">The email also has a button that signs you in. Use it on this device if you prefer.</p>
+        <div class="oc-alert" data-alert hidden></div>
+        <button class="oc-btn" type="submit">Sign in</button>
+      </form>` : `
+      <div class="oc-card oc-signin">
+        <h2>Check your email</h2>
+        <p>A link has been sent to <strong>${esc(email)}</strong>. Open it on this device to continue. It may take a minute to arrive; please check your spam folder.</p>
+      </div>`;
+    const input = document.querySelector("[data-oc-code] input");
+    if (input) input.focus();
+  }
+
+  if (configured) {
+    document.addEventListener("click", async (event) => {
+      const button = event.target.closest("[data-oc-google]");
+      if (!button) return;
+      const { error } = await sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: window.location.origin + window.location.pathname } });
+      if (error) alertIn(button.closest("form"), "Google sign-in isn't available right now. Please use your email instead.");
+    });
+
+    document.addEventListener("submit", async (event) => {
+      const form = event.target.closest("[data-oc-code]");
+      if (!form) return;
+      event.preventDefault();
+      setBusy(form, true);
+      const { error } = await sb.auth.verifyOtp({ email: form.dataset.email, token: form.code.value.replace(/\D/g, ""), type: "email" });
+      if (error) {
+        setBusy(form, false);
+        return alertIn(form, "That code didn't work. Check it, or go back and request a new one: codes expire after a short while.");
+      }
+      window.location.replace(window.location.pathname);
+    });
+  }
 
   const notOpenCard = () => `
     <div class="oc-card">
@@ -106,5 +160,5 @@ window.OC = (() => {
     URL.revokeObjectURL(a.href);
   }
 
-  return { app, config, configured, sb, content, link, esc, categoryLabel, money, date, statusPill, STATUS, rpc, sendMail, signIn, signInCard, notOpenCard, alertIn, setBusy, downloadCsv };
+  return { app, config, configured, sb, content, link, esc, categoryLabel, money, date, statusPill, STATUS, rpc, sendMail, signIn, signInCard, showEmailSent, notOpenCard, alertIn, setBusy, downloadCsv };
 })();

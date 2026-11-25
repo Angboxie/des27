@@ -934,3 +934,170 @@
 }
 
 .oc-howto li { margin-bottom: 0.45rem; }
+
+
+/* ---------- Organisers: the way into their dashboard ---------- */
+
+.oc-admin {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: clamp(1rem, 2.5vw, 1.4rem) clamp(1.1rem, 3vw, 1.75rem);
+  color: var(--des-white);
+  text-decoration: none;
+  background: var(--des-ink);
+  border: 2px solid var(--des-ink);
+  border-radius: 0.9rem;
+  transition: background 0.3s var(--ease-out), color 0.3s var(--ease-out);
+}
+
+.oc-admin strong {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(1.6rem, 4.5vw, 2.4rem);
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--des-lime);
+}
+
+.oc-admin small {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.oc-admin__arrow {
+  flex: 0 0 auto;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--des-lime);
+  transition: translate 0.3s var(--ease-out);
+}
+
+.oc-admin:hover,
+.oc-admin:focus-visible {
+  color: var(--des-ink);
+  background: var(--des-lime);
+}
+
+.oc-admin:hover strong,
+.oc-admin:focus-visible strong,
+.oc-admin:hover .oc-admin__arrow,
+.oc-admin:focus-visible .oc-admin__arrow {
+  color: var(--des-ink);
+}
+
+.oc-admin:hover .oc-admin__arrow,
+.oc-admin:focus-visible .oc-admin__arrow {
+  translate: 0.35rem 0;
+}
+
+
+/* ---------- Dashboard for confirmed entries ---------- */
+
+.oc-dash {
+  display: grid;
+  gap: 1rem;
+}
+
+.oc-dash .oc-next p:last-child { margin-bottom: 0; }
+
+.oc-dash__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.oc-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: clamp(1.1rem, 3vw, 1.5rem);
+  background: var(--des-white);
+  border: 2px solid var(--des-blue);
+  border-radius: 0.9rem;
+  box-shadow: 0.35rem 0.35rem 0 rgba(58, 79, 224, 0.12);
+}
+
+.oc-tile h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: 1.6rem;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--des-blue-deep);
+}
+
+.oc-tile p { margin: 0; }
+
+/* buttons sit on the bottom edge so a row of tiles lines up */
+.oc-tile .oc-actions { margin-top: auto; padding-top: 0.5rem; }
+
+.oc-tile__big {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.oc-tile__big strong {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 4.2rem);
+  line-height: 0.9;
+  color: var(--des-blue);
+}
+
+.oc-dates {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9rem;
+}
+
+.oc-dates li {
+  display: grid;
+  grid-template-columns: 6.5em minmax(0, 1fr);
+  gap: 0.75rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.4rem;
+}
+
+.oc-dates li span:first-child { font-weight: 600; }
+.oc-dates .is-past { color: #8a8a94; text-decoration: line-through; }
+.oc-dates .is-next { background: var(--des-lime); }
+
+@media (max-width: 42em) {
+  .oc-dash__grid { grid-template-columns: 1fr; }
+}
+
+
+/* ---------- Sign-in: Google, and "or use your email" ---------- */
+
+.oc-google { width: 100%; }
+
+.oc-or {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.25rem 0;
+  font-size: 0.85rem;
+  color: #5f5f6b;
+}
+
+.oc-or::before,
+.oc-or::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.35;
+}

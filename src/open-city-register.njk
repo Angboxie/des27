@@ -24,6 +24,8 @@ scripts:
          data-supabase-url="{{ opencity.supabaseUrl or '' }}"
          data-supabase-key="{{ opencity.supabaseAnonKey or '' }}"
          data-contact="{{ opencity.contactEmail }}"
+         data-signin-google="{{ 'true' if opencity.signIn.google else '' }}"
+         data-signin-code="{{ 'true' if opencity.signIn.emailCode else '' }}"
          data-opens="{{ opencity.opensText }}">
       <noscript><p class="oc-card">Registration needs JavaScript switched on in your browser.</p></noscript>
       <p class="oc-card oc-loading" data-oc-loading>Loading&hellip;</p>
@@ -33,6 +35,8 @@ scripts:
     <a hidden data-oc-link="portal" href="/open-city/register/"></a>
     <a hidden data-oc-link="admin" href="/open-city/admin/"></a>
     <a hidden data-oc-link="event" href="{{ opencity.eventUrl }}"></a>
-    <script type="application/json" id="oc-content">{{ { categories: opencity.categories, institutions: opencity.institutions, rules: opencity.rules, privacy: opencity.privacy } | dump | safe }}</script>
+    <a hidden data-oc-link="brief-full" href="{{ opencity.briefs.full.file }}"></a>
+    {% for cat in opencity.categories %}<a hidden data-oc-link="brief-{{ cat.id }}" href="{{ cat.brief }}"></a>{% endfor %}
+    <script type="application/json" id="oc-content">{{ { categories: opencity.categories, institutions: opencity.institutions, rules: opencity.rules, privacy: opencity.privacy, briefsUnlockAt: opencity.briefs.unlocksAt, briefsUnlockText: opencity.briefs.unlocksText, keyDates: (events | byId(opencity.eventId)).details.keyDates } | dump | safe }}</script>
   </div>
 </section>

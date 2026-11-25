@@ -25,14 +25,14 @@ const TEMPLATES: Record<string, (d: Data) => Draft> = {
   payment_confirmation: (d) => ({
     subject: "OPEN CITY 2027: payment received",
     body: [`We've received your payment of ${money(d.amount_cents)} for ${s(d.quantity)} ${Number(d.quantity) === 1 ? "entry" : "entries"}.`,
-      "The full competition brief is now unlocked on your OPEN CITY page.",
+      "The Discord is now unlocked on your OPEN CITY page. The competition brief is public on the OPEN CITY page of the DES website.",
       Number(d.spare) > 0 ? `You have ${s(d.spare)} spare ${Number(d.spare) === 1 ? "entry" : "entries"}. On your OPEN CITY page, enter the email address of the person each one is for. Buying entries together doesn't create a team: that's a separate step.` : "",
       "If you haven't yet, complete your registration there too."],
   }),
   entry_assigned: (d) => ({
     subject: "OPEN CITY 2027: your entry has been paid for",
     body: [`${s(d.from)} has paid for your OPEN CITY 2027 entry.`,
-      "Open the registration page and enter this email address to complete your registration and access the full brief."],
+      "Open the registration page with the button below to complete your registration. Your email address is filled in for you."],
   }),
   team_created: (d) => ({
     subject: `OPEN CITY 2027: team "${s(d.team)}" registered`,
@@ -43,7 +43,7 @@ const TEMPLATES: Record<string, (d: Data) => Draft> = {
   team_invite: (d) => ({
     subject: `DES OPEN CITY 2027: ${s(d.leader)} has invited you to join team "${s(d.team)}"`,
     body: [`Dear ${s(d.name)},`, `${s(d.leader)} has invited you to join team "${s(d.team)}" (Team ID ${s(d.code)}) for DES OPEN CITY 2027.`,
-      "To respond, open the registration page using the button below and enter this email address. You will be asked to complete your own registration, after which you can accept or decline the invitation.",
+      "To respond, open the registration page using the button below. Your email address is filled in for you: please keep it, because the invitation is tied to this address. You will be asked to complete your own registration, after which you can accept or decline the invitation.",
       "Each team member requires their own paid entry."],
   }),
   invite_accepted: (d) => ({
@@ -79,7 +79,7 @@ const TEMPLATES: Record<string, (d: Data) => Draft> = {
     subject: d.solo ? "OPEN CITY 2027: your entry is confirmed" : `OPEN CITY 2027: team "${s(d.team)}" is confirmed`,
     body: [d.solo ? "Your individual entry is officially confirmed." : `Team "${s(d.team)}" is officially confirmed. Every member has registered, confirmed and paid.`,
       `Entry ID: ${s(d.code)}`,
-      "The brief, rules, submission requirements and Discord are on your OPEN CITY page."],
+      "Your dashboard, with the brief, key dates, submission and Discord, is on your OPEN CITY page."],
   }),
   payment_refunded: (d) => ({
     subject: "OPEN CITY 2027: payment refunded",
@@ -141,7 +141,9 @@ export async function drainOutbox(rpc: Rpc, send: (message: Message) => Promise<
     const rows = (await rpc("oc_outbox_take", { p_limit: batch })) as Array<{ id: number; to_email: string; template: string; data: Data }> | null;
     if (!rows || !rows.length) break;
     for (const row of rows) {
-      const rendered = renderEmail(row.template, row.data, portalUrl);
+      // the button opens the page with this person's address filled in, so they sign in as the address the email went to
+      const link = portalUrl + (portalUrl.includes("?") ? "&" : "?") + "email=" + encodeURIComponent(row.to_email);
+      const rendered = renderEmail(row.template, row.data, link);
       let error: string | null = null;
       if (!rendered) {
         error = `unknown template ${row.template}`;

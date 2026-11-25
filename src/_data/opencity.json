@@ -3,23 +3,26 @@
   "supabaseUrl": "https://wrrrgsdazduiiwkuoubz.supabase.co",
   "supabaseAnonKey": "sb_publishable_J2IeD8u6MTqeJAb-sS4TRg_HAWRPn2A",
   "opensText": "Registration opens 27 November 2026.",
-  "contactEmail": "des.unimelb@gmail.com",
+  "contactEmail": "des.partnerships.unimelb@gmail.com",
   "eventUrl": "/open-city/",
   "categories": [
     {
       "id": "architecture",
       "label": "Architecture",
-      "blurb": "Buildings, spaces and places in the city."
+      "blurb": "Buildings, spaces and places in the city.",
+      "brief": "/assets/open-city/briefs/des27-open-city-brief-architecture.pdf"
     },
     {
       "id": "uiux",
       "label": "UI/UX Design",
-      "blurb": "Digital products and services people use to get around city life."
+      "blurb": "Digital products and services people use to get around city life.",
+      "brief": "/assets/open-city/briefs/des27-open-city-brief-uiux.pdf"
     },
     {
       "id": "graphic",
       "label": "Graphic Design",
-      "blurb": "Identity, print and visual communication for the city."
+      "blurb": "Identity, print and visual communication for the city.",
+      "brief": "/assets/open-city/briefs/des27-open-city-brief-graphic.pdf"
     }
   ],
   "rules": [
@@ -35,24 +38,24 @@
   "landing": {
     "_note": "Wording for the public OPEN CITY page (/open-city/). Dates, eligibility and prizes come from the OPEN CITY entry in events.json.",
     "intro": [
-      "OPEN CITY is the Design Student Society's flagship competition: one shared challenge facing Melbourne, taken on by students from three design disciplines over the summer break.",
-      "Enter on your own or in a team of up to three. The best work is shown at the final exhibition in March 2027."
+      "OPEN CITY is the Design Student Society's flagship competition, and the biggest design student competition in Australia: one shared challenge facing Melbourne, taken on by students from three design disciplines over the summer break.",
+      "Enter on your own or in a team of up to three. Twelve finalists present at the final exhibition and awards in March 2027, with $3,500 in cash prizes to be won."
     ],
     "facts": [
       {
-        "big": "3",
-        "label": "Categories"
+        "big": "$10",
+        "label": "Entry per person"
       },
       {
         "big": "1–3",
         "label": "People per entry"
       },
       {
-        "big": "12 Mar",
-        "label": "Final exhibition"
+        "big": "March",
+        "label": "Final exhibition, date TBC"
       }
     ],
-    "locked": "The full brief and each category's challenge are for entrants only. They unlock in your participant area as soon as your entry is paid.",
+    "locked": "The full brief and each category brief are published here on 27 November 2026, free for everyone to read.",
     "steps": [
       {
         "title": "Sign up",
@@ -63,8 +66,8 @@
         "text": "Each participant pays for their own entry, securely by card."
       },
       {
-        "title": "Unlock the brief",
-        "text": "The full brief, your category challenge, the rules and the Discord open up as soon as payment is confirmed."
+        "title": "Join the Discord",
+        "text": "Announcements, questions, mentor videos and the team-finder open up as soon as payment is confirmed."
       },
       {
         "title": "Solo or team",
@@ -72,7 +75,7 @@
       },
       {
         "title": "Design and submit",
-        "text": "Round 1 submissions close 29 January 2027. Judging is anonymous: your work carries a code, not your name."
+        "text": "Registration closes 23 December 2026. Round 1 submissions close 29 January 2027, and judging is anonymous."
       }
     ],
     "faq": [
@@ -94,9 +97,67 @@
       },
       {
         "q": "When do I see the brief?",
-        "a": "As soon as your payment is confirmed. It isn't published anywhere else."
+        "a": "It is published on this page on 27 November 2026, free for everyone to read. You do not need to register or pay to see it."
+      },
+      {
+        "q": "What if the entry fee is a barrier?",
+        "a": "Confidential fee waivers are available. Email DES before registration closes on 23 December 2026."
+      },
+      {
+        "q": "Do I need to be a DES member, or study at the University of Melbourne?",
+        "a": "No. OPEN CITY is open to Bachelor's and Master's coursework students at any university or higher education provider in Victoria."
       }
-    ]
+    ],
+    "heroStats": [
+      {
+        "big": "$3,500",
+        "label": "Cash prize pool"
+      },
+      {
+        "big": "12",
+        "label": "Finalists"
+      },
+      {
+        "big": "3",
+        "label": "Categories"
+      }
+    ],
+    "introHeading": {
+      "big": "Your city",
+      "script": "Your move"
+    },
+    "eyebrow": "Australia's biggest design student competition",
+    "prizes": {
+      "big": "$3,500",
+      "script": "in cash prizes",
+      "lead": "First, second and third place in every category, decided by a panel of four judges at the final exhibition.",
+      "table": [
+        {
+          "category": "Architecture",
+          "first": "$1,000",
+          "second": "$350",
+          "third": "$150"
+        },
+        {
+          "category": "UI/UX Design",
+          "first": "$700",
+          "second": "$300",
+          "third": "$100"
+        },
+        {
+          "category": "Graphic Design",
+          "first": "$500",
+          "second": "$300",
+          "third": "$100"
+        }
+      ],
+      "extras": [
+        "Industry prizes, including studio tours and portfolio reviews",
+        "Lived Experience Award (commendation)",
+        "Digital certificates and features on DES channels for winners and finalists"
+      ],
+      "note": "Prize amounts are as set out in the competition brief and are subject to final confirmation by DES."
+    }
   },
   "institutions": [
     "University of Melbourne",
@@ -109,5 +170,19 @@
     "Australian Catholic University",
     "Federation University",
     "Torrens University"
-  ]
+  ],
+  "briefs": {
+    "_note": "Public brief PDFs on /open-city/. The links stay hidden until unlocksAt (Melbourne time), then appear on their own; no rebuild needed. The files live in src/assets/open-city/briefs/.",
+    "unlocksAt": "2026-11-27T00:00:00+11:00",
+    "unlocksText": "27 November 2026",
+    "full": {
+      "label": "Full competition brief",
+      "file": "/assets/open-city/briefs/des27-open-city-brief.pdf"
+    }
+  },
+  "signIn": {
+    "_note": "Extra ways to sign in. Turn each on only after its Supabase setup is done (supabase/README.md, 'Faster sign-in').",
+    "google": false,
+    "emailCode": false
+  }
 }

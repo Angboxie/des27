@@ -1,7 +1,7 @@
 ---
 layout: layouts/base.njk
 title: OPEN CITY 2027
-description: DES OPEN CITY 2027 is a summer design competition for architecture, UI/UX and graphic design students across Melbourne. Enter alone or in a team of up to three.
+description: DES OPEN CITY 2027 is Australia's biggest design student competition, for architecture, UI/UX and graphic design students across Victoria. $3,500 in cash prizes. Enter alone or in a team of up to three.
 permalink: /open-city/
 theme: des27
 styles:
@@ -10,6 +10,8 @@ styles:
   - /assets/css/open-city-landing.css
 scripts:
   - /assets/js/events.js
+  - /assets/js/open-city/briefs.js
+  - /assets/js/open-city/landing.js
 ---
 {# Public page about the competition. Wording: _data/opencity.json (landing).
    Dates, eligibility and prizes: the OPEN CITY entry in _data/events.json. #}
@@ -34,7 +36,7 @@ scripts:
 
   <div class="des-container ev-featured__inner">
     <div class="ev-featured__content">
-      <p class="ev-eyebrow reveal">DES flagship competition</p>
+      <p class="ev-eyebrow reveal">{{ page_.eyebrow }}</p>
       <h1 id="oc-title" class="ev-featured__title">
         <span class="ev-featured__big reveal" style="--delay: 100ms">{{ event.headline }}</span>
         <span class="script ev-featured__script reveal" style="--delay: 220ms">{{ event.headlineAccent }}</span>
@@ -42,8 +44,13 @@ scripts:
       <p class="ev-featured__text reveal" style="--delay: 320ms">{{ event.summary }}</p>
       <div class="ol-hero__actions reveal" style="--delay: 420ms">
         {{ registerButton() }}
-        <a class="ev-btn" href="#how">How it works</a>
+        <a class="ev-btn" href="#brief">The brief</a>
       </div>
+      <ul class="ol-stats reveal" style="--delay: 520ms">
+        {% for stat in page_.heroStats %}
+          <li><strong data-count>{{ stat.big }}</strong><span>{{ stat.label }}</span></li>
+        {% endfor %}
+      </ul>
     </div>
 
     <p class="ev-featured__date reveal" style="--delay: 200ms">
@@ -59,8 +66,8 @@ scripts:
   <div class="des-container ol-about">
     <div>
       <h2 id="about-title" class="ev-heading reveal">
-        <span class="ev-heading__big">What is</span>
-        <span class="ev-heading__script script">Open City</span>
+        <span class="ev-heading__big">{{ page_.introHeading.big }}</span>
+        <span class="ev-heading__script script">{{ page_.introHeading.script }}</span>
       </h2>
       <div class="ed-prose ol-prose reveal" style="--delay: 120ms">
         {% for para in page_.intro %}<p>{{ para }}</p>{% endfor %}
@@ -74,8 +81,36 @@ scripts:
   </div>
 </section>
 
+{# ---------- Prizes ---------- #}
+{% set prizes = page_.prizes %}
+<section class="ev-featured ol-prizes" data-cursor="light" aria-labelledby="prizes-title">
+  <div class="ev-featured__glow" aria-hidden="true"></div>
+  <div class="des-container ol-prizes__inner">
+    <div>
+      <h2 id="prizes-title" class="ol-prizes__title reveal">
+        <span class="ev-featured__big" data-count>{{ prizes.big }}</span>
+        <span class="script ev-featured__script">{{ prizes.script }}</span>
+      </h2>
+      <p class="ol-prizes__lead reveal" style="--delay: 100ms">{{ prizes.lead }}</p>
+      <ul class="ol-prizes__extras reveal" style="--delay: 180ms">
+        {% for item in prizes.extras %}<li>{{ item }}</li>{% endfor %}
+      </ul>
+    </div>
+    <div class="reveal" style="--delay: 150ms">
+      <table class="ol-prizes__table">
+        <caption class="visually-hidden">Cash prizes by category</caption>
+        <thead><tr><th scope="col">Category</th><th scope="col">1st</th><th scope="col">2nd</th><th scope="col">3rd</th></tr></thead>
+        <tbody>
+          {% for row in prizes.table %}<tr><th scope="row">{{ row.category }}</th><td>{{ row.first }}</td><td>{{ row.second }}</td><td>{{ row.third }}</td></tr>{% endfor %}
+        </tbody>
+      </table>
+      <p class="ol-prizes__note">{{ prizes.note }}</p>
+    </div>
+  </div>
+</section>
+
 {# ---------- Categories ---------- #}
-<section class="ed-section" aria-labelledby="categories-title">
+<section class="ed-section" id="brief" aria-labelledby="categories-title" data-briefs-unlock="{{ opencity.briefs.unlocksAt }}">
   <div class="des-container">
     <h2 id="categories-title" class="ev-heading reveal">
       <span class="ev-heading__big">Three</span>
@@ -87,14 +122,29 @@ scripts:
           <span class="ol-cat__letter script" aria-hidden="true">{{ "ABC"[loop.index0] }}</span>
           <h3>{{ cat.label }}</h3>
           <p>{{ cat.blurb }}</p>
-          <p class="ol-cat__lock">
+          {# swapped for the link at the release time: assets/js/open-city/briefs.js #}
+          <p class="ol-cat__lock" data-brief-locked>
             <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="9" width="12" height="8" rx="1.5"/><path d="M7 9V6.5a3 3 0 0 1 6 0V9"/></svg>
-            Challenge unlocks with your entry
+            Brief released {{ opencity.briefs.unlocksText }}
+          </p>
+          <p class="ol-cat__lock" data-brief-open hidden>
+            <a class="ol-cat__brief" href="{{ cat.brief }}" target="_blank" rel="noopener" data-brief-tab data-brief-jump>Read the brief {{ arrow | safe }}</a>
           </p>
         </li>
       {% endfor %}
     </ul>
-    <p class="ol-locked reveal">{{ page_.locked }}</p>
+    <p class="ol-locked reveal" data-brief-locked>{{ page_.locked }}</p>
+    {# The brief itself, readable on the page. On phones, where PDFs can't be shown in place, the tabs open the file instead. #}
+    <div class="ol-reader reveal" id="brief-reader" data-brief-open hidden>
+      <h3 class="ol-reader__title">Read the brief</h3>
+      <p class="ol-locked">Free for everyone to read. Each category brief has the shared rules plus that category&rsquo;s challenge; the full brief covers all three.</p>
+      <div class="ol-reader__tabs">
+        <a href="{{ opencity.briefs.full.file }}" target="_blank" rel="noopener" data-brief-tab aria-current="true">Full brief</a>
+        {% for cat in opencity.categories %}<a href="{{ cat.brief }}" target="_blank" rel="noopener" data-brief-tab>{{ cat.label }}</a>{% endfor %}
+      </div>
+      <iframe class="ol-reader__frame" title="OPEN CITY 2027 competition brief" data-brief-frame></iframe>
+      <p class="ol-reader__open"><a href="{{ opencity.briefs.full.file }}" target="_blank" rel="noopener" data-brief-newtab>Open this brief in a new tab {{ arrow | safe }}</a></p>
+    </div>
   </div>
 </section>
 
@@ -168,7 +218,7 @@ scripts:
   <div class="ev-featured__glow" aria-hidden="true"></div>
   <div class="des-container ol-final__inner">
     <h2 id="final-title" class="reveal"><span class="ev-featured__big">Ready to</span> <span class="script ev-featured__script">enter?</span></h2>
-    <p class="reveal" style="--delay: 100ms">{% if isOpen %}Sign up, pay your entry and the brief is yours.{% else %}{{ opencity.opensText }} Already started? Pick up where you left off.{% endif %}</p>
+    <p class="reveal" style="--delay: 100ms">{% if isOpen %}Read the brief, sign up and pay your entry.{% else %}{{ opencity.opensText }} Already started? Pick up where you left off.{% endif %}</p>
     <div class="ol-hero__actions reveal" style="--delay: 200ms">
       {{ registerButton() }}
       <a class="ev-btn" href="{{ opencity.registerUrl }}">Continue my entry</a>

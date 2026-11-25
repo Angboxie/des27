@@ -152,3 +152,22 @@ Stripe signature check. Run them after any change to the SQL or functions.
 
 The three `index.ts` files that wrap this logic for Supabase's servers can only be
 exercised once deployed (step 5).
+
+## Faster sign-in (optional)
+
+People stay signed in on the browser they used, so the sign-in email is only needed
+on a new device. Two switches in `src/_data/opencity.json` (`signIn`) make that first
+sign-in quicker. Turn each on only after its setup below is done.
+
+**`emailCode`: a 6-digit code as well as the link.** In Supabase, open the sign-in
+(Authentication) email templates, choose the magic link template, and paste in
+`email-templates/sign-in-link.html` (it now includes `{{ .Token }}`). Then set
+`"emailCode": true`. The sign-in page shows a box for the code, so the person is
+signed in on the page they started from, whichever app opened the email.
+
+**`google`: a "Continue with Google" button.** Create an OAuth client in Google Cloud
+(type: web application) with the redirect address
+`https://YOUR-PROJECT.supabase.co/auth/v1/callback`, then paste its client ID and
+secret into Supabase under the Google sign-in provider and switch the provider on.
+Then set `"google": true`. Someone who signs in with Google is the same entrant as
+the one who used the email link, as long as the email address is the same.

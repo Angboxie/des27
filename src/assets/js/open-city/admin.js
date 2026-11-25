@@ -319,7 +319,7 @@
       window.OC.setBusy(form, true);
       try {
         await window.OC.signIn(form.email.value.trim());
-        form.innerHTML = `<h2>Check your inbox</h2><p>We've sent you a sign-in link.</p>`;
+        window.OC.showEmailSent(form, form.email.value.trim());
       } catch (error) {
         window.OC.setBusy(form, false);
         window.OC.alertIn(form, error.message);

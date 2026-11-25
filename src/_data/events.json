@@ -6,8 +6,8 @@
     "headlineAccent": "2027",
     "date": "2026-11-27",
     "location": "Online, with the finale at the Melbourne School of Design",
-    "summary": "A summer design challenge for architecture, UI/UX and graphic design students from every university in Melbourne.",
-    "description": "Over the summer break, students from different design disciplines take on one shared challenge facing Melbourne. The best work is presented at a live crit, awards night and open exhibition in Week 2 of Semester 1, 2027.",
+    "summary": "A summer design challenge for architecture, UI/UX and graphic design students across Victoria, with $3,500 in cash prizes.",
+    "description": "Over the summer break, students from different design disciplines take on one shared challenge facing Melbourne. The best work is presented at the final exhibition and awards at the Melbourne School of Design in March 2027.",
     "image": "/assets/images/open-city.jpg",
     "homeArt": "/assets/images/home/open-city-collage.webp",
     "registration": {
@@ -18,13 +18,17 @@
     "remindUrl": null,
     "flagship": true,
     "featured": true,
-    "dateNote": "Registration opens. The competition runs from December 2026 to March 2027.",
+    "dateNote": "Registration opens. The competition runs from 27 November 2026 to March 2027.",
     "details": {
-      "brief": "The full brief and the three category challenges unlock in your participant area as soon as your entry is paid.",
+      "brief": "The full brief and the three category briefs are published on the OPEN CITY page on 27 November 2026, free for everyone to read.",
       "keyDates": [
         {
           "label": "Registration opens",
           "when": "27 Nov 2026"
+        },
+        {
+          "label": "Registration closes",
+          "when": "23 Dec 2026"
         },
         {
           "label": "Round 1 submissions close",
@@ -39,24 +43,25 @@
           "when": "1 Mar 2027"
         },
         {
-          "label": "Final exhibition",
-          "when": "12 Mar 2027"
+          "label": "Final exhibition and awards",
+          "when": "March 2027 (date TBC)"
         }
       ],
       "eligibility": [
-        "Bachelor and Masters coursework students at any university or higher education provider in Greater Melbourne",
+        "Bachelor's and Master's coursework students at any university or higher education provider in Victoria",
+        "2026 graduates and students with a confirmed offer to start in 2027 can also enter",
         "Categories: A. Architecture · B. UI/UX Design · C. Graphic Design",
         "Solo or teams of up to 3, one entry per person",
-        "$10 per person (AUD)"
+        "$10 per person (AUD); confidential fee waivers available"
       ],
       "prizes": [
         "$3,500 cash prize pool across all three categories",
-        "People’s Choice Award ($200), voted by finale guests",
+        "Architecture $1,500 · UI/UX Design $1,100 · Graphic Design $900",
         "Lived Experience Award (commendation)",
-        "Industry prizes such as studio tours and portfolio reviews (TBC)"
+        "Industry prizes, including studio tours and portfolio reviews"
       ],
       "submission": [
-        "Released with the brief once your entry is paid. Join the Discord for announcements, Q&A and team-finding."
+        "Set out in the brief. The Discord, for announcements, Q&A and team-finding, opens once your entry is paid."
       ]
     },
     "status": "upcoming",

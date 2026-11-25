@@ -50,6 +50,43 @@
 }
 
 
+/* the headline numbers under the hero buttons */
+.ol-stats {
+  display: flex;
+  width: max-content;
+  max-width: 100%;
+  gap: clamp(1rem, 2.6vw, 2.5rem);
+  margin: clamp(1.75rem, 3vw, 2.75rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ol-stats li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-left: 0.9rem;
+  border-left: 2px solid var(--des-lime);
+}
+
+.ol-stats strong {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(2.1rem, 3.9vw, 3.6rem);
+  line-height: 0.9;
+  color: var(--des-lime);
+  font-variant-numeric: tabular-nums;
+}
+
+.ol-stats span {
+  font-size: clamp(0.7rem, 0.95vw, 0.85rem);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--des-on-blue);
+}
+
+
 /* ---------- What it is ---------- */
 
 .ol-about {
@@ -190,6 +227,30 @@
   max-width: 44em;
   margin: clamp(1.25rem, 2.5vw, 2rem) 0 0;
   color: #4a4a55;
+}
+
+/* the brief links, shown from the release time */
+.ol-cat__brief {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.ol-cat__brief:hover,
+.ol-cat__brief:focus-visible {
+  color: var(--des-ink);
+}
+
+.ol-briefs .ol-cta {
+  margin-top: 1.25rem;
+}
+
+[data-brief-locked][hidden],
+[data-brief-open][hidden] {
+  display: none;
 }
 
 
@@ -418,4 +479,198 @@
 
 .ol-final .ev-featured__script {
   margin-left: 0.2em;
+}
+
+/* room for the brief link to sit on one line */
+.ol-cat .ol-cat__lock[data-brief-open] {
+  max-width: none;
+}
+
+
+/* ---------- The brief, readable on the page ---------- */
+
+.ol-reader {
+  margin-top: clamp(2rem, 4vw, 3.5rem);
+  scroll-margin-top: 5rem;
+}
+
+.ol-reader__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(1.8rem, 3.4vw, 2.9rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.ol-reader .ol-locked { margin-top: 0.6rem; }
+
+.ol-reader__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.25rem 0 0.75rem;
+}
+
+.ol-reader__tabs a {
+  padding: 0.65em 1.2em;
+  font-weight: 600;
+  color: var(--des-blue-deep);
+  text-decoration: none;
+  background: var(--des-white);
+  border: 2px solid var(--des-blue);
+  border-radius: 0.55em;
+  transition: background 0.3s var(--ease-out), color 0.3s var(--ease-out);
+}
+
+.ol-reader__tabs a:hover,
+.ol-reader__tabs a:focus-visible {
+  background: var(--des-lime);
+}
+
+.ol-reader__tabs a[aria-current] {
+  color: var(--des-white);
+  background: var(--des-blue);
+}
+
+.ol-reader__frame {
+  display: block;
+  width: 100%;
+  height: min(88vh, 62rem);
+  background: #e9e7e1;
+  border: 2px solid var(--des-ink);
+  border-radius: 0.9rem;
+}
+
+.ol-reader__open {
+  margin: 0.75rem 0 0;
+}
+
+.ol-reader__open a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--des-blue-deep);
+}
+
+/* phones: no frame, the tabs open the PDFs */
+@media (max-width: 47.99em) {
+  .ol-reader__frame,
+  .ol-reader__open { display: none; }
+
+  .ol-reader__tabs { flex-direction: column; }
+  .ol-reader__tabs a[aria-current] {
+    color: var(--des-blue-deep);
+    background: var(--des-lime);
+  }
+}
+
+
+/* ---------- Prizes ---------- */
+
+.ol-prizes__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+  padding-block: clamp(3rem, 6.5vw, 6rem);
+}
+
+.ol-prizes__title {
+  margin: 0 0 1.25rem;
+  line-height: 0.9;
+}
+
+.ol-prizes__title .ev-featured__big {
+  display: block;
+  font-size: clamp(5rem, 13vw, 11.5rem);
+  line-height: 0.85;
+  color: var(--des-lime);
+  font-variant-numeric: tabular-nums;
+}
+
+.ol-prizes__title .ev-featured__script { display: block; }
+
+.ol-prizes__lead {
+  max-width: 30em;
+  margin: 0 0 1.25rem;
+  font-size: clamp(1rem, 1.3vw, 1.15rem);
+  line-height: 1.55;
+}
+
+.ol-prizes__extras {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ol-prizes__extras li {
+  padding-left: 1.5em;
+  background: radial-gradient(circle at 0.35em 0.75em, var(--des-lime) 0.25em, transparent 0.27em) no-repeat;
+}
+
+.ol-prizes__table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--des-ink);
+  background: var(--des-white);
+  border: 2px solid var(--des-ink);
+  border-radius: 1rem;
+  border-spacing: 0;
+  overflow: hidden;
+  box-shadow: 0.5rem 0.5rem 0 var(--des-lime);
+}
+
+.ol-prizes__table th,
+.ol-prizes__table td {
+  padding: clamp(0.8rem, 1.6vw, 1.15rem) clamp(0.75rem, 1.6vw, 1.25rem);
+  text-align: right;
+  border-bottom: 1px solid rgba(13, 13, 13, 0.15);
+}
+
+.ol-prizes__table tr:last-child th,
+.ol-prizes__table tr:last-child td { border-bottom: 0; }
+
+.ol-prizes__table th:first-child { text-align: left; }
+
+.ol-prizes__table thead th {
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--des-ink);
+  background: var(--des-lime);
+  border-bottom: 2px solid var(--des-ink);
+}
+
+.ol-prizes__table tbody th {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(1.15rem, 2vw, 1.6rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.ol-prizes__table td {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(1.15rem, 2vw, 1.6rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.ol-prizes__table td:nth-child(2) {
+  font-size: clamp(1.5rem, 2.8vw, 2.3rem);
+  color: var(--des-blue);
+}
+
+.ol-prizes__note {
+  margin: 1.1rem 0 0;
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+@media (max-width: 59.99em) {
+  .ol-prizes__inner { grid-template-columns: 1fr; }
 }

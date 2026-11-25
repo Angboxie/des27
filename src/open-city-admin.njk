@@ -24,6 +24,8 @@ scripts:
          data-supabase-url="{{ opencity.supabaseUrl or '' }}"
          data-supabase-key="{{ opencity.supabaseAnonKey or '' }}"
          data-contact="{{ opencity.contactEmail }}"
+         data-signin-google="{{ 'true' if opencity.signIn.google else '' }}"
+         data-signin-code="{{ 'true' if opencity.signIn.emailCode else '' }}"
          data-opens="{{ opencity.opensText }}">
       <noscript><p class="oc-card">The dashboard needs JavaScript switched on in your browser.</p></noscript>
       <p class="oc-card oc-loading" data-oc-loading>Loading&hellip;</p>

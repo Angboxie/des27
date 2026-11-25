@@ -1,4 +1,5 @@
-// OPEN CITY participant page: sign in, register, pay, set up a team, read the brief.
+// OPEN CITY participant page: sign in, register, pay, set up a team, then a dashboard
+// (brief, key dates, submission, Discord) once the entry is confirmed.
 // Every rule is enforced by the database; this file only shows what it says
 // and sends the participant's choices to it.
 
@@ -25,7 +26,7 @@
     const p = me.participant;
     const team = me.team;
     if (!p) return ["Complete your registration", "Tell us who you are and how you're taking part. It takes about two minutes.", "#registration"];
-    if (!me.paid) return ["Pay for your entry", "Each participant pays for their own entry. The full brief and the Discord are available once payment is confirmed.", "#payment"];
+    if (!me.paid) return ["Pay for your entry", "Each participant pays for their own entry. The Discord opens once payment is confirmed.", "#payment"];
     if (!team && me.invitations.length) return ["Answer your team invitation", `You've been invited to "${me.invitations[0].team}". Accept or decline below.`, "#team"];
     if (!team && p.path === "looking") return ["Find your teammates", "Join the DES Discord and use the team-finder. Once you have a team, one member registers it here and invites the others. You will not need to register again.", "#discord"];
     if (!team) return ["Set up your team", "If you're the team leader, register the team now. Otherwise wait for your leader's invitation: it will appear here.", "#team"];
@@ -333,27 +334,101 @@
       </section>`;
   }
 
-  function briefSection() {
-    if (!me.paid && !me.is_admin) {
-      return `
-        <section class="oc-card oc-card--locked" id="brief">
-          <div class="oc-card__head"><h2>Competition brief</h2><span class="oc-pill oc-pill--wait">Locked</span></div>
-          <p>The full brief, the three category challenges, the rules and the submission requirements unlock here as soon as your entry payment is verified.</p>
-        </section>`;
-    }
-    if (!brief) return `<section class="oc-card" id="brief"><h2>Competition brief</h2><p class="oc-loading">Loading the brief&hellip;</p></section>`;
+  // The brief is public (PDFs on the OPEN CITY page) from the release time in _data/opencity.json
+  const briefsReleased = () => {
+    const local = ["localhost", "127.0.0.1"].includes(window.location.hostname);   // previews show the released state
+    return local || !(Date.parse(content.briefsUnlockAt || "") > Date.now());
+  };
+  const myCategory = () => (me.team ? me.team.category : me.participant && me.participant.category);
 
-    const mine = me.team ? me.team.category : me.participant && me.participant.category;
+  function briefLinks() {
+    if (!briefsReleased()) return `<p class="oc-hint">The brief is released on ${esc(content.briefsUnlockText || "launch day")}.</p>`;
+    const mine = myCategory();
+    const link = (name) => esc(window.OC.link(name));
+    return `
+      <div class="oc-actions">
+        ${mine ? `<a class="oc-btn" href="${link("brief-" + mine)}" target="_blank" rel="noopener">${esc(categoryLabel(mine))} brief (PDF)</a>` : ""}
+        <a class="oc-btn oc-btn--line" href="${link("brief-full")}" target="_blank" rel="noopener">Full brief (PDF)</a>
+      </div>`;
+  }
+
+  // Extra material organisers add in their dashboard (the starter placeholders are left out)
+  function resources() {
+    const mine = myCategory();
     const KIND = { brief: "Brief", challenge: "Category challenge", rules: "Rules and guidelines", submission: "Submission requirements", resource: "Resource" };
+    return (brief || []).filter((item) => !/^placeholder/i.test((item.body || "").trim())).map((item) => `
+      <details class="oc-doc">
+        <summary><span>${esc(item.title)}</span><small>${esc(KIND[item.kind] || "")}${item.category ? " &middot; " + esc(categoryLabel(item.category)) : ""}${item.category && item.category === mine ? " &middot; yours" : ""}</small></summary>
+        ${(item.body || "").split(/\n{2,}/).filter(Boolean).map((para) => `<p>${esc(para).replace(/\n/g, "<br>")}</p>`).join("")}
+        ${/^https:\/\//.test(item.url || "") ? `<p><a class="oc-btn oc-btn--line" href="${esc(item.url)}" target="_blank" rel="noopener">Open ${esc(item.title)}</a></p>` : ""}
+      </details>`).join("");
+  }
+
+  function briefSection() {
     return `
       <section class="oc-card" id="brief">
-        <div class="oc-card__head"><h2>Competition brief</h2><span class="oc-pill oc-pill--ok">Unlocked</span></div>
-        ${brief.map((item) => `
-          <details class="oc-doc"${item.kind === "brief" || item.category === mine ? " open" : ""}>
-            <summary><span>${esc(item.title)}</span><small>${esc(KIND[item.kind] || "")}${item.category ? " &middot; " + esc(categoryLabel(item.category)) : ""}${item.category && item.category === mine ? " &middot; yours" : ""}</small></summary>
-            ${(item.body || "").split(/\n{2,}/).filter(Boolean).map((para) => `<p>${esc(para).replace(/\n/g, "<br>")}</p>`).join("")}
-            ${/^https:\/\//.test(item.url || "") ? `<p><a class="oc-btn oc-btn--line" href="${esc(item.url)}" target="_blank" rel="noopener">Open ${esc(item.title)}</a></p>` : ""}
-          </details>`).join("") || "<p>The brief will appear here shortly.</p>"}
+        <div class="oc-card__head"><h2>Competition brief</h2></div>
+        <p>Your category brief has the shared rules plus your challenge. The full brief covers all three categories.</p>
+        ${briefLinks()}
+        ${resources()}
+      </section>`;
+  }
+
+  // Shown once the entry is confirmed: everything in one place
+  function dashboard() {
+    const p = me.participant;
+    const team = me.team;
+    const sub = team.submission || {};
+    const s = me.settings;
+    const safe = (url) => (/^https:\/\//.test(url || "") ? url : null);
+    const first = String(p.full_name || "").trim().split(/\s+/)[0];
+
+    const day = 24 * 60 * 60 * 1000;
+    const dates = (content.keyDates || []).map((item) => ({ ...item, time: Date.parse(item.when) }));
+    const next = dates.find((item) => item.time + day > Date.now());
+    const daysLeft = next ? Math.max(0, Math.ceil((next.time - Date.now()) / day)) : null;
+
+    const submission = sub.link
+      ? `<p><span class="oc-pill oc-pill--ok">Lodged</span></p><p class="oc-hint">${sub.submitted_at ? "Lodged " + esc(window.OC.date(sub.submitted_at)) + ". " : ""}${s.submissions_open ? "It can be replaced until the deadline." : ""}</p>`
+      : s.submissions_open
+        ? `<p><span class="oc-pill oc-pill--wait">Not lodged yet</span></p><p class="oc-hint">${team.solo || team.is_leader ? "Lodge your link below." : "Your team leader lodges the link."}</p>`
+        : `<p><span class="oc-pill oc-pill--wait">Not open yet</span></p><p class="oc-hint">Submissions open on this page before the Round 1 deadline.</p>`;
+
+    return `
+      <section class="oc-dash" id="dashboard">
+        <div class="oc-next oc-next--ok">
+          <p class="oc-next__label">Entry confirmed &middot; ${esc(categoryLabel(team.category))}</p>
+          <h2>${first ? "Hi " + esc(first) : "Your dashboard"}</h2>
+          <p>${team.solo ? "Individual entry" : "Team " + esc(team.name)} &middot; ${team.solo ? "Entry" : "Team"} ID <code>${esc(team.code)}</code></p>
+        </div>
+        <div class="oc-dash__grid">
+          <article class="oc-tile">
+            <h3>Brief</h3>
+            <p>Your category brief has the shared rules plus your challenge.</p>
+            ${briefLinks()}
+          </article>
+          <article class="oc-tile">
+            <h3>Key dates</h3>
+            ${next ? `<p class="oc-tile__big"><strong>${daysLeft}</strong><span>${daysLeft === 1 ? "day" : "days"} to<br>${esc(next.label.toLowerCase())}</span></p>` : ""}
+            <ol class="oc-dates">
+              ${dates.map((item) => `<li class="${item === next ? "is-next" : item.time + day <= Date.now() ? "is-past" : ""}"><span>${esc(item.when)}</span><span>${esc(item.label)}</span></li>`).join("")}
+            </ol>
+          </article>
+          <article class="oc-tile">
+            <h3>Submission</h3>
+            ${submission}
+            ${sub.code ? `<p class="oc-hint">Anonymous judging code: <code>${esc(sub.code)}</code></p>` : ""}
+            <div class="oc-actions"><a class="oc-btn oc-btn--line" href="#team">${team.solo ? "My entry" : "My team"} and submission</a></div>
+          </article>
+          <article class="oc-tile">
+            <h3>Discord</h3>
+            <p>Announcements, questions, mentor videos and the team-finder.</p>
+            <div class="oc-actions">
+              ${safe(s.discord_invite) ? `<a class="oc-btn" href="${esc(s.discord_invite)}" target="_blank" rel="noopener">Join the Discord</a>` : `<span class="oc-hint">The invitation link will appear here soon.</span>`}
+              ${safe(s.team_finder_url) ? `<a class="oc-btn oc-btn--line" href="${esc(s.team_finder_url)}" target="_blank" rel="noopener">Team-finder</a>` : ""}
+            </div>
+          </article>
+        </div>
       </section>`;
   }
 
@@ -393,23 +468,32 @@
       4: () => teamSection(),
     }[shown]();
 
-    // once the entry is paid, the brief and Discord sit under the team step
-    const unlocked = me.paid && shown >= 3 ? briefSection() + discordSection() : "";
+    // confirmed entries get the dashboard; before that the brief and Discord sit under the team step
+    const dash = current === 4 && shown === 4;
+    const extras = resources();
+    const unlocked = dash
+      ? (extras ? `<section class="oc-card" id="brief"><div class="oc-card__head"><h2>More from DES</h2></div>${extras}</section>` : "")
+      : me.paid && shown >= 3 ? briefSection() + discordSection() : "";
     const teaser = !me.paid && shown === current ? `
       <p class="oc-teaser">
         <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="9" width="12" height="8" rx="1.5"/><path d="M7 9V6.5a3 3 0 0 1 6 0V9"/></svg>
-        The full brief, your category challenge and the Discord unlock as soon as your entry is paid.
+        The Discord unlocks as soon as your entry is paid. The brief is public on the OPEN CITY page.
       </p>` : "";
 
     app.innerHTML = `
       <div class="oc-bar">
         <span>Signed in as <strong>${esc(me.email)}</strong></span>
-        <span>${me.is_admin ? `<a class="oc-link" href="${esc(window.OC.link("admin"))}">Organiser dashboard</a> &middot; ` : ""}<button class="oc-link" type="button" data-action="signout">Sign out</button></span>
+        <span><button class="oc-link" type="button" data-action="signout">Sign out</button></span>
       </div>
+      ${me.is_admin ? `
+        <a class="oc-admin" href="${esc(window.OC.link("admin"))}">
+          <span><strong>Organiser&rsquo;s dashboard</strong><small>Registrations, payments, teams, submissions and settings</small></span>
+          <span class="oc-admin__arrow" aria-hidden="true">&rarr;</span>
+        </a>` : ""}
       ${stepper(current, shown)}
       ${notice ? `<p class="oc-alert" data-tone="${esc(notice[1])}" role="status">${esc(notice[0])}</p>` : ""}
       ${back ? `
-        <p class="oc-backto">You're looking back at step ${shown}. <button class="oc-link" type="button" data-action="goto" data-step="${current}">Return to step ${current}: ${esc(title)}</button></p>` : `
+        <p class="oc-backto">You're looking back at step ${shown}. <button class="oc-link" type="button" data-action="goto" data-step="${current}">${current === 4 ? "Return to my dashboard" : `Return to step ${current}: ${esc(title)}`}</button></p>` : dash ? dashboard() : `
         <div class="oc-next oc-next--${tone || "todo"}">
           <p class="oc-next__label">${tone === "ok" ? "Registration complete" : `Step ${current} of 4`}</p>
           <h2>${esc(title)}</h2>
@@ -453,7 +537,7 @@
       window.OC.setBusy(form, true);
       try {
         await window.OC.signIn(email);
-        form.innerHTML = `<h2>Check your email</h2><p>A link has been sent to <strong>${esc(email)}</strong>. Open it on this device to continue. It may take a minute to arrive; please check your spam folder.</p>`;
+        window.OC.showEmailSent(form, email);
       } catch (error) {
         window.OC.setBusy(form, false);
         window.OC.alertIn(form, error.message);
@@ -575,7 +659,7 @@
     } catch (e) { /* private mode */ }
 
     const verified = () => {
-      notice = ["Payment verified. The full brief is unlocked.", "ok"];
+      notice = ["Payment verified. The Discord is unlocked.", "ok"];
       return refresh();
     };
     if (me.purchases.length > before) return verified();
@@ -610,6 +694,13 @@
     } catch (error) {
       app.innerHTML = `<p class="oc-card oc-alert" data-tone="bad">${esc(error.message)}</p>`;
       return;
+    }
+
+    // emails from DES carry the address they were sent to; invitations only show for that address
+    const wanted = (params.get("email") || "").trim().toLowerCase();
+    if (wanted && me && wanted !== String(me.email).toLowerCase()) {
+      notice = [`This link was sent to ${wanted}, but you are signed in as ${me.email}. Team invitations only show for the address they were sent to: sign out, then sign in as ${wanted}.`, "hold"];
+      render();
     }
 
     if (params.has("paid") || params.has("cancelled")) {
