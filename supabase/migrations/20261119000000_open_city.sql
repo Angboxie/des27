@@ -1078,6 +1078,44 @@ begin
   delete from oc_teams where id = t.id;
 end $$;
 
+-- Remove a participant: take them out of their team (re-checking it) and
+-- delete their registration. Their payment and entry stay on record, so they
+-- show up as "paid but not registered" until they register again or the entry
+-- is voided in Payments. Someone leading a team with other members can't be
+-- removed until that team is cancelled.
+create function public.oc_admin_remove_participant(p_user uuid) returns text
+language plpgsql volatile security definer set search_path = public as $$
+declare
+  p oc_participants;
+  m oc_team_members;
+  t oc_teams;
+  others int;
+begin
+  perform oc_require_admin();
+  select * into p from oc_participants where user_id = p_user for update;
+  if not found then raise exception 'Participant not found.'; end if;
+
+  select * into m from oc_team_members
+   where participant_id = p_user and state = 'accepted' for update;
+  if found then
+    select * into t from oc_teams where id = m.team_id for update;
+    if m.role = 'leader' then
+      select count(*) into others from oc_team_members
+       where team_id = t.id and id <> m.id and state in ('invited', 'accepted');
+      if others > 0 then
+        raise exception 'They lead team "%". Cancel that team (or remove its other members) first.', t.name;
+      end if;
+      perform oc_close_team(t.id, 'cancelled');
+    else
+      update oc_team_members set state = 'removed', responded_at = now() where id = m.id;
+      perform oc_recheck_team(t.id);
+    end if;
+  end if;
+
+  delete from oc_participants where user_id = p_user;
+  return p.full_name;
+end $$;
+
 -- Authorised team changes, including on approved teams
 create function public.oc_admin_remove_member(p_member uuid) returns text
 language plpgsql volatile security definer set search_path = public as $$
@@ -1309,7 +1347,7 @@ grant execute on function
   public.oc_team_invite(text, text), public.oc_team_remove_member(uuid), public.oc_leave_team(),
   public.oc_cancel_team(), public.oc_brief(), public.oc_submit(text, text),
   public.oc_admin_data(), public.oc_admin_judging_sheet(), public.oc_admin_set_team(uuid, text, text),
-  public.oc_admin_delete_team(uuid),
+  public.oc_admin_delete_team(uuid), public.oc_admin_remove_participant(uuid),
   public.oc_admin_remove_member(uuid), public.oc_admin_add_member(uuid, text, text),
   public.oc_admin_grant_entry(text, text), public.oc_admin_void_entry(uuid),
   public.oc_admin_set_setting(text, jsonb), public.oc_admin_save_resource(jsonb),

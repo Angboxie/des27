@@ -71,8 +71,8 @@
         <button class="oc-btn oc-btn--line" type="button" data-action="csv-participants">Download CSV</button>
       </div>
       <div class="oc-scroll"><table class="oc-table">
-        <thead><tr><th>Name</th><th>Institution</th><th>Category</th><th>Discord</th><th>Payment</th><th>Entry</th><th>Registered</th></tr></thead>
-        <tbody>${rows.map((p) => `<tr>
+        <thead><tr><th>Name</th><th>Institution</th><th>Category</th><th>Discord</th><th>Payment</th><th>Entry</th><th>Registered</th><th><span class="visually-hidden">Actions</span></th></tr></thead>
+        <tbody>${rows.map((p) => `<tr data-participant="${esc(p.user_id)}">
           <td><strong>${esc(p.name)}</strong><small>${esc(p.email)}${p.phone ? " &middot; " + esc(p.phone) : ""}</small></td>
           <td>${esc(p.institution)}</td>
           <td>${esc(categoryLabel(p.category))}</td>
@@ -80,7 +80,8 @@
           <td>${yesNo(p.paid, "Paid", "Not paid")}</td>
           <td>${p.team ? `${esc(p.team.solo ? "Individual" : p.team.name)} <small><code>${esc(p.team.code)}</code></small> ${statusPill(p.team.status)}` : `<span class="oc-tick">${p.path === "looking" ? "Looking for teammates" : "No team yet"}</span>`}</td>
           <td>${esc(date(p.registered_at))}</td>
-        </tr>`).join("") || `<tr><td colspan="7">No one matches.</td></tr>`}</tbody>
+          <td><button class="oc-link" type="button" data-action="remove-participant" data-name="${esc(p.name)}" data-team="${esc(p.team && !p.team.solo ? p.team.name : "")}">Remove</button><div class="oc-alert" data-alert hidden></div></td>
+        </tr>`).join("") || `<tr><td colspan="8">No one matches.</td></tr>`}</tbody>
       </table></div>`;
   }
 
@@ -306,6 +307,12 @@
       if (!email) return;
       const name = window.prompt("Their name:") || email;
       act(card, () => rpc("oc_admin_add_member", { p_team: card.dataset.team, p_name: name, p_email: email }), "Invitation sent.");
+    },
+    "remove-participant"(button) {
+      const { name, team } = button.dataset;
+      const fromTeam = team ? ` They will be taken out of team "${team}", which is re-checked.` : "";
+      if (!window.confirm(`Remove ${name}?${fromTeam} Their registration is deleted; any payment and entry are kept (void the entry in Payments if they shouldn't take part).`)) return;
+      act(button.closest("tr"), () => rpc("oc_admin_remove_participant", { p_user: button.closest("tr").dataset.participant }), `${name} removed.`);
     },
     "delete-team"(button) {
       const card = button.closest("[data-team]");

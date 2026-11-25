@@ -232,6 +232,26 @@
     </li>`;
   }
 
+  // One teammate row in the "register a team" form. Rows are added and
+  // removed in place (see add-mate / remove-mate) so typed values survive.
+  function mateRow(n, canRemove = true) {
+    return `<li class="oc-mate" data-mate>
+      <span class="oc-mate__tag">Teammate <span data-mate-num>${n}</span></span>
+      <label class="oc-field"><span>Name</span><input name="mate-name" required maxlength="120" autocomplete="off"></label>
+      <label class="oc-field"><span>Email</span><input type="email" name="mate-email" required autocomplete="off"></label>
+      <button class="oc-link oc-mate__remove" type="button" data-action="remove-mate"${canRemove ? "" : " hidden"}>Remove</button>
+    </li>`;
+  }
+
+  // Keep the teammate rows tidy: numbered 1, 2; no Remove on a lone teammate
+  // (a team needs at least one); no Add once there are two.
+  function syncMates(form) {
+    const rows = [...form.querySelectorAll("[data-mate]")];
+    rows.forEach((row, i) => { row.querySelector("[data-mate-num]").textContent = i + 1; });
+    rows.forEach((row) => { row.querySelector("[data-action='remove-mate']").hidden = rows.length < 2; });
+    form.querySelector("[data-action='add-mate']").hidden = rows.length >= 2;
+  }
+
   function teamSection() {
     const p = me.participant;
     const team = me.team;
@@ -307,21 +327,36 @@
           </ol>
           ${finder ? `<p><a class="oc-btn" href="${esc(finder)}" target="_blank" rel="noopener">Open the Discord team-finder</a></p>` : ""}
           <details class="oc-more"><summary>Register a team (team leader only)</summary>`
-        : `<p><strong>Only the team leader fills this in.</strong> Everyone else receives an invitation by email and accepts it on their own page.</p>`}
-        <form data-form="create-team">
-          <div class="oc-grid">
-            <label class="oc-field"><span>Team name</span><input name="name" required minlength="2" maxlength="80"></label>
-            <label class="oc-field"><span>Category</span>
-              <select name="category" required>${(content.categories || []).map((c) => `<option value="${esc(c.id)}"${c.id === p.category ? " selected" : ""}>${esc(c.label)}</option>`).join("")}</select>
-            </label>
-            <label class="oc-field"><span>Teammate 1 name</span><input name="name1" required maxlength="120"></label>
-            <label class="oc-field"><span>Teammate 1 email</span><input type="email" name="email1" required></label>
-            <label class="oc-field"><span>Teammate 2 name <em>(optional)</em></span><input name="name2" maxlength="120"></label>
-            <label class="oc-field"><span>Teammate 2 email <em>(optional)</em></span><input type="email" name="email2"></label>
+        : `<p class="oc-callout"><strong>Only the team leader fills this in.</strong> Your teammates don't register the team: they get an email invitation and accept it on their own page.</p>`}
+        <form class="oc-teamform" data-form="create-team">
+          <fieldset class="oc-step">
+            <legend><span class="oc-step__num" aria-hidden="true">1</span> Your team</legend>
+            <div class="oc-grid">
+              <label class="oc-field"><span>Team name</span><input name="name" required minlength="2" maxlength="80"></label>
+              <label class="oc-field"><span>Category</span>
+                <select name="category" required>${(content.categories || []).map((c) => `<option value="${esc(c.id)}"${c.id === p.category ? " selected" : ""}>${esc(c.label)}</option>`).join("")}</select>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="oc-step">
+            <legend><span class="oc-step__num" aria-hidden="true">2</span> Who's in it</legend>
+            <p class="oc-hint">A team is two or three people: you plus one or two teammates. Use the email address each teammate signs in with; they can only join by accepting from that address.</p>
+            <ol class="oc-mates" data-mates>
+              <li class="oc-mate oc-mate--you">
+                <span class="oc-mate__tag">Leader</span>
+                <span class="oc-mate__who"><strong>${esc(p.full_name)} (you)</strong><small>${esc(me.email)}</small></span>
+              </li>
+              ${mateRow(1, false)}
+            </ol>
+            <button class="oc-link oc-mates__add" type="button" data-action="add-mate">+ Add another teammate</button>
+          </fieldset>
+
+          <div class="oc-step oc-step--send">
+            <p class="oc-step__title"><span class="oc-step__num" aria-hidden="true">3</span> Send the invitations</p>
+            <div class="oc-alert" data-alert hidden></div>
+            <button class="oc-btn" type="submit">Register team and send invitations</button>
           </div>
-          <p class="oc-hint">Use the email address each teammate signs in with. They can only join by accepting from that address.</p>
-          <div class="oc-alert" data-alert hidden></div>
-          <button class="oc-btn" type="submit">Register team and send invitations</button>
         </form>
         ${looking ? "</details>" : ""}`;
     }
@@ -585,8 +620,8 @@
     },
 
     "create-team"(form) {
-      const members = [1, 2]
-        .map((n) => ({ name: form[`name${n}`].value.trim(), email: form[`email${n}`].value.trim() }))
+      const members = [...form.querySelectorAll("[data-mate]")]
+        .map((row) => ({ name: row.querySelector("[name='mate-name']").value.trim(), email: row.querySelector("[name='mate-email']").value.trim() }))
         .filter((m) => m.name || m.email);
       act(form, () => rpc("oc_create_team", { p_name: form.name.value, p_category: form.category.value, p_members: members }), "Team registered. Invitations are on their way.");
     },
@@ -609,6 +644,18 @@
     decline(button) {
       if (!window.confirm("Decline this team invitation?")) return;
       act(button.closest("[data-invite]"), () => rpc("oc_respond_invite", { p_member: button.dataset.id, p_accept: false }), "Invitation declined.");
+    },
+    "add-mate"(button) {
+      const form = button.closest("form");
+      form.querySelector("[data-mates]").insertAdjacentHTML("beforeend", mateRow(2));
+      syncMates(form);
+      form.querySelector("[data-mate]:last-child [name='mate-name']").focus();
+    },
+    "remove-mate"(button) {
+      const form = button.closest("form");
+      button.closest("[data-mate]").remove();
+      syncMates(form);
+      form.querySelector("[data-action='add-mate']").focus();
     },
     "remove-member"(button) {
       if (!window.confirm(`Remove ${button.dataset.name} from the team?`)) return;

@@ -136,8 +136,15 @@ entries, CSV exports, and the anonymous judging sheet.
 - **Clearing out closed teams:** cancelled and rejected teams have a **Delete team**
   button in the Teams tab, and **Delete all cancelled / rejected** clears them in one
   go. It only removes the team from the list: its members were already freed, and
-  payments and entries are kept. (On a database set up before 26 Nov 2026, run
-  `migrations/20261126000000_delete_closed_teams.sql` once in the SQL editor first.)
+  payments and entries are kept.
+- **Removing a participant:** **Remove** in the Participants tab takes them out of
+  their team (which is re-checked) and deletes their registration. Their payment and
+  entry are kept, so they then show as "paid but not registered": void the entry in
+  Payments if they shouldn't take part. Someone leading a team with other members
+  can't be removed until that team is cancelled.
+- (On a database set up before 26 Nov 2026, run
+  `migrations/20261126000000_organiser_cleanup.sql` once in the SQL editor to turn on
+  the two items above.)
 - **Team deadline:** turn off **Team changes are open**.
 - **Judging:** give judges the *judging sheet* download only. The *code key* links
   codes to teams and stays with DES.

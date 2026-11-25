@@ -1101,3 +1101,149 @@
   background: currentColor;
   opacity: 0.35;
 }
+
+
+/* ---------- Register a team: three numbered steps ---------- */
+
+/* who fills the form in, set apart above it */
+.oc-callout {
+  padding: 0.8rem 1rem;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  background: #f1f4ff;
+  border-left: 4px solid var(--des-blue);
+  border-radius: 0.5rem;
+}
+
+.oc-step {
+  min-width: 0;
+  margin: 0 0 1.5rem;
+  padding: 0 0 0 2.6rem;
+  border: 0;
+  position: relative;
+}
+
+/* a thin line joining the step numbers */
+.oc-step:not(.oc-step--send)::before {
+  content: "";
+  position: absolute;
+  top: 2.2rem;
+  bottom: -1.2rem;
+  left: 0.9rem;
+  width: 2px;
+  background: #dfe4fb;
+}
+
+.oc-step legend,
+.oc-step__title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 0.9rem -2.6rem;
+  padding: 0;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(1.2rem, 2vw, 1.45rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.oc-step__num {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.85rem;
+  height: 1.85rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--des-ink);
+  background: var(--des-lime);
+  border: 2px solid var(--des-ink);
+  border-radius: 50%;
+}
+
+.oc-step .oc-grid { margin-bottom: 0; }
+.oc-step > .oc-hint { margin: 0 0 0.9rem; }
+
+/* the people in the team, one row each */
+.oc-mates {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0 0 0.6rem;
+  padding: 0;
+  list-style: none;
+}
+
+.oc-mate {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr) minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 0.6rem 1rem;
+  padding: 0.85rem 1rem;
+  background: #f7f8ff;
+  border: 1.5px solid #dfe4fb;
+  border-radius: 0.7rem;
+}
+
+.oc-mate .oc-field { margin: 0; }
+
+.oc-mate__tag {
+  align-self: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--des-blue-deep);
+}
+
+.oc-mate--you {
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  align-items: center;
+  background: var(--des-white);
+  border-style: dashed;
+}
+
+.oc-mate__who {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.oc-mate__remove {
+  align-self: center;
+  margin-top: 1.4rem;
+  color: #b3261e;
+}
+
+.oc-mates__add {
+  margin-top: 0.2rem;
+}
+
+.oc-step--send {
+  margin-bottom: 0;
+}
+
+.oc-step--send .oc-step__title {
+  margin-bottom: 0.9rem;
+}
+
+@media (max-width: 40em) {
+  .oc-step { padding-left: 0; }
+  .oc-step::before { display: none; }
+  .oc-step legend,
+  .oc-step__title { margin-left: 0; }
+
+  .oc-mate,
+  .oc-mate--you { grid-template-columns: minmax(0, 1fr); }
+  .oc-mate__remove { margin-top: 0; justify-self: start; }
+}
+
+/* beats the card's own paragraph margins, so "3" lines up under 1 and 2 */
+.oc-card .oc-step > .oc-step__title {
+  margin: 0 0 0.9rem -2.6rem;
+}
+
+@media (max-width: 40em) {
+  .oc-card .oc-step > .oc-step__title { margin-left: 0; }
+}

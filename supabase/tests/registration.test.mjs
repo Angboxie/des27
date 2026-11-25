@@ -369,6 +369,37 @@ test("organisers can delete cancelled or rejected teams, and nothing else", asyn
   await assert.rejects(admin.call("oc_admin_delete_team", team.id), /Team not found/);
 });
 
+test("organisers can remove a participant; their payment stays on record", async () => {
+  const [alex, olivia] = await trio(["Alex", "Olivia"]);
+  const admin = await signIn("Organiser");
+  await api.sql("insert into oc_admins (email) values ($1)", [admin.email]);
+  for (const person of [alex, olivia]) await api.pay(person);
+  await alex.call("oc_create_team", "Pair", "uiux", [invite(olivia)]);
+  await olivia.call("oc_respond_invite", (await olivia.me()).invitations[0].id, true);
+  const team = await teamOf(alex);
+  assert.equal(team.status, "approved");
+
+  // only organisers; and a leader with teammates has to have their team cancelled first
+  await assert.rejects(alex.call("oc_admin_remove_participant", olivia.id), /organis/i);
+  await assert.rejects(admin.call("oc_admin_remove_participant", alex.id), /They lead team "Pair"/);
+
+  // a teammate: out of the team (which drops back to needing teammates), registration gone, entry kept
+  assert.equal(await admin.call("oc_admin_remove_participant", olivia.id), "Olivia");
+  assert.equal((await olivia.me()).participant, null);
+  assert.equal((await olivia.me()).paid, true);
+  assert.notEqual((await teamOf(alex)).status, "approved");
+  const data = await admin.call("oc_admin_data");
+  assert.equal(data.participants.some((p) => p.user_id === olivia.id), false);
+  assert.equal(data.unregistered.some((u) => u.email === olivia.email), true);
+
+  // a solo entrant: their one-person entry is closed with them
+  const sam = await signIn("Sam");
+  assert.equal((await sam.call("oc_save_registration", details("Sam", { path: "solo" }))).team.solo, true);
+  await admin.call("oc_admin_remove_participant", sam.id);
+  assert.equal((await sam.me()).participant, null);
+  assert.equal((await sam.me()).team, null);
+});
+
 test("team changes can be closed for everyone", async () => {
   const [alex, olivia] = await trio(["Alex", "Olivia"]);
   await api.sql("update oc_settings set value = 'false' where key = 'team_changes_open'");
