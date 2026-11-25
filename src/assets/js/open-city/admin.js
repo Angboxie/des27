@@ -86,11 +86,14 @@
 
   function teams() {
     const rows = data.teams.filter((t) => matches(t.name, t.code, t.status, t.members.map((m) => m.name + " " + m.email).join(" ")));
+    const closedCount = count(data.teams, (t) => ["cancelled", "rejected"].includes(t.status));
     return `
       <div class="oc-toolbar">
         <input type="search" placeholder="Search team, Team ID, member" value="${esc(filter)}" data-filter aria-label="Search teams">
         <button class="oc-btn oc-btn--line" type="button" data-action="csv-teams">Download CSV</button>
+        ${closedCount ? `<button class="oc-btn oc-btn--line" type="button" data-action="delete-closed-teams">Delete all ${closedCount} cancelled / rejected</button>` : ""}
       </div>
+      <div class="oc-alert" data-alert hidden></div>
       ${rows.map((t) => {
         const closed = ["cancelled", "rejected"].includes(t.status);
         return `
@@ -106,7 +109,11 @@
             <span class="oc-ticks">${yesNo(m.state === "accepted", "Confirmed", "Invited")}${yesNo(m.registered, "Registered", "Not registered")}${yesNo(m.paid, "Paid", "Not paid")}</span>
             ${m.role !== "leader" && !closed ? `<button class="oc-link" type="button" data-action="remove-member" data-id="${esc(m.id)}" data-name="${esc(m.name)}">Remove</button>` : ""}
           </li>`).join("")}</ul>
-          ${closed ? "" : `
+          ${closed ? `
+            <div class="oc-actions">
+              <button class="oc-btn oc-btn--line" type="button" data-action="delete-team" data-name="${esc(t.name)}">Delete team</button>
+            </div>
+            <div class="oc-alert" data-alert hidden></div>` : `
             <div class="oc-actions">
               ${t.status === "pending_review"
                 ? `<button class="oc-btn" type="button" data-action="team" data-do="recheck">Clear hold and re-check</button>`
@@ -299,6 +306,18 @@
       if (!email) return;
       const name = window.prompt("Their name:") || email;
       act(card, () => rpc("oc_admin_add_member", { p_team: card.dataset.team, p_name: name, p_email: email }), "Invitation sent.");
+    },
+    "delete-team"(button) {
+      const card = button.closest("[data-team]");
+      if (!window.confirm(`Delete "${button.dataset.name}" for good? It is already closed; this only removes it from the list. Payments are kept.`)) return;
+      act(card, () => rpc("oc_admin_delete_team", { p_team: card.dataset.team }), "Team deleted.");
+    },
+    "delete-closed-teams"(button) {
+      const closed = data.teams.filter((t) => ["cancelled", "rejected"].includes(t.status));
+      if (!window.confirm(`Delete all ${closed.length} cancelled or rejected teams for good? Payments are kept.`)) return;
+      act(button.closest(".oc-toolbar").parentElement, async () => {
+        for (const t of closed) await rpc("oc_admin_delete_team", { p_team: t.id });
+      }, `${closed.length} closed teams deleted.`);
     },
     "remove-member"(button) {
       if (!window.confirm(`Remove ${button.dataset.name} from this team?`)) return;

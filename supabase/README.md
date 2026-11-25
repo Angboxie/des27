@@ -133,6 +133,11 @@ entries, CSV exports, and the anonymous judging sheet.
 - **Refunds:** refund in Stripe. A full refund cancels the entries it paid for and
   re-checks the teams. A part refund holds the team for review, because Stripe can't
   say which entry it was for: void the right entry in the Payments tab, then clear the hold.
+- **Clearing out closed teams:** cancelled and rejected teams have a **Delete team**
+  button in the Teams tab, and **Delete all cancelled / rejected** clears them in one
+  go. It only removes the team from the list: its members were already freed, and
+  payments and entries are kept. (On a database set up before 26 Nov 2026, run
+  `migrations/20261126000000_delete_closed_teams.sql` once in the SQL editor first.)
 - **Team deadline:** turn off **Team changes are open**.
 - **Judging:** give judges the *judging sheet* download only. The *code key* links
   codes to teams and stays with DES.

@@ -344,6 +344,31 @@ test("an approved team can only be changed by an organiser", async () => {
   assert.equal((await olivia.me()).paid, true);
 });
 
+test("organisers can delete cancelled or rejected teams, and nothing else", async () => {
+  const [alex, olivia] = await trio(["Alex", "Olivia"]);
+  const admin = await signIn("Organiser");
+  await api.sql("insert into oc_admins (email) values ($1)", [admin.email]);
+  for (const person of [alex, olivia]) await api.pay(person);
+  await alex.call("oc_create_team", "Short Lived", "graphic", [invite(olivia)]);
+  await olivia.call("oc_respond_invite", (await olivia.me()).invitations[0].id, true);
+  const team = await teamOf(alex);
+
+  // a live team can't be deleted, and only organisers may try
+  await assert.rejects(admin.call("oc_admin_delete_team", team.id), /Only cancelled or rejected teams/);
+  await assert.rejects(alex.call("oc_admin_delete_team", team.id), /organis|admin|permission/i);
+
+  assert.equal(await admin.call("oc_admin_set_team", team.id, "cancel", "Test team"), "cancelled");
+  await assert.rejects(alex.call("oc_admin_delete_team", team.id), /organis|admin|permission/i);
+  await admin.call("oc_admin_delete_team", team.id);
+
+  // gone from the dashboard and the database; the members keep their paid entries
+  assert.equal((await admin.call("oc_admin_data")).teams.some((t) => t.id === team.id), false);
+  assert.equal((await api.sql("select count(*)::int as n from oc_team_members where team_id = $1", [team.id]))[0].n, 0);
+  assert.equal((await olivia.me()).team, null);
+  assert.equal((await olivia.me()).paid, true);
+  await assert.rejects(admin.call("oc_admin_delete_team", team.id), /Team not found/);
+});
+
 test("team changes can be closed for everyone", async () => {
   const [alex, olivia] = await trio(["Alex", "Olivia"]);
   await api.sql("update oc_settings set value = 'false' where key = 'team_changes_open'");

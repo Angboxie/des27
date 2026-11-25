@@ -1059,6 +1059,25 @@ begin
   return result;
 end $$;
 
+-- Delete a cancelled or rejected team for good, to tidy the dashboard.
+-- Closing it already freed its members; payments and entries don't point
+-- at teams, so they are untouched.
+create function public.oc_admin_delete_team(p_team uuid) returns void
+language plpgsql volatile security definer set search_path = public as $$
+declare
+  t oc_teams;
+begin
+  perform oc_require_admin();
+  select * into t from oc_teams where id = p_team for update;
+  if not found then raise exception 'Team not found.'; end if;
+  if t.status not in ('rejected', 'cancelled') then
+    raise exception 'Only cancelled or rejected teams can be deleted. Cancel the team first.';
+  end if;
+  delete from oc_submissions where team_id = t.id;
+  delete from oc_team_members where team_id = t.id;
+  delete from oc_teams where id = t.id;
+end $$;
+
 -- Authorised team changes, including on approved teams
 create function public.oc_admin_remove_member(p_member uuid) returns text
 language plpgsql volatile security definer set search_path = public as $$
@@ -1290,6 +1309,7 @@ grant execute on function
   public.oc_team_invite(text, text), public.oc_team_remove_member(uuid), public.oc_leave_team(),
   public.oc_cancel_team(), public.oc_brief(), public.oc_submit(text, text),
   public.oc_admin_data(), public.oc_admin_judging_sheet(), public.oc_admin_set_team(uuid, text, text),
+  public.oc_admin_delete_team(uuid),
   public.oc_admin_remove_member(uuid), public.oc_admin_add_member(uuid, text, text),
   public.oc_admin_grant_entry(text, text), public.oc_admin_void_entry(uuid),
   public.oc_admin_set_setting(text, jsonb), public.oc_admin_save_resource(jsonb),
