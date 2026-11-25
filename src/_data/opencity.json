@@ -181,7 +181,7 @@
   },
   "signIn": {
     "_note": "Extra ways to sign in. Turn each on only after its Supabase setup is done (supabase/README.md, 'Faster sign-in').",
-    "google": false,
+    "google": true,
     "emailCode": true
   }
 }
