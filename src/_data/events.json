@@ -6,7 +6,7 @@
     "headlineAccent": "2027",
     "date": "2026-11-27",
     "location": "Online, with the finale at the Melbourne School of Design",
-    "summary": "A summer design challenge for architecture, UI/UX and graphic design students across Victoria, with $3,500 in cash prizes.",
+    "summary": "A summer design challenge for architecture, UI/UX and graphic design students across Victoria.",
     "description": "Over the summer break, students from different design disciplines take on one shared challenge facing Melbourne. The best work is presented at the final exhibition and awards at the Melbourne School of Design in March 2027.",
     "image": "/assets/images/open-city.jpg",
     "homeArt": "/assets/images/home/open-city-collage.webp",
@@ -65,7 +65,12 @@
       ]
     },
     "status": "upcoming",
-    "placeholder": false
+    "placeholder": false,
+    "tagline": "Australia's biggest design student competition",
+    "prize": {
+      "big": "$3,500",
+      "label": "in cash prizes"
+    }
   },
   {
     "id": "des-movie-night",

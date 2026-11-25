@@ -130,6 +130,14 @@
   color: var(--des-blue);
 }
 
+.ol-facts li:first-child {
+  background: var(--des-lime);
+  border-color: var(--des-ink);
+  box-shadow: 0.35rem 0.35rem 0 var(--des-ink);
+}
+
+.ol-facts li:first-child strong { color: var(--des-ink); }
+
 .ol-facts span {
   font-weight: 600;
   text-transform: uppercase;

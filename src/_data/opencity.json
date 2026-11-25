@@ -43,8 +43,8 @@
     ],
     "facts": [
       {
-        "big": "$10",
-        "label": "Entry per person"
+        "big": "No. 1",
+        "label": "Biggest design student competition in Australia"
       },
       {
         "big": "1–3",
@@ -110,23 +110,22 @@
     ],
     "heroStats": [
       {
-        "big": "$3,500",
-        "label": "Cash prize pool"
-      },
-      {
         "big": "12",
         "label": "Finalists"
       },
       {
         "big": "3",
         "label": "Categories"
+      },
+      {
+        "big": "$10",
+        "label": "To enter"
       }
     ],
     "introHeading": {
       "big": "Your city",
       "script": "Your move"
     },
-    "eyebrow": "Australia's biggest design student competition",
     "prizes": {
       "big": "$3,500",
       "script": "in cash prizes",
