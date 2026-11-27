@@ -1010,6 +1010,9 @@
   gap: 1rem;
 }
 
+/* an odd tile left on its own row takes the full width */
+.oc-dash__grid > .oc-tile:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
 .oc-tile {
   display: flex;
   flex-direction: column;

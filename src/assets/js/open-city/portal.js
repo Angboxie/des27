@@ -1,5 +1,5 @@
 // OPEN CITY participant page: sign in, register, pay, set up a team, then a dashboard
-// (brief, key dates, submission, Discord) once the entry is confirmed.
+// (key dates, submission, Discord) once the entry is confirmed.
 // Every rule is enforced by the database; this file only shows what it says
 // and sends the participant's choices to it.
 
@@ -34,7 +34,7 @@
     const waitingOn = (test) => team.members.filter(test).map((m) => (m.me ? "you" : m.name)).join(", ");
     switch (team.status) {
       case "approved":
-        return [team.solo ? "Your entry is confirmed" : "Your team is confirmed", "The competition brief and the Discord link are below.", "#brief", "ok"];
+        return [team.solo ? "Your entry is confirmed" : "Your team is confirmed", "Key dates, your submission and the Discord link are below.", "#dashboard", "ok"];
       case "draft":
         return ["Invite a teammate", "A team needs two or three people. Invite someone, or switch to entering individually in your registration.", "#team"];
       case "pending_payment":
@@ -369,23 +369,7 @@
       </section>`;
   }
 
-  // The brief is public (PDFs on the OPEN CITY page) from the release time in _data/opencity.json
-  const briefsReleased = () => {
-    const local = ["localhost", "127.0.0.1"].includes(window.location.hostname);   // previews show the released state
-    return local || !(Date.parse(content.briefsUnlockAt || "") > Date.now());
-  };
   const myCategory = () => (me.team ? me.team.category : me.participant && me.participant.category);
-
-  function briefLinks() {
-    if (!briefsReleased()) return `<p class="oc-hint">The brief is released on ${esc(content.briefsUnlockText || "launch day")}.</p>`;
-    const mine = myCategory();
-    const link = (name) => esc(window.OC.link(name));
-    return `
-      <div class="oc-actions">
-        ${mine ? `<a class="oc-btn" href="${link("brief-" + mine)}" target="_blank" rel="noopener">${esc(categoryLabel(mine))} brief (PDF)</a>` : ""}
-        <a class="oc-btn oc-btn--line" href="${link("brief-full")}" target="_blank" rel="noopener">Full brief (PDF)</a>
-      </div>`;
-  }
 
   // Extra material organisers add in their dashboard (the starter placeholders are left out)
   function resources() {
@@ -397,16 +381,6 @@
         ${(item.body || "").split(/\n{2,}/).filter(Boolean).map((para) => `<p>${esc(para).replace(/\n/g, "<br>")}</p>`).join("")}
         ${/^https:\/\//.test(item.url || "") ? `<p><a class="oc-btn oc-btn--line" href="${esc(item.url)}" target="_blank" rel="noopener">Open ${esc(item.title)}</a></p>` : ""}
       </details>`).join("");
-  }
-
-  function briefSection() {
-    return `
-      <section class="oc-card" id="brief">
-        <div class="oc-card__head"><h2>Competition brief</h2></div>
-        <p>Your category brief has the shared rules plus your challenge. The full brief covers all three categories.</p>
-        ${briefLinks()}
-        ${resources()}
-      </section>`;
   }
 
   // Shown once the entry is confirmed: everything in one place
@@ -437,11 +411,6 @@
           <p>${team.solo ? "Individual entry" : "Team " + esc(team.name)} &middot; ${team.solo ? "Entry" : "Team"} ID <code>${esc(team.code)}</code></p>
         </div>
         <div class="oc-dash__grid">
-          <article class="oc-tile">
-            <h3>Brief</h3>
-            <p>Your category brief has the shared rules plus your challenge.</p>
-            ${briefLinks()}
-          </article>
           <article class="oc-tile">
             <h3>Key dates</h3>
             ${next ? `<p class="oc-tile__big"><strong>${daysLeft}</strong><span>${daysLeft === 1 ? "day" : "days"} to<br>${esc(next.label.toLowerCase())}</span></p>` : ""}
@@ -503,12 +472,11 @@
       4: () => teamSection(),
     }[shown]();
 
-    // confirmed entries get the dashboard; before that the brief and Discord sit under the team step
+    // confirmed entries get the dashboard; before that the Discord sits under the team step
     const dash = current === 4 && shown === 4;
     const extras = resources();
-    const unlocked = dash
-      ? (extras ? `<section class="oc-card" id="brief"><div class="oc-card__head"><h2>More from DES</h2></div>${extras}</section>` : "")
-      : me.paid && shown >= 3 ? briefSection() + discordSection() : "";
+    const more = extras ? `<section class="oc-card" id="more"><div class="oc-card__head"><h2>More from DES</h2></div>${extras}</section>` : "";
+    const unlocked = dash ? more : me.paid && shown >= 3 ? more + discordSection() : "";
     const teaser = !me.paid && shown === current ? `
       <p class="oc-teaser">
         <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="9" width="12" height="8" rx="1.5"/><path d="M7 9V6.5a3 3 0 0 1 6 0V9"/></svg>
