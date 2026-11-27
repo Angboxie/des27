@@ -8,7 +8,6 @@
   if (!app) return;
 
   let me = null;          // everything the database knows about the signed-in person
-  let brief = null;       // paid-only material, loaded once access is confirmed
   let editing = false;    // registration form open for changes
   let notice = null;      // one-off message at the top, e.g. after paying
   let viewing = null;     // a step the person has gone back to look at (null = their current step)
@@ -369,20 +368,6 @@
       </section>`;
   }
 
-  const myCategory = () => (me.team ? me.team.category : me.participant && me.participant.category);
-
-  // Extra material organisers add in their dashboard (the starter placeholders are left out)
-  function resources() {
-    const mine = myCategory();
-    const KIND = { brief: "Brief", challenge: "Category challenge", rules: "Rules and guidelines", submission: "Submission requirements", resource: "Resource" };
-    return (brief || []).filter((item) => !/^placeholder/i.test((item.body || "").trim())).map((item) => `
-      <details class="oc-doc">
-        <summary><span>${esc(item.title)}</span><small>${esc(KIND[item.kind] || "")}${item.category ? " &middot; " + esc(categoryLabel(item.category)) : ""}${item.category && item.category === mine ? " &middot; yours" : ""}</small></summary>
-        ${(item.body || "").split(/\n{2,}/).filter(Boolean).map((para) => `<p>${esc(para).replace(/\n/g, "<br>")}</p>`).join("")}
-        ${/^https:\/\//.test(item.url || "") ? `<p><a class="oc-btn oc-btn--line" href="${esc(item.url)}" target="_blank" rel="noopener">Open ${esc(item.title)}</a></p>` : ""}
-      </details>`).join("");
-  }
-
   // Shown once the entry is confirmed: everything in one place
   function dashboard() {
     const p = me.participant;
@@ -474,9 +459,7 @@
 
     // confirmed entries get the dashboard; before that the Discord sits under the team step
     const dash = current === 4 && shown === 4;
-    const extras = resources();
-    const more = extras ? `<section class="oc-card" id="more"><div class="oc-card__head"><h2>More from DES</h2></div>${extras}</section>` : "";
-    const unlocked = dash ? more : me.paid && shown >= 3 ? more + discordSection() : "";
+    const unlocked = !dash && me.paid && shown >= 3 ? discordSection() : "";
     const teaser = !me.paid && shown === current ? `
       <p class="oc-teaser">
         <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="9" width="12" height="8" rx="1.5"/><path d="M7 9V6.5a3 3 0 0 1 6 0V9"/></svg>
@@ -510,10 +493,6 @@
 
   async function refresh() {
     me = await rpc("oc_me");
-    if ((me.paid || me.is_admin) && !brief) {
-      rpc("oc_brief").then((items) => { brief = items; render(); }).catch(() => {});
-    }
-    if (!me.paid && !me.is_admin) brief = null;
     render();
   }
 
