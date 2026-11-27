@@ -406,7 +406,6 @@
           <article class="oc-tile">
             <h3>Submission</h3>
             ${submission}
-            ${sub.code ? `<p class="oc-hint">Anonymous judging code: <code>${esc(sub.code)}</code></p>` : ""}
             <div class="oc-actions"><a class="oc-btn oc-btn--line" href="#team">${team.solo ? "My entry" : "My team"} and submission</a></div>
           </article>
           <article class="oc-tile">
